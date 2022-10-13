@@ -7,6 +7,8 @@ class SearchResult {
   int? rank;
   String? checksum;
 
+  SearchResult(this.artist, this.title, this.id, this.checksum);
+
   static List<SearchResult> samples = [
     SearchResult(
         "Genesis", "Supper's Ready", 3046, "fb6986fc60a04cbc7af17210809caa1d"),
@@ -27,6 +29,4 @@ class SearchResult {
         "bff5062ab21bfe837d6ca06c62b99013"),
     SearchResult("Jay-Z", "Threat", 27848, "8f0065a48a12c71c930320c31085bd7a"),
   ];
-
-  SearchResult(this.artist, this.title, this.id, this.checksum);
 }

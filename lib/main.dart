@@ -6,7 +6,7 @@ import 'models/models.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 
-final _theme = LyricsTheme.light();
+//final _theme = LyricsTheme.light();
 
 void main() {
   runApp(const LyricsApp());

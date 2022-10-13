@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyrics_2/models/lyric.dart';
 
-import 'grocery_item.dart';
-
 class FavoritesManager extends ChangeNotifier {
   final _favoriteItems = <Lyric>[];
   int _selectedIndex = -1;

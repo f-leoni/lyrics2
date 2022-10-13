@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import '../models/grocery_item.dart';
+import '../models/lyric.dart';
 
-class GroceryTile extends StatelessWidget {
+class LyricTile extends StatelessWidget {
   // 1
-  final GroceryItem item;
+  final Lyric item;
   // 2
   final Function(bool?)? onComplete;
   // 3
   final TextDecoration textDecoration;
 
   // 4
-  GroceryTile({Key? key, required this.item, this.onComplete})
-      : textDecoration =
-            item.isComplete ? TextDecoration.lineThrough : TextDecoration.none,
+  LyricTile({Key? key, required this.item, this.onComplete})
+      : textDecoration = TextDecoration.none,
         super(key: key);
 
   @override
@@ -28,7 +26,7 @@ class GroceryTile extends StatelessWidget {
           Row(
             children: [
               // 2
-              Container(width: 5.0, color: item.color),
+              Container(width: 5.0, color: Colors.amber),
               // 3
               const SizedBox(width: 16.0),
               // 4
@@ -37,36 +35,39 @@ class GroceryTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 5
-                  Text(item.name,
+                  Text(
+                    item.title,
                     style: GoogleFonts.lato(
                         decoration: textDecoration,
                         fontSize: 21.0,
-                        fontWeight: FontWeight.bold),),
+                        fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 4.0),
-                  buildDate(),
+                  buildAuthor(),
                   const SizedBox(height: 4.0),
-                  buildImportance(),
-                ],),
+                  //buildImportance(),
+                ],
+              ),
             ],
           ),
-          // 6
           Row(
             children: [
-              // 7
-              Text(item.quantity.toString(),
-                style:
-                GoogleFonts.lato(
-                    decoration: textDecoration,
-                    fontSize: 21.0),),
-              // 8
-              buildCheckbox(),
-            ],),
-        ],),
+              Text(
+                item.album.toString(),
+                style: GoogleFonts.lato(
+                    decoration: textDecoration, fontSize: 21.0),
+              ),
+              //buildCheckbox(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget buildImportance() {
-    if (item.importance == Importance.low) {
+    return Text("...");
+    /*if (item.importance == Importance.low) {
       return Text('Low', style: GoogleFonts.lato(decoration: textDecoration));
     } else if (item.importance == Importance.medium) {
       return Text('Medium',
@@ -83,23 +84,13 @@ class GroceryTile extends StatelessWidget {
       );
     } else {
       throw Exception('This importance type does not exist');
-    }
+    }*/
   }
 
-  Widget buildDate() {
-    final dateFormatter = DateFormat('MMMM dd h:mm a');
-    final dateString = dateFormatter.format(item.date);
+  Widget buildAuthor() {
     return Text(
-      dateString,
+      item.author,
       style: TextStyle(decoration: textDecoration),
     );
-  }
-
-  Widget buildCheckbox() {
-    return Checkbox(
-      // 1
-      value: item.isComplete,
-      // 2
-      onChanged: onComplete,);
   }
 }

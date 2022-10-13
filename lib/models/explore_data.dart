@@ -1,11 +1,11 @@
 import 'models.dart';
 
 class ExploreData {
-  final List<ExploreRecipe> todayRecipes;
+  final List<Lyric> searchResult;
   //final List<Post> friendPosts;
 
   ExploreData(
-    this.todayRecipes,
+    this.searchResult,
     //this.friendPosts,
   );
 }
