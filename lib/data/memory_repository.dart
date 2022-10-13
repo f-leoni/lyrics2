@@ -1,10 +1,9 @@
 import 'dart:core';
 import 'package:flutter/foundation.dart';
 import 'repository.dart';
-import '/models/models.dart';
+import '../models/models.dart';
 
 class MemoryRepository extends Repository with ChangeNotifier {
-  // 4
   final List<Lyric> _currentLyrics = <Lyric>[];
   final _user = "";
   final _darkTheme = false;

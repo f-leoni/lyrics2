@@ -3,7 +3,6 @@ import 'package:lyrics_2/lyricstheme.dart';
 import 'circle_image.dart';
 
 class AuthorCard extends StatefulWidget {
-  // 1
   final String authorName;
   final String title;
   final ImageProvider imageProvider;
@@ -21,7 +20,6 @@ class AuthorCard extends StatefulWidget {
 
 class _AuthorCardState extends State<AuthorCard> {
   bool _isFavorited = false;
-  // 2
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -50,13 +48,10 @@ class _AuthorCardState extends State<AuthorCard> {
             ),
           ]),
           IconButton(
-            // 1
             icon: Icon(_isFavorited ? Icons.favorite : Icons.favorite_border),
             iconSize: 30,
-            // 2
             color: Colors.red[400],
             onPressed: () {
-              // 3
               setState(() {
                 _isFavorited = !_isFavorited;
               });

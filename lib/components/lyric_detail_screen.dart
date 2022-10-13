@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lyrics_2/lyricstheme.dart';
 import 'package:lyrics_2/models/models.dart';
 // import 'package:lyrics_2/components/components.dart';
-import 'package:lyrics_2/models/lyrics_pages.dart';
 
 class LyricDetailScreen extends StatelessWidget {
   static MaterialPage page(Lyric lyric) {

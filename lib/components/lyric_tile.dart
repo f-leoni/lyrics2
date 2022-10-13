@@ -3,14 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/lyric.dart';
 
 class LyricTile extends StatelessWidget {
-  // 1
   final Lyric item;
-  // 2
   final Function(bool?)? onComplete;
-  // 3
   final TextDecoration textDecoration;
 
-  // 4
   LyricTile({Key? key, required this.item, this.onComplete})
       : textDecoration = TextDecoration.none,
         super(key: key);
@@ -22,19 +18,14 @@ class LyricTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 1
           Row(
             children: [
-              // 2
               Container(width: 5.0, color: Colors.amber),
-              // 3
               const SizedBox(width: 16.0),
-              // 4
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 5
                   Text(
                     item.title,
                     style: GoogleFonts.lato(

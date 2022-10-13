@@ -20,21 +20,16 @@ class _LyricDetailState extends State<LyricDetail> {
       appBar: AppBar(
         title: Text(widget.lyric.title),
       ),
-      // 2
       body: SafeArea(
-          // 3
           child: Column(children: <Widget>[
-        // 4
         SizedBox(
           height: 100,
           width: double.infinity,
           child: Image(image: AssetImage(widget.lyric.imageUrl.toString())),
         ),
-        // 5
         const SizedBox(
           height: 4,
         ),
-        // 6
         Expanded(
           flex: 1,
           child: SingleChildScrollView(

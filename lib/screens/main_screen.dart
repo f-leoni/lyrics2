@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics_2/components/homepagebody.dart';
 import 'package:lyrics_2/screens/screens.dart';
-import '../models/models.dart';
-import '../components/lyric_detail_screen.dart';
+import 'package:lyrics_2/models/models.dart';
+import 'package:lyrics_2/components/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -79,9 +78,6 @@ class _MainScreenState extends State<MainScreen> {
   static List<Widget> pages = <Widget>[
     EmptyFavoritesScreen(),
     SearchScreen(),
-    // homePageBody(), //Container(color: Colors.red),
-    // const GroceryScreen(),
-    //RecipesScreen(),
     LyricDetailScreen(
       lyric: Lyric(
         id: 1,

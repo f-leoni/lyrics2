@@ -16,14 +16,11 @@ homePageBody() {
               itemCount: SearchResult.samples.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  // 8
                   onTap: () {
-                    // 9
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          // 10
                           return LyricDetail(lyric: Lyric.samples[index]);
                         },
                       ),
