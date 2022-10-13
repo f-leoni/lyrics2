@@ -1,0 +1,73 @@
+{
+  "ArrayOfSearchLyricResult": {
+    "-xmlns:xsd": "http://www.w3.org/2001/XMLSchema",
+    "-xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+    "-xmlns": "http://api.chartlyrics.com/",
+    "SearchLyricResult": [
+      {
+        "TrackId": "0",
+        "LyricChecksum": "bf2b5e371b3cf7e7008db460b9281cdb",
+        "LyricId": "20515",
+        "SongUrl": "http://www.chartlyrics.com/fc0_jqG9oEy5h7hSjS7nTg/The+Musical+Box.aspx",
+        "ArtistUrl": "http://www.chartlyrics.com/fc0_jqG9oEy5h7hSjS7nTg.aspx",
+        "Artist": "Genesis",
+        "Song": "The Musical Box",
+        "SongRank": "9"
+      },
+      {
+        "TrackId": "0",
+        "LyricChecksum": "c881c7c25dcb7c23f2a6467648f6e474",
+        "LyricId": "88460",
+        "SongUrl": "http://www.chartlyrics.com/fc0_jqG9oEy5h7hSjS7nTg/The+Musical+Box+(closing+section).aspx",
+        "ArtistUrl": "http://www.chartlyrics.com/fc0_jqG9oEy5h7hSjS7nTg.aspx",
+        "Artist": "Genesis",
+        "Song": "The Musical Box (closing section)",
+        "SongRank": "8"
+      },
+      {
+        "TrackChecksum": "e4881cb734e765bc5a9b1911594d0b25",
+        "TrackId": "10349847",
+        "LyricId": "0",
+        "SongUrl": "http://www.chartlyrics.com/app/add.aspx?a=1492&t=10349847",
+        "ArtistUrl": "http://www.chartlyrics.com/fc0_jqG9oEy5h7hSjS7nTg.aspx",
+        "Artist": "Genesis",
+        "Song": "Old Medley: Dance on a Volcano / The Lamb Lies Down on Broadway / The Musical Box / Firth of Fifth / I Know What I Like (In Your Wardrobe)",
+        "SongRank": "6"
+      },
+      {
+        "TrackChecksum": "c0e989f631586ee0b503ab6f2d5c458a",
+        "TrackId": "3885563",
+        "LyricId": "0",
+        "SongUrl": "http://www.chartlyrics.com/app/add.aspx?a=1492&t=3885563",
+        "ArtistUrl": "http://www.chartlyrics.com/fc0_jqG9oEy5h7hSjS7nTg.aspx",
+        "Artist": "Genesis",
+        "Song": "Lamb Lies Down on Broadway / The Musical Box (closing section)",
+        "SongRank": "2"
+      },
+      {
+        "TrackChecksum": "e89f68b39960eafc5ee4d800c23d042b",
+        "TrackId": "6812887",
+        "LyricId": "0",
+        "SongUrl": "http://www.chartlyrics.com/app/add.aspx?a=1492&t=6812887",
+        "ArtistUrl": "http://www.chartlyrics.com/fc0_jqG9oEy5h7hSjS7nTg.aspx",
+        "Artist": "Genesis",
+        "Song": "Music Box",
+        "SongRank": "1"
+      },
+      {
+        "TrackChecksum": "1e95d2ca14843cb8eb185a8304c457e1",
+        "TrackId": "10419958",
+        "LyricId": "0",
+        "SongUrl": "http://www.chartlyrics.com/app/add.aspx?a=1492&t=10419958",
+        "ArtistUrl": "http://www.chartlyrics.com/fc0_jqG9oEy5h7hSjS7nTg.aspx",
+        "Artist": "Genesis",
+        "Song": "The Musical Box (Ending)",
+        "SongRank": "1"
+      },
+      {
+        "-xsi:nil": "true",
+        "-self-closing": "true"
+      }
+    ]
+  }
+}
