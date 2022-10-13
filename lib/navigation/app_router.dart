@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics_2/components/homepagebody.dart';
 import 'package:lyrics_2/models/favorites_manager.dart';
-import 'package:lyrics_2/screens/main_screen.dart';
 
 import '../models/models.dart';
 import '../screens/screens.dart';
