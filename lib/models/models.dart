@@ -5,5 +5,4 @@ export 'app_state_manager.dart';
 export 'profile_manager.dart';
 export 'lyrics_pages.dart';
 export 'explore_data.dart';
-export 'simple_recipe.dart';
 export 'user.dart';
