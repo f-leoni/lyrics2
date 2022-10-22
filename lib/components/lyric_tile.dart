@@ -1,58 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/lyric.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics_2/models/lyricSearchResult.dart';
+import 'package:provider/provider.dart';
 
 class LyricTile extends StatelessWidget {
-  final Lyric item;
-  final Function(bool?)? onComplete;
-  final TextDecoration textDecoration;
+  final LyricSearchResult item;
 
-  LyricTile({Key? key, required this.item, this.onComplete})
-      : textDecoration = TextDecoration.none,
-        super(key: key);
+  LyricTile({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    return Consumer<AppStateManager>(
+      builder: (context, appStateManager, child) {
+        return SizedBox(
+          height: 70.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(width: 5.0, color: Colors.amber),
-              const SizedBox(width: 16.0),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text(
-                    item.title,
-                    style: GoogleFonts.lato(
-                        decoration: textDecoration,
-                        fontSize: 21.0,
-                        fontWeight: FontWeight.bold),
+                  //Container(width: 5.0, color: Colors.amber),
+                  const SizedBox(width: 16.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.song,
+                        style: GoogleFonts.lato(
+                            //decoration: textDecoration,
+                            fontSize: 21.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4.0),
+                      buildAuthor(),
+                      const SizedBox(height: 4.0),
+                      Container(
+                        color: Colors.amber,
+                        width: 100,
+                        height: 2,
+                      )
+                      //buildImportance(),
+                    ],
                   ),
-                  const SizedBox(height: 4.0),
-                  buildAuthor(),
-                  const SizedBox(height: 4.0),
-                  //buildImportance(),
                 ],
               ),
             ],
           ),
-          Row(
-            children: [
-              Text(
-                item.album.toString(),
-                style: GoogleFonts.lato(
-                    decoration: textDecoration, fontSize: 21.0),
-              ),
-              //buildCheckbox(),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -80,8 +77,8 @@ class LyricTile extends StatelessWidget {
 
   Widget buildAuthor() {
     return Text(
-      item.author,
-      style: TextStyle(decoration: textDecoration),
+      item.artist,
+      //style: TextStyle(decoration: textDecoration),
     );
   }
 }

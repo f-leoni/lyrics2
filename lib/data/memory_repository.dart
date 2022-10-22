@@ -5,9 +5,9 @@ import '../models/models.dart';
 
 class MemoryRepository extends Repository with ChangeNotifier {
   final List<Lyric> _currentLyrics = <Lyric>[];
-  final _user = "";
-  final _darkTheme = false;
-  final _autoTheme = false;
+  //final _user = "";
+  //final _darkTheme = false;
+  //final _autoTheme = false;
 
   @override
   List<Lyric> findAllFavsLyrics() {

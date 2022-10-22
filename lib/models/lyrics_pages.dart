@@ -8,4 +8,5 @@ class LyricsPages {
   static String accountPath = '/account';
   static String infoPath = '/info';
   static String searchResultsPath = '/searchresults';
+  static String showLyricPath = '/showlyric';
 }
