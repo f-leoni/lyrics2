@@ -40,7 +40,9 @@ class LyricDetailScreen extends StatelessWidget {
 
 Widget createLyricPage(Lyric? lyric) {
   if (lyric == null) {
-    return Container();
+    return Center(
+        child: Container(
+            child: Text("An error occurred: lyric can't be retrieved")));
   }
   return Container(
     padding: const EdgeInsets.all(16),
@@ -49,10 +51,10 @@ Widget createLyricPage(Lyric? lyric) {
       image: DecorationImage(
         image: NetworkImage(lyric.imageUrl),
         colorFilter:
-            ColorFilter.mode(Colors.black.withAlpha(128), BlendMode.darken),
+            ColorFilter.mode(Colors.black.withAlpha(200), BlendMode.darken),
         fit: BoxFit.cover,
       ),
-      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
     ),
     child: Column(
       children: [

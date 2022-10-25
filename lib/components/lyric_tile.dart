@@ -30,16 +30,18 @@ class LyricTile extends StatelessWidget {
                         item.song,
                         style: GoogleFonts.lato(
                             //decoration: textDecoration,
-                            fontSize: 21.0,
+                            fontSize: 18.0,
                             fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4.0),
                       buildAuthor(),
                       const SizedBox(height: 4.0),
-                      Container(
-                        color: Colors.amber,
-                        width: 100,
-                        height: 2,
+                      Center(
+                        child: Container(
+                          color: Colors.amber,
+                          width: 150,
+                          height: 2,
+                        ),
                       )
                       //buildImportance(),
                     ],

@@ -42,12 +42,13 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(15.0),
           child: Container(
             width: double.infinity,
-            height: 500,
+            height: double.infinity,
             decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(5)),
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(5)),
             child: Center(
                 child: Column(children: [
               TextField(
@@ -81,7 +82,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildButton(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 35,
       child: MaterialButton(
         color: rwColor,
         shape: RoundedRectangleBorder(
@@ -105,6 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget buildList(BuildContext context) {
+    double _height = 284;
     if (Provider.of<AppStateManager>(context, listen: false)
         .isSearchCompleted) {
       var results =
@@ -147,8 +149,9 @@ class _SearchScreenState extends State<SearchScreen> {
           },
         ));
       }
+
       return SizedBox(
-          height: 185,
+          height: _height,
           //color: Colors.green,
           child: ListView(
             padding: EdgeInsets.all(10.0),
@@ -156,7 +159,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ));
     } else {
       return SizedBox(
-          height: 185,
+          height: _height,
           //color: Colors.green,
           child: ListView(padding: EdgeInsets.all(10.0), children: []));
     }
