@@ -7,29 +7,28 @@ homePageBody() {
   return Column(
     children: [
       Container(
-        color: Color.fromRGBO(255, 0, 0, 1),
-        child: Text("Ciao!"),
+        color: const Color.fromRGBO(255, 0, 0, 1),
+        child: const Text(""),
       ),
-      Container(
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: SearchResult.samples.length,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return LyricDetail(lyric: Lyric.samples[index]);
-                        },
-                      ),
-                    );
-                  },
-                  // 11
-                  child: buildSearchResultCard(SearchResult.samples[index]),
+      ListView.builder(
+          shrinkWrap: true,
+          itemCount: SearchResult.samples.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return LyricDetail(lyric: Lyric.samples[index]);
+                    },
+                  ),
                 );
-              })),
+              },
+              // 11
+              child: buildSearchResultCard(SearchResult.samples[index]),
+            );
+          }),
     ],
   );
 }

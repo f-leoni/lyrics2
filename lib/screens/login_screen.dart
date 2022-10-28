@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
@@ -42,9 +43,10 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              buildTextfield(username ?? '🎭 username'),
+              buildTextfield(
+                  username ?? AppLocalizations.of(context)!.username),
               const SizedBox(height: 16),
-              buildTextfield('🎹 password'),
+              buildTextfield(AppLocalizations.of(context)!.password),
               const SizedBox(height: 16),
               buildButton(context),
             ],

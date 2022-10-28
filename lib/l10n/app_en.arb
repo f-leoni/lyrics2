@@ -1,0 +1,87 @@
+{
+    "appName": "Lyrics 2",
+    "@appName": {
+      "description": "Application name"
+    },
+    "searchHint": "Search by author, title, text, ...",
+    "@searchHint": {
+        "description": "Hint used in search fields"
+    },
+    "searchText": "Search",
+    "@searchText": {
+        "description": "Text used in search buttons"
+    },
+    "gettingStarted": "Getting Started",
+    "@gettingStarted": {
+        "description": "Onboarding screen title"
+    },
+    "onboardingSearch": "Search your favorite song by title and/or by author!",
+    "@onboardingSearch": {
+        "description": "Onboarding screen first hint"
+    },
+    "onboardingAdd": "Add your song to favorites!",
+    "@onboardingAdd": {
+        "description": "Onboarding screen second hint"
+    },
+    "onboardingCome": "Come back to Lyrics App and sing!",
+    "@onboardingCome": {
+        "description": "Onboarding screen third hint"
+    },
+    "nothingHere": "Nothing here!",
+    "@nothingHere": {
+        "description": "Empty Favorites Title"
+    },
+    "emptyFavsLine1": "Add some favorites!\n",
+    "@emptyFavsLine1": {
+        "description": "Empty Favorites text - first line"
+    },
+    "emptyFavsLine2": "Tap the button to search for some lyrics!",
+    "@emptyFavsLine2": {
+        "description": "Empty Favorites text - second line"
+    },
+    "somethingWrong": "Something went wrong!",
+    "@somethingWrong": {
+        "description": "Show Lyric - error"
+    },
+    "username": "🎭 username",
+    "@username": {
+        "description": "Login - username hint"
+    },
+    "password": "🎹 password",
+    "@password": {
+        "description": "Login - password hint"
+    },
+    "lblFavs": "Favorites",
+    "@lblFavs": {
+        "description": "Nav - Label for Favorites"
+    },
+    "lblInfo": "Info",
+    "@lblInfo": {
+        "description": "Nav - Label for Favorites"
+    },
+    "lblSearch": "Search",
+    "@lblSearch": {
+        "description": "Nav - Label for Search"
+    },
+    "errNoLyric": "An error occurred: lyric can't be retrieved",
+    "@errNoLyric": {
+        "description": "Lyric Detail Error Msg"
+    },
+    "splashInit": "Initializing...",
+    "@splashInit": {
+        "description": "Splash Screen  Msg"
+    },
+    "info": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus congue vulputate. Nulla semper dapibus neque nec feugiat. Ut eu consectetur nisl. In iaculis sapien id orci iaculis, quis tempus nibh ultrices. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut vel leo nulla. Curabitur ultricies nibh quis enim dapibus porta. Aenean varius sodales metus et auctor. Fusce commodo eros vel varius porttitor. Nullam eu dictum ipsum. Nulla lacus urna, consectetur nec suscipit eu, vehicula nec mi.\r\n\r\nInteger tincidunt, orci et eleifend eleifend, felis ipsum blandit magna, id aliquam mi nibh at arcu. Proin pellentesque turpis non nisi commodo rhoncus. Sed varius ante sagittis molestie porta. Mauris posuere luctus libero, vel sagittis turpis efficitur non. Nulla facilisi. Ut at nibh et urna pellentesque vestibulum id ac urna. Donec blandit ligula vel fringilla imperdiet. Vivamus ultrices blandit sapien, vel rhoncus massa gravida in.\r\n\r\nSed eu magna sem. Pellentesque efficitur vulputate euismod. Mauris at sem quis quam volutpat ornare eget eu lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut finibus sagittis sollicitudin. Suspendisse id justo ac urna sollicitudin bibendum. Cras porttitor pulvinar ex vel porttitor. Vivamus semper, sapien vitae tristique fermentum, elit metus fermentum nibh, et pretium dui lorem ac dui. Etiam a mauris dui. Quisque condimentum arcu dui. Cras accumsan nibh magna, et convallis dui commodo eget.\r\n\r\nProin sed bibendum tellus. Vivamus scelerisque vitae tortor finibus cursus. In dapibus ipsum a gravida suscipit. Nullam ac varius urna, a dapibus ipsum. Nullam venenatis enim ac ultricies tristique. Maecenas viverra pulvinar turpis, in fringilla urna fringilla a. In pharetra sem ac magna ultricies vestibulum. Pellentesque justo velit, porttitor sit amet pellentesque sit amet, efficitur vel ligula. Suspendisse sagittis mollis suscipit. Duis ut bibendum risus, a ullamcorper nunc. Integer ornare diam at ipsum sollicitudin molestie. Praesent dapibus nisi mi. Suspendisse semper tincidunt ligula, eu molestie ante volutpat sit amet. Proin sit amet commodo arcu. Duis pretium nisi sed elit iaculis condimentum.\r\n\r\nAenean varius sapien at elit finibus ultrices. Integer venenatis, diam vitae fermentum accumsan, turpis tellus scelerisque libero, sed dictum mi odio a orci. Proin felis sem, venenatis eget feugiat quis, gravida et diam. Vestibulum eget venenatis ante. Quisque faucibus pretium sem eget laoreet. Sed molestie nulla eu commodo lacinia. Integer sit amet justo elementum, consequat lacus a, rutrum dui. Nunc vitae ante nec quam aliquam vehicula a ut erat.",
+    "@info": {
+        "description": "Info text"
+    },
+    "infoTitle": "Lyrics 2\nInfo",
+    "@infoTitle": {
+        "description": "Info page title"
+    }
+
+
+
+
+
+}

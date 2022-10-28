@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EmptyFavoritesScreen extends StatelessWidget {
   const EmptyFavoritesScreen({Key? key}) : super(key: key);
@@ -16,14 +17,14 @@ class EmptyFavoritesScreen extends StatelessWidget {
               child: Image.asset('assets/lyrics_assets/empty_favorites.png'),
             ),
             const SizedBox(height: 8.0),
-            const Text(
-              'Nothing here!',
-              style: TextStyle(fontSize: 21.0),
+            Text(
+              AppLocalizations.of(context)!.nothingHere,
+              style: const TextStyle(fontSize: 21.0),
             ),
             const SizedBox(height: 16.0),
-            const Text(
-              'Add some favorites!\n'
-              'Tap the button to search for some lyrics!',
+            Text(
+              AppLocalizations.of(context)!.emptyFavsLine1 +
+                  AppLocalizations.of(context)!.emptyFavsLine2,
               textAlign: TextAlign.center,
             ),
             MaterialButton(

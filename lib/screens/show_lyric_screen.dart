@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics_2/models/models.dart';
 
 class ShowLyricScreen extends StatelessWidget {
@@ -15,17 +16,12 @@ class ShowLyricScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (lyric == null) {
-      return Container(child: Text("Something went wrong!"));
-    } else {
-      return Container(
-          child: Column(
-        children: [
-          Text(lyric.title),
-          Text(lyric.author),
-          Text(lyric.lyric),
-        ],
-      ));
-    }
+    return Column(
+      children: [
+        Text(lyric.title),
+        Text(lyric.author),
+        Text(lyric.lyric),
+      ],
+    );
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics_2/components/components_lyrics.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics_2/lyricstheme.dart';
 import 'package:lyrics_2/models/models.dart';
 import 'package:lyrics_2/components/lyric_tile.dart';
+import 'package:logger/logger.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -26,6 +28,9 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
   final _searchController = TextEditingController();
   String _searchString = "";
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
 
   @override
   void initState() {
@@ -34,7 +39,6 @@ class _SearchScreenState extends State<SearchScreen> {
         _searchString = _searchController.text;
       });
     });
-
     super.initState();
   }
 
@@ -58,23 +62,19 @@ class _SearchScreenState extends State<SearchScreen> {
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.clear),
                       onPressed: () {
-                        /* Clear the search field */
+                        // Clear the search field
                         _searchController.text = "";
                       },
                     ),
-                    hintText: 'Search by author, title, text, ...',
+                    hintText: AppLocalizations.of(context)!.searchHint,
                     border: InputBorder.none),
                 onEditingComplete: () => startSearch(context),
               ),
               buildButton(context),
-              //if (Provider.of<AppStateManager>(context, listen: false)
-              //    .isSearchCompleted)
               Consumer<AppStateManager>(
                   builder: (context, appStateManager, child) {
                 return buildList(context);
               })
-              //else
-              //     Container(),
             ])),
           )),
     );
@@ -88,11 +88,12 @@ class _SearchScreenState extends State<SearchScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: const Text(
-          'Search',
-          style: TextStyle(color: Colors.white),
+        child: Text(
+          AppLocalizations.of(context)!.searchText,
+          style: const TextStyle(color: Colors.white),
         ),
         onPressed: () async {
+          logger.v("Click on Search button in search screen");
           startSearch(context);
         },
       ),
@@ -138,6 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
             item: item,
           ),
           onTap: () {
+            logger.i("Clicked on Search result. Song: ${item.song}");
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -154,19 +156,22 @@ class _SearchScreenState extends State<SearchScreen> {
           height: _height,
           //color: Colors.green,
           child: ListView(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             children: itemTiles,
           ));
     } else {
+      // Case for isSearchComplete == false
       return SizedBox(
           height: _height,
           //color: Colors.green,
-          child: ListView(padding: EdgeInsets.all(10.0), children: []));
+          child: ListView(
+              padding: const EdgeInsets.all(10.0), children: const []));
     }
   }
 
   @override
   void dispose() {
+    logger.d("Dispose of Search Screen");
     _searchController.dispose();
     super.dispose();
   }

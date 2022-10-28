@@ -1,6 +1,6 @@
 export 'lyric.dart';
-export 'lyricSearchResult.dart';
-export 'lyricException.dart';
+export 'lyric_search_result.dart';
+export 'lyric_exception.dart';
 export 'search_result.dart';
 export 'tab_manager.dart';
 export 'app_state_manager.dart';

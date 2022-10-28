@@ -101,5 +101,5 @@ class AppRouter extends RouterDelegate
   }
 
   @override
-  Future<void> setNewRoutePath(configuration) async => null;
+  Future<void> setNewRoutePath(configuration) async => {};
 }

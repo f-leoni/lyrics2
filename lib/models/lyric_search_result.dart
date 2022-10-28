@@ -17,23 +17,23 @@ class LyricSearchResult {
 
   @override
   String toString() {
-    return "Titolo: ${this.song} - Autore: ${this.artist} (${this.lyricId})";
+    return "Titolo: $song - Autore: $artist ($lyricId)";
   }
 
 // Create from json object
   factory LyricSearchResult.fromJson(Map<String, dynamic> json) {
-    var cs;
-    var lId;
+    String cs;
+    String lId;
     cs = json['LyricChecksum'];
-    if (cs == null) {
+    /*if (cs == null) {
       cs = "";
-    }
+    }*/
     lId = json['LyricId'];
     return LyricSearchResult(
       lyricId: int.parse(lId),
       artist: json['Artist'] as String,
       song: json['Song'] as String,
-      lyricChecksum: cs as String,
+      lyricChecksum: cs,
     );
   }
 
@@ -45,10 +45,10 @@ class LyricSearchResult {
       String? imageUrl,
       String? lyric}) {
     return LyricSearchResult(
-      lyricId: id ?? this.lyricId,
-      artist: author ?? this.artist,
-      song: title ?? this.song,
-      lyricChecksum: lyric ?? this.lyricChecksum,
+      lyricId: id ?? lyricId,
+      artist: author ?? artist,
+      song: title ?? song,
+      lyricChecksum: lyric ?? lyricChecksum,
     );
   }
 

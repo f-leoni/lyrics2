@@ -32,12 +32,12 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Image(
+          children: const [
+            Image(
               height: 200,
               image: AssetImage('assets/lyrics_assets/logo.png'),
             ),
-            const Text('Initializing...'),
+            Text("Initializing..."),
           ],
         ),
       ),

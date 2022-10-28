@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics_2/lyricstheme.dart';
 import 'package:lyrics_2/models/models.dart';
 // import 'package:lyrics_2/components/components.dart';
@@ -29,7 +30,7 @@ class LyricDetailScreen extends StatelessWidget {
           future: lyric,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return createLyricPage(snapshot.data);
+              return createLyricPage(context, snapshot.data);
             } else {
               return Container();
             }
@@ -38,11 +39,9 @@ class LyricDetailScreen extends StatelessWidget {
   }
 }
 
-Widget createLyricPage(Lyric? lyric) {
+Widget createLyricPage(BuildContext context, Lyric? lyric) {
   if (lyric == null) {
-    return Center(
-        child: Container(
-            child: Text("An error occurred: lyric can't be retrieved")));
+    return Center(child: Text(AppLocalizations.of(context)!.errNoLyric));
   }
   return Container(
     padding: const EdgeInsets.all(16),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics_2/models/favorites_manager.dart';
 import 'package:provider/provider.dart';
 import 'data/memory_repository.dart';
@@ -65,6 +67,16 @@ class _LyricsAppState extends State<LyricsApp> {
           return MaterialApp(
             theme: theme,
             title: 'Lyrics2 🎶',
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en', ''), // English, no country code
+              Locale('it', ''), // Italian, no country code
+            ],
             debugShowCheckedModeBanner: false,
             home: Router(
               routerDelegate: _appRouter,

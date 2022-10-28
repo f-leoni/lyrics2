@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
@@ -28,7 +29,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: const Text('Getting Started'),
+        title: Text(AppLocalizations.of(context)!.gettingStarted),
         leading: GestureDetector(
           child: const Icon(
             Icons.chevron_left,
@@ -73,15 +74,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       children: [
         onboardPageView(
           const AssetImage('assets/lyrics_assets/search_b.png'),
-          '''Search your favorite song by title and/or by author!''',
+          AppLocalizations.of(context)!.onboardingSearch,
         ),
         onboardPageView(
           const AssetImage('assets/lyrics_assets/favorite.png'),
-          'Add your song to favorites!',
+          AppLocalizations.of(context)!.onboardingAdd,
         ),
         onboardPageView(
           const AssetImage('assets/lyrics_assets/singer.png'),
-          'Come back to Lyrics App and sing!',
+          AppLocalizations.of(context)!.onboardingCome,
         ),
       ],
     );

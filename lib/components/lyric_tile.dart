@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
-import 'package:lyrics_2/models/lyricSearchResult.dart';
+import 'package:lyrics_2/models/lyric_search_result.dart';
 import 'package:provider/provider.dart';
 
 class LyricTile extends StatelessWidget {
   final LyricSearchResult item;
 
-  LyricTile({Key? key, required this.item}) : super(key: key);
+  const LyricTile({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class LyricTile extends StatelessWidget {
   }
 
   Widget buildImportance() {
-    return Text("...");
+    return const Text("...");
     /*if (item.importance == Importance.low) {
       return Text('Low', style: GoogleFonts.lato(decoration: textDecoration));
     } else if (item.importance == Importance.medium) {
