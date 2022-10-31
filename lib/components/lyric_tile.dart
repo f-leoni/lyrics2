@@ -15,40 +15,45 @@ class LyricTile extends StatelessWidget {
       builder: (context, appStateManager, child) {
         return SizedBox(
           height: 70.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  //Container(width: 5.0, color: Colors.amber),
-                  const SizedBox(width: 16.0),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.song,
-                        style: GoogleFonts.lato(
-                            //decoration: textDecoration,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 4.0),
-                      buildAuthor(),
-                      const SizedBox(height: 4.0),
-                      Center(
-                        child: Container(
-                          color: Colors.amber,
-                          width: 150,
-                          height: 2,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            //color: Colors.yellow,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    //Container(width: 5.0, color: Colors.amber),
+                    const SizedBox(width: 16.0),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.song,
+                          overflow: TextOverflow.fade,
+                          style: GoogleFonts.lato(
+                              //decoration: textDecoration,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold),
                         ),
-                      )
-                      //buildImportance(),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                        const SizedBox(height: 4.0),
+                        buildAuthor(),
+                        const SizedBox(height: 4.0),
+                        Center(
+                          child: Container(
+                            color: Colors.amber,
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: 3,
+                          ),
+                        )
+                        //buildImportance(),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

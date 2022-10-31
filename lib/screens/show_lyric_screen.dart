@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics_2/models/models.dart';
+import 'package:provider/provider.dart';
 
 class ShowLyricScreen extends StatelessWidget {
   static MaterialPage page(Lyric lyric) {

@@ -24,6 +24,8 @@ class AppStateManager extends ChangeNotifier {
   bool _searchCompleted = false;
   bool _isSearching = false;
   Future<Lyric>? _lyric;
+  // search mode - if true search by text else search by author/title
+  bool _isTextSearch = true;
 
   // Accessors
   bool get isInitialized => _initialized;
@@ -36,6 +38,7 @@ class AppStateManager extends ChangeNotifier {
   int get lastStatus => _status;
   String get lastErrorMsg => _errorMessage;
   bool get isSearching => _isSearching;
+  bool get isTextSearch => _isTextSearch;
 
   void initializeApp() {
     logger.d("Initialising...");
@@ -54,7 +57,7 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<LyricSearchResult>> startSearch(String searchText) async {
+  Future<List<LyricSearchResult>> startSearchText(String searchText) async {
     logger.d("Starting Search for [$searchText]...");
     _isSearching = true;
     _searchCompleted = false;
@@ -75,10 +78,37 @@ class AppStateManager extends ChangeNotifier {
     return _searchResults;
   }
 
+  Future<List<LyricSearchResult>> startSearchSongAuthor(
+      String author, String song) async {
+    logger.d("Starting Search for [$author], [$song]...");
+    _isSearching = true;
+    _searchCompleted = false;
+    ChartLyricsProxy clp = ChartLyricsProxy();
+    try {
+      _searchResults = await clp.simpleSearch(author, song);
+      _status = 200;
+      _searchCompleted = true;
+      _isSearching = false;
+    } on LyricException catch (e) {
+      logger.e("An exception occurred: ${e.message} (${e.code})...");
+      //print("Error LyricException code: ${e.code}: ${e.message}");
+      _status = e.code;
+      _errorMessage = e.message;
+      _isSearching = false;
+    } //*/
+    notifyListeners();
+    return _searchResults;
+  }
+
   void endSearch() {
     logger.d("Ending search...");
     _isSearching = false;
     _searchCompleted = false;
+    notifyListeners();
+  }
+
+  void switchSearch() {
+    _isTextSearch = !_isTextSearch;
     notifyListeners();
   }
 

@@ -3,8 +3,16 @@
     "@appName": {
       "description": "Application name"
     },
-    "searchHint": "Search by author, title, text, ...",
+    "searchHint": "Text, author, title, ...",
     "@searchHint": {
+        "description": "Hint used in search fields"
+    },
+    "searchAuthorHint": "Author name...",
+    "@searchAuthorHint": {
+        "description": "Hint used in search fields"
+    },
+    "searchSongHint": "Song title...",
+    "@searchSongHint": {
         "description": "Hint used in search fields"
     },
     "searchText": "Search",
@@ -78,9 +86,15 @@
     "infoTitle": "Lyrics 2\nInfo",
     "@infoTitle": {
         "description": "Info page title"
+    },
+    "noResults": "No results found",
+    "@noResults": {
+        "description": "Text of Snackbar shown when no results are found"
+    },
+    "searchTextTooShort": "Search text is too short!",
+    "@searchTextTooShort": {
+        "description": "Text of Snackbar shown when no results are found"
     }
-
-
 
 
 
