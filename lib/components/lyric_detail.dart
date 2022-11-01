@@ -18,7 +18,7 @@ class _LyricDetailState extends State<LyricDetail> {
     // 1
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.lyric.title),
+        title: Text(widget.lyric.getSong()),
       ),
       body: SafeArea(
           child: Column(children: <Widget>[

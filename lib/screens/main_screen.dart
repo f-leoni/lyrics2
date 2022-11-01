@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = <Widget>[
-      const EmptyFavoritesScreen(),
+      FavoritesScreen(),
       const SearchScreen(),
       const InfoScreen(),
       /*LyricDetailScreen(

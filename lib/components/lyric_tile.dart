@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lyrics_2/data/memory_repository.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics_2/models/lyric.dart';
+import 'package:lyrics_2/models/lyric_data.dart';
 import 'package:lyrics_2/models/lyric_search_result.dart';
 import 'package:provider/provider.dart';
 
 class LyricTile extends StatelessWidget {
-  final LyricSearchResult item;
+  final LyricData lyric;
+  MemoryRepository repository = MemoryRepository();
+  List<Lyric> favorites = List<Lyric>.empty(growable: true);
 
-  const LyricTile({Key? key, required this.item}) : super(key: key);
+  LyricTile({Key? key, required this.lyric}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    repository = Provider.of<MemoryRepository>(context);
+    List<Lyric> favorites = repository.findAllFavsLyrics();
+
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
         return SizedBox(
           height: 70.0,
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.5,
             //color: Colors.yellow,
             child: Row(
@@ -30,7 +38,7 @@ class LyricTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.song,
+                          lyric.getSong(),
                           overflow: TextOverflow.fade,
                           style: GoogleFonts.lato(
                               //decoration: textDecoration,
@@ -50,6 +58,7 @@ class LyricTile extends StatelessWidget {
                         //buildImportance(),
                       ],
                     ),
+                    buildFavoriteIcon(lyric),
                   ],
                 ),
               ],
@@ -84,8 +93,19 @@ class LyricTile extends StatelessWidget {
 
   Widget buildAuthor() {
     return Text(
-      item.artist,
+      lyric.getArtist(),
       //style: TextStyle(decoration: textDecoration),
     );
+  }
+
+  Widget buildFavoriteIcon(LyricData p_lyric) {
+    if (repository.isLyricFavoriteById(p_lyric.getId())) {
+      return const Icon(
+        Icons.favorite,
+        color: Colors.red,
+      );
+    } else {
+      return Container();
+    }
   }
 }

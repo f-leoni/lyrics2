@@ -6,6 +6,7 @@ abstract class Repository {
   //List<Author> findAllAuthors();
   int insertLyricInFavs(Lyric lyric);
   void deleteLyricFromFavs(Lyric lyric);
+  bool isLyricFavoriteById(int? id);
   Future init();
   void close();
 }

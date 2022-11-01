@@ -1,4 +1,4 @@
-export 'empty_favorites_screen.dart';
+export 'favorites_screen.dart';
 export 'login_screen.dart';
 export 'onboarding_screen.dart';
 export 'profile_screen.dart';

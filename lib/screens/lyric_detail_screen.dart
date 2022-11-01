@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics_2/components/logger.dart';
+import 'package:lyrics_2/data/memory_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics_2/lyricstheme.dart';
 import 'package:lyrics_2/models/models.dart';
@@ -43,26 +47,36 @@ class LyricDetailScreen extends StatelessWidget {
 Widget createLyricPage(BuildContext context, Lyric? lyric) {
   int _alpha = 180;
   BlendMode blend = BlendMode.darken;
-  if (lyric == null) {
+  final favorites = Provider.of<MemoryRepository>(context);
+  bool isFavorite = false;
+  /*if (lyric == null) {
     return Center(child: Text(AppLocalizations.of(context)!.errNoLyric));
-  }
-  BoxDecoration decoration = const BoxDecoration();
-  if (lyric.imageUrl == "") {
-    decoration = BoxDecoration(
-        image: DecorationImage(
-      image: const AssetImage("assets/lyrics_assets/logo.png"),
-      colorFilter: ColorFilter.mode(Colors.black.withAlpha(_alpha), blend),
-      fit: BoxFit.cover,
-    ));
-  } else {
-    decoration = BoxDecoration(
+  }*/
+  BoxDecoration decoration = BoxDecoration(
       image: DecorationImage(
-        image: NetworkImage(lyric.imageUrl),
-        colorFilter: ColorFilter.mode(Colors.black.withAlpha(_alpha), blend),
-        fit: BoxFit.cover,
-      ),
-      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-    );
+    image: const AssetImage("assets/lyrics_assets/logo.png"),
+    colorFilter: ColorFilter.mode(Colors.black.withAlpha(_alpha), blend),
+    fit: BoxFit.cover,
+  ));
+
+  if (lyric == null || lyric.imageUrl == "") {
+    logger.w("lyric.imageUrl is void!");
+  } else {
+    try {
+      isFavorite = favorites.isLyricFavoriteById(lyric.lyricId);
+      //throw Exception("Test");
+      decoration = BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(lyric.imageUrl),
+          colorFilter: ColorFilter.mode(Colors.black.withAlpha(_alpha), blend),
+          fit: BoxFit.cover,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+      );
+    } on Exception catch (e) {
+      logger
+          .w("Image at ${lyric.imageUrl} cannot be retrieved! ${e.toString()}");
+    }
   }
 
   return Scaffold(
@@ -74,6 +88,7 @@ Widget createLyricPage(BuildContext context, Lyric? lyric) {
       child: Column(
         children: [
           Row(
+            mainAxisSize: MainAxisSize.max,
             children: [
               IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -86,16 +101,34 @@ Widget createLyricPage(BuildContext context, Lyric? lyric) {
               ),
               SizedBox(
                 child: Text(
-                  lyric.author,
+                  lyric != null ? lyric.artist : "",
                   style: LyricsTheme.darkTextTheme.bodyText1,
                 ),
                 height: 24,
+              ),
+              //const Expanded(flex:1,child: Container()),
+              IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_outline,
+                  color: Colors.red,
+                ),
+                alignment: Alignment.centerRight,
+                iconSize: 22,
+                color: Colors.white,
+                onPressed: () {
+                  if (isFavorite) {
+                    favorites.deleteLyricFromFavs(lyric);
+                  } else {
+                    favorites.insertLyricInFavs(lyric);
+                  }
+                  isFavorite = !isFavorite;
+                },
               ),
             ],
           ),
           SizedBox(
             child: Text(
-              lyric.title,
+              lyric != null ? lyric.song : "",
               style: LyricsTheme.darkTextTheme.headline3,
             ),
             height: 40,
@@ -105,7 +138,9 @@ Widget createLyricPage(BuildContext context, Lyric? lyric) {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical, //.horizontal
               child: Text(
-                lyric.lyric.replaceAll("\\r\\\\n", "\r\n"),
+                lyric != null
+                    ? lyric.lyric.replaceAll("\\r\\\\n", "\r\n")
+                    : AppLocalizations.of(context)!.errNoLyric,
                 style: LyricsTheme.darkTextTheme.bodyText1,
               ),
             ),

@@ -2,12 +2,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lyrics_2/models/models.dart';
 import 'package:lyrics_2/api/chartlyrics_proxy.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 
 class LyricsTab {
   static const int favorites = 0;
   static const int search = 1;
   static const int info = 2;
+}
+
+class SearchType {
+  static const int text = 0;
+  static const int songAuthor = 1;
+  static const int audio = 2;
 }
 
 class AppStateManager extends ChangeNotifier {
@@ -26,6 +33,9 @@ class AppStateManager extends ChangeNotifier {
   Future<Lyric>? _lyric;
   // search mode - if true search by text else search by author/title
   bool _isTextSearch = true;
+  bool _isSongAuthorSearch = false;
+  bool _isAudioSearch = false;
+  int _searchType = SearchType.text;
 
   // Accessors
   bool get isInitialized => _initialized;
@@ -39,6 +49,10 @@ class AppStateManager extends ChangeNotifier {
   String get lastErrorMsg => _errorMessage;
   bool get isSearching => _isSearching;
   bool get isTextSearch => _isTextSearch;
+  bool get isSongAuthorSearch => _isSongAuthorSearch;
+  bool get isAudioSearch => _isAudioSearch;
+  //bool get isSongAuthorSearch => !_isTextSearch;
+  int get searchType => _searchType;
 
   void initializeApp() {
     logger.d("Initialising...");
@@ -107,8 +121,47 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void switchSearch() {
+  void switchSearchOld(BuildContext context) {
     _isTextSearch = !_isTextSearch;
+    String msg = "";
+    if (_isTextSearch) {
+      msg = AppLocalizations.of(context)!.msgSearchText;
+    } else {
+      msg = AppLocalizations.of(context)!.msgSearchSongAuthor;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+    ));
+    notifyListeners();
+  }
+
+  void switchSearch(BuildContext context) {
+    String msg = "";
+    int currSearchType = searchType;
+    int newSearchType;
+    if (currSearchType == SearchType.text) {
+      msg = AppLocalizations.of(context)!.msgSearchSongAuthor;
+      _searchType = SearchType.songAuthor;
+      _isTextSearch = false;
+      _isSongAuthorSearch = true;
+      _isAudioSearch = false;
+    } else if (currSearchType == SearchType.songAuthor) {
+      msg = AppLocalizations.of(context)!.msgSearchAudio;
+      _searchType = SearchType.audio;
+      _isTextSearch = false;
+      _isSongAuthorSearch = false;
+      _isAudioSearch = true;
+    } else if (currSearchType == SearchType.audio) {
+      _searchType = SearchType.text;
+      msg = AppLocalizations.of(context)!.msgSearchText;
+      _isTextSearch = true;
+      _isSongAuthorSearch = false;
+      _isAudioSearch = false;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+      duration: const Duration(milliseconds: 500),
+    ));
     notifyListeners();
   }
 

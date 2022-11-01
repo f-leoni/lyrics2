@@ -35,6 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
   var logger = Logger(
     printer: PrettyPrinter(),
   );
+  int minSearchLen = 3;
 
   @override
   void initState() {
@@ -61,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       body: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             height: double.infinity,
             /*decoration: BoxDecoration(
@@ -69,15 +70,21 @@ class _SearchScreenState extends State<SearchScreen> {
                 borderRadius: BorderRadius.circular(5)),*/
             child: Center(
                 child: Column(children: [
-              Consumer<AppStateManager>(
-                  builder: (context, appStateManager, child) {
-                return buildSearchFields(context);
-              }),
-              buildButton(context),
-              Consumer<AppStateManager>(
-                  builder: (context, appStateManager, child) {
-                return buildList(context);
-              })
+              Expanded(
+                flex: 3,
+                child: Consumer<AppStateManager>(
+                    builder: (context, appStateManager, child) {
+                  return buildSearchFields(context);
+                }),
+              ),
+              Expanded(flex: 1, child: buildButton(context)),
+              Expanded(
+                flex: 8,
+                child: Consumer<AppStateManager>(
+                    builder: (context, appStateManager, child) {
+                  return buildList(context);
+                }),
+              )
             ])),
           )),
     );
@@ -86,116 +93,138 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget buildSearchFields(BuildContext context) {
     bool isTextSearch =
         Provider.of<AppStateManager>(context, listen: false).isTextSearch;
+    bool isSongAuthorSearch =
+        Provider.of<AppStateManager>(context, listen: false).isSongAuthorSearch;
+    bool isAudioSearch =
+        Provider.of<AppStateManager>(context, listen: false).isAudioSearch;
     if (isTextSearch) {
-      return SizedBox(
-        //color: Colors.green,
-        height: 96,
-        width: double.infinity,
-        child: Row(
-          //mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            IconButton(
-                //color: Colors.red,
-                iconSize: 25,
-                onPressed: () {
-                  Provider.of<AppStateManager>(context, listen: false)
-                      .switchSearch();
-                },
-                icon: Icon(Icons.refresh_rounded)),
-            Expanded(
-              flex: 1,
-              child: Container(
-                //color: Colors.greenAccent,
-                child: TextField(
-                  controller: _searchControllerText,
-                  decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          // Clear the search field
-                          _searchControllerText.text = "";
-                        },
-                      ),
-                      hintText: AppLocalizations.of(context)!.searchHint,
-                      border: InputBorder.none),
-                  onEditingComplete: () => startSearch(context),
+      return Row(
+        //mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+              //color: Colors.red,
+              iconSize: 25,
+              onPressed: () {
+                Provider.of<AppStateManager>(context, listen: false)
+                    .switchSearch(context);
+              },
+              icon: const Icon(Icons.refresh_rounded)),
+          Expanded(
+            flex: 1,
+            child: TextField(
+              controller: _searchControllerText,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    // Clear the search field
+                    _searchControllerText.text = "";
+                  },
                 ),
+                hintText: AppLocalizations.of(context)!.searchHint,
+                border: const OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.yellow[50],
               ),
+              onEditingComplete: () => startSearch(context),
             ),
-          ],
-        ),
+          ),
+        ],
       );
-    } else {
-      return Container(
-        //color: Colors.yellow,
-        height: 96,
-        width: double.infinity,
-        child: Row(
-          //mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            IconButton(
-                //color: Colors.green,
-                iconSize: 25,
-                onPressed: () {
-                  Provider.of<AppStateManager>(context, listen: false)
-                      .switchSearch();
-                },
-                icon: const Icon(Icons.refresh_rounded)),
-            Expanded(
-              flex: 1,
-              child: SizedBox(
-                //color: Colors.yellowAccent,
-                height: 100,
-                child: Column(
-                  children: [
-                    TextField(
+    } else if (isSongAuthorSearch) {
+      return Row(
+        //mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+              //color: Colors.green,
+              iconSize: 30,
+              onPressed: () {
+                Provider.of<AppStateManager>(context, listen: false)
+                    .switchSearch(context);
+              },
+              icon: const Icon(Icons.refresh_rounded)),
+          Flexible(
+            flex: 2,
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 300),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      textAlignVertical: TextAlignVertical.bottom,
                       controller: _searchControllerAuthor,
                       decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              // Clear the search field
-                              _searchControllerAuthor.text = "";
-                            },
-                          ),
-                          hintText:
-                              AppLocalizations.of(context)!.searchAuthorHint,
-                          border: InputBorder.none),
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            // Clear the search field
+                            _searchControllerAuthor.text = "";
+                          },
+                        ),
+                        hintText:
+                            AppLocalizations.of(context)!.searchAuthorHint,
+                        //hintStyle: const TextStyle(fontSize: 8),
+                        border: const OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.yellow[50],
+                      ),
                       onEditingComplete: () => startSearch(context),
                     ),
-                    TextField(
+                  ),
+                  SizedBox.fromSize(size: const Size.fromHeight(5)),
+                  Expanded(
+                    child: TextField(
+                      textAlignVertical: TextAlignVertical.bottom,
                       controller: _searchControllerSong,
                       decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              // Clear the search field
-                              _searchControllerSong.text = "";
-                            },
-                          ),
-                          hintText:
-                              AppLocalizations.of(context)!.searchSongHint,
-                          border: InputBorder.none),
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            // Clear the search field
+                            _searchControllerSong.text = "";
+                          },
+                        ),
+                        hintText: AppLocalizations.of(context)!.searchSongHint,
+                        //hintStyle: const TextStyle(fontSize: 8),
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.yellow[50],
+                      ),
                       onEditingComplete: () => startSearch(context),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox.fromSize(size: const Size.fromHeight(5)),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
+    } else {
+      // Ricerca per audio
+      return Row(children: [
+        IconButton(
+            //color: Colors.green,
+            iconSize: 30,
+            onPressed: () {
+              Provider.of<AppStateManager>(context, listen: false)
+                  .switchSearch(context);
+            },
+            icon: const Icon(Icons.refresh_rounded)),
+        Text("AUDIO SEARCH\nTO BE IMPLEMENTED"),
+      ]);
     }
   }
 
   Widget buildButton(BuildContext context) {
-    return SizedBox(
-      height: 35,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 30, maxHeight: 50),
       child: MaterialButton(
         color: rwColor,
         shape: RoundedRectangleBorder(
@@ -214,7 +243,14 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void startSearch(BuildContext context) {
-    if (_searchControllerText.text.length < 3) {
+    bool isTextSearch =
+        Provider.of<AppStateManager>(context, listen: false).isTextSearch;
+    bool isSongAuthorSearch =
+        Provider.of<AppStateManager>(context, listen: false).isSongAuthorSearch;
+    if (isTextSearch && _searchStringText.length < minSearchLen ||
+        isSongAuthorSearch &&
+            (_searchStringSong.length < minSearchLen ||
+                _searchStringAuthor.length < minSearchLen)) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.searchTextTooShort),
       ));
@@ -223,25 +259,23 @@ class _SearchScreenState extends State<SearchScreen> {
 
     //Hide virtual keyboard
     FocusManager.instance.primaryFocus?.unfocus();
-    bool isTextSearch =
-        Provider.of<AppStateManager>(context, listen: false).isTextSearch;
     if (isTextSearch) {
       Provider.of<AppStateManager>(context, listen: false)
-          .startSearchText(_searchControllerText.text);
+          .startSearchText(_searchStringText);
     } else {
       Provider.of<AppStateManager>(context, listen: false)
-          .startSearchSongAuthor(
-              _searchControllerAuthor.text, _searchControllerSong.text);
+          .startSearchSongAuthor(_searchStringAuthor, _searchStringSong);
     }
-    showSnackBar(
+    showNoResultsMsg(
         Provider.of<AppStateManager>(context, listen: false).searchResults);
   }
 
+  // List of fount Lyrics
   Widget buildList(BuildContext context) {
-    double _height = 236;
+    double _height = MediaQuery.of(context).size.height / 2 - 31; //, 236;
     if (Provider.of<AppStateManager>(context, listen: false)
         .isSearchCompleted) {
-      var results =
+      List<LyricSearchResult> results =
           Provider.of<AppStateManager>(context, listen: false).searchResults;
       List<Widget> itemTiles = List<Widget>.empty(growable: true);
       /*itemTiles.add(
@@ -261,25 +295,28 @@ class _SearchScreenState extends State<SearchScreen> {
               Provider.of<AppStateManager>(context, listen: false).goToTab(2),
         ),
       );*/
-      for (LyricSearchResult item in results) {
+      for (LyricSearchResult lyricSearchResult in results) {
         var provider = Provider.of<AppStateManager>(context, listen: false);
-
-        itemTiles.add(InkWell(
-          child: LyricTile(
-            item: item,
-          ),
-          onTap: () {
-            logger.i("Clicked on Search result. Song: ${item.song}");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LyricDetailScreen(
-                  lyric: provider.getLyric(item),
+        // Exclude invalid results
+        if (!lyricSearchResult.isEmpty && lyricSearchResult.lyricId != 0) {
+          itemTiles.add(InkWell(
+            child: LyricTile(
+              lyric: lyricSearchResult,
+            ),
+            onTap: () {
+              logger.i(
+                  "Clicked on Search result. Song: ${lyricSearchResult.song}");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LyricDetailScreen(
+                    lyric: provider.getLyric(lyricSearchResult),
+                  ),
                 ),
-              ),
-            );
-          },
-        ));
+              );
+            },
+          ));
+        }
       }
 
       return SizedBox(
@@ -301,12 +338,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
-    logger.d("Dispose of Search Screen");
+    logger.d("Disposing of Search Screen");
     _searchControllerText.dispose();
+    _searchControllerAuthor.dispose();
+    _searchControllerSong.dispose();
     super.dispose();
   }
 
-  void showSnackBar(List<LyricSearchResult> results) {
+  void showNoResultsMsg(List<LyricSearchResult> results) {
     if (results.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.noResults),

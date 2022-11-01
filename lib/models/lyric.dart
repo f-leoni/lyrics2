@@ -1,7 +1,9 @@
-class Lyric {
-  int? id;
-  String author;
-  String title;
+import 'package:lyrics_2/models/lyric_data.dart';
+
+class Lyric extends LyricData {
+  int? lyricId;
+  String artist;
+  String song;
   String lyric;
   String imageUrl;
   String checksum;
@@ -12,9 +14,9 @@ class Lyric {
 
 // Constructor
   Lyric({
-    required this.id,
-    required this.author,
-    required this.title,
+    required this.lyricId,
+    required this.artist,
+    required this.song,
     required this.lyric,
     required this.imageUrl,
     required this.checksum,
@@ -23,9 +25,9 @@ class Lyric {
 // Create from json object
   factory Lyric.fromJson(Map<String, dynamic> json) {
     return Lyric(
-      id: int.parse(json['LyricId']),
-      author: json['LyricArtist'] as String,
-      title: json['LyricSong'] as String,
+      lyricId: int.parse(json['LyricId']),
+      artist: json['LyricArtist'] as String,
+      song: json['LyricSong'] as String,
       lyric: json['Lyric'] as String,
       imageUrl: json['LyricCovertArtUrl'] as String,
       checksum: json['LyricChecksum'] as String,
@@ -34,26 +36,56 @@ class Lyric {
 
 // Copy
   Lyric copyWith(
-      {int? id,
-      String? author,
-      String? title,
-      String? imageUrl,
-      String? lyric,
-      String? checksum}) {
+      {int? p_id,
+      String? p_author,
+      String? p_title,
+      String? p_imageUrl,
+      String? p_lyric,
+      String? p_checksum}) {
     return Lyric(
-        id: id ?? this.id,
-        author: author ?? this.author,
-        title: title ?? this.title,
-        imageUrl: imageUrl ?? this.imageUrl,
-        lyric: lyric ?? this.lyric,
-        checksum: checksum ?? this.checksum);
+        lyricId: p_id ?? lyricId,
+        artist: p_author ?? artist,
+        song: p_title ?? song,
+        imageUrl: p_imageUrl ?? imageUrl,
+        lyric: p_lyric ?? lyric,
+        checksum: p_checksum ?? checksum);
+  }
+
+  // LyricData implementation
+  @override
+  int? getId() {
+    return lyricId;
+  }
+
+  @override
+  String getSong() {
+    return song;
+  }
+
+  @override
+  String getArtist() {
+    return artist;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is Lyric &&
+        other.lyricId != null &&
+        lyricId != null &&
+        other.lyricId == lyricId;
   }
 
   static List<Lyric> samples = [
     Lyric(
-      id: 1,
-      author: "Genesis",
-      title: "Supper's Ready",
+      lyricId: 1,
+      artist: "Genesis",
+      song: "Supper's Ready",
       lyric: """
  [Part I: "Lover's Leap" (0:00 - 3:47)]
 Walking across the sitting room
@@ -267,9 +299,9 @@ To take them to the new Jerusalem""",
       checksum: "147b0b3627e1da1a2de60a3c01f84e0f",
     ),
     Lyric(
-      id: 2,
-      author: "Genesis",
-      title: "Supper's Ready",
+      lyricId: 2,
+      artist: "Genesis",
+      song: "Supper's Ready",
       lyric: """
 [Part I: 'Lover's Leap' (0:00 - 3:47)] Walking across the sitting room 
 I turn the television off 
@@ -279,9 +311,9 @@ I look into your eyes...""",
       checksum: "Test002",
     ),
     Lyric(
-      id: 3,
-      author: "Genesis",
-      title: "Supper's Ready",
+      lyricId: 3,
+      artist: "Genesis",
+      song: "Supper's Ready",
       lyric: """
 [Part I: 'Lover's Leap' (0:00 - 3:47)] Walking across the sitting room 
 I turn the television off 
@@ -291,9 +323,9 @@ I look into your eyes...""",
       checksum: "Test003",
     ),
     Lyric(
-      id: 4,
-      author: "Genesis",
-      title: "Supper's Ready",
+      lyricId: 4,
+      artist: "Genesis",
+      song: "Supper's Ready",
       lyric: """
 [Part I: 'Lover's Leap' (0:00 - 3:47)] Walking across the sitting room 
 I turn the television off 
@@ -303,9 +335,9 @@ I look into your eyes...""",
       checksum: "Test004",
     ),
     Lyric(
-      id: 5,
-      author: "Genesis",
-      title: "Supper's Ready",
+      lyricId: 5,
+      artist: "Genesis",
+      song: "Supper's Ready",
       lyric: """
 [Part I: 'Lover's Leap' (0:00 - 3:47)] Walking across the sitting room 
 I turn the television off 
@@ -315,9 +347,9 @@ I look into your eyes...""",
       checksum: "Test005",
     ),
     Lyric(
-      id: 6,
-      author: "Genesis",
-      title: "Supper's Ready",
+      lyricId: 6,
+      artist: "Genesis",
+      song: "Supper's Ready",
       lyric: """
 [Part I: 'Lover's Leap' (0:00 - 3:47)] Walking across the sitting room 
 I turn the television off 

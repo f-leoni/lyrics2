@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:flutter/foundation.dart';
+import 'package:lyrics_2/components/logger.dart';
 import 'repository.dart';
 import '../models/models.dart';
 
@@ -15,24 +16,39 @@ class MemoryRepository extends Repository with ChangeNotifier {
   }
 
   @override
-  Lyric findLyricById(int id) {
-    return _currentLyrics.firstWhere((lyric) => lyric.id == id);
+  Lyric findLyricById(int? id) {
+    return _currentLyrics.firstWhere((lyric) => lyric.lyricId == id);
+  }
+
+  @override
+  bool isLyricFavoriteById(int? id) {
+    try {
+      _currentLyrics.firstWhere((lyric) => lyric.lyricId == id);
+      return true;
+    } on StateError catch (e) {
+      return false;
+    }
   }
 
 //List<Author> findAllAuthors();
   @override
-  int insertLyricInFavs(Lyric lyric) {
-    _currentLyrics.add(lyric);
-
+  int insertLyricInFavs(Lyric? lyric) {
+    if (lyric != null && !_currentLyrics.contains(lyric)) {
+      _currentLyrics.add(lyric);
+    } else {
+      logger
+          .i("Lyric ${lyric!.song} not added favorites because already added");
+    }
     notifyListeners();
     return 0;
   }
 
   @override
-  void deleteLyricFromFavs(Lyric lyric) {
-    _currentLyrics.remove(lyric);
-
-    notifyListeners();
+  void deleteLyricFromFavs(Lyric? lyric) {
+    if (lyric != null) {
+      _currentLyrics.remove(lyric);
+      notifyListeners();
+    }
   }
 
   @override
@@ -42,4 +58,8 @@ class MemoryRepository extends Repository with ChangeNotifier {
 
   @override
   void close() {}
+
+  bool contains(Lyric lyric) {
+    return _currentLyrics.contains(lyric);
+  }
 }
