@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lyrics_2/data/memory_repository.dart';
+import 'package:lyrics_2/data/repository.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
-import 'package:lyrics_2/models/lyric.dart';
 import 'package:lyrics_2/models/lyric_data.dart';
-import 'package:lyrics_2/models/lyric_search_result.dart';
 import 'package:provider/provider.dart';
 
 class LyricTile extends StatelessWidget {
   final LyricData lyric;
-  MemoryRepository repository = MemoryRepository();
-  List<Lyric> favorites = List<Lyric>.empty(growable: true);
-
-  LyricTile({Key? key, required this.lyric}) : super(key: key);
+  const LyricTile({Key? key, required this.lyric}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    repository = Provider.of<MemoryRepository>(context);
-    List<Lyric> favorites = repository.findAllFavsLyrics();
+    MemoryRepository repository = Provider.of<MemoryRepository>(context);
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
@@ -37,13 +32,17 @@ class LyricTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          lyric.getSong(),
-                          overflow: TextOverflow.fade,
-                          style: GoogleFonts.lato(
-                              //decoration: textDecoration,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.7185,
+                          child: Text(
+                            lyric.getSong(),
+                            softWrap: true,
+                            overflow: TextOverflow.fade,
+                            style: GoogleFonts.roboto(
+                                //decoration: textDecoration,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                         const SizedBox(height: 4.0),
                         buildAuthor(),
@@ -58,7 +57,7 @@ class LyricTile extends StatelessWidget {
                         //buildImportance(),
                       ],
                     ),
-                    buildFavoriteIcon(lyric),
+                    buildFavoriteIcon(repository, lyric),
                   ],
                 ),
               ],
@@ -98,8 +97,8 @@ class LyricTile extends StatelessWidget {
     );
   }
 
-  Widget buildFavoriteIcon(LyricData p_lyric) {
-    if (repository.isLyricFavoriteById(p_lyric.getId())) {
+  Widget buildFavoriteIcon(Repository repository, LyricData pLyric) {
+    if (repository.isLyricFavoriteById(pLyric.getId())) {
       return const Icon(
         Icons.favorite,
         color: Colors.red,

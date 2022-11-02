@@ -1,13 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lyrics_2/components/logger.dart';
 import 'package:lyrics_2/data/memory_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics_2/lyricstheme.dart';
 import 'package:lyrics_2/models/models.dart';
-// import 'package:lyrics_2/components/components.dart';
 
 class LyricDetailScreen extends StatelessWidget {
   static MaterialPage page(Future<Lyric> lyric) {
@@ -141,7 +139,13 @@ Widget createLyricPage(BuildContext context, Lyric? lyric) {
                 lyric != null
                     ? lyric.lyric.replaceAll("\\r\\\\n", "\r\n")
                     : AppLocalizations.of(context)!.errNoLyric,
-                style: LyricsTheme.darkTextTheme.bodyText1,
+                style: GoogleFonts.roboto(
+                  //decoration: textDecoration,
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white,
+                ),
+                //style: LyricsTheme.darkTextTheme.bodyText1,
               ),
             ),
           ),

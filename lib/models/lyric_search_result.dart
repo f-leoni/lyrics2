@@ -1,6 +1,5 @@
 import 'package:lyrics_2/components/logger.dart';
 import 'package:lyrics_2/models/lyric_data.dart';
-import 'package:lyrics_2/models/lyric_search_result.dart';
 
 class LyricSearchResult extends LyricData {
   int lyricId;
@@ -58,7 +57,7 @@ class LyricSearchResult extends LyricData {
         lyricChecksum: cs,
       );
     } on Exception catch (e) {
-      logger.e("Error in converting to json");
+      logger.e("Error in converting to json ${e.toString()}");
       return LyricSearchResult.empty;
     }
   }

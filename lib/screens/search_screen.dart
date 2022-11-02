@@ -6,6 +6,8 @@ import 'package:lyrics_2/lyricstheme.dart';
 import 'package:lyrics_2/models/models.dart';
 import 'package:lyrics_2/components/lyric_tile.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter_acrcloud/flutter_acrcloud.dart';
+import 'package:lyrics_2/env.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -32,10 +34,13 @@ class _SearchScreenState extends State<SearchScreen> {
   String _searchStringText = "";
   String _searchStringAuthor = "";
   String _searchStringSong = "";
+  String _searchAudioAuthor = "";
+  String _searchAudioSong = "";
   var logger = Logger(
     printer: PrettyPrinter(),
   );
   int minSearchLen = 3;
+  ACRCloudResponseMusicItem? music;
 
   @override
   void initState() {
@@ -54,6 +59,8 @@ class _SearchScreenState extends State<SearchScreen> {
         _searchStringSong = _searchControllerSong.text;
       });
     });
+
+    ACRCloud.setUp(ACRCloudConfig(arApiAccess, arApiAccess, arApiHost));
     super.initState();
   }
 
@@ -192,7 +199,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         hintText: AppLocalizations.of(context)!.searchSongHint,
                         //hintStyle: const TextStyle(fontSize: 8),
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.yellow[50],
                       ),
@@ -207,7 +214,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       );
     } else {
-      // Ricerca per audio
+      // Search bu audio recognition
       return Row(children: [
         IconButton(
             //color: Colors.green,
@@ -217,7 +224,75 @@ class _SearchScreenState extends State<SearchScreen> {
                   .switchSearch(context);
             },
             icon: const Icon(Icons.refresh_rounded)),
-        Text("AUDIO SEARCH\nTO BE IMPLEMENTED"),
+        //Text("AUDIO SEARCH\nTO BE IMPLEMENTED"),
+        Column(
+          children: [
+            Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  setState(() {
+                    music = null;
+                  });
+
+                  final session = ACRCloud.startSession();
+
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.msgListening),
+                      content: StreamBuilder(
+                        stream: session.volumeStream,
+                        initialData: 0,
+                        builder: (_, snapshot) =>
+                            Text(snapshot.data.toString()),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text(AppLocalizations.of(context)!.msgCancel),
+                          onPressed: session.cancel,
+                        )
+                      ],
+                    ),
+                  );
+
+                  final result = await session.result;
+                  Navigator.of(context, rootNavigator: true).pop(result);
+                  //Navigator.pop(context);
+
+                  if (result == null) {
+                    // Cancelled.
+                    return;
+                  } else if (result.metadata == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(AppLocalizations.of(context)!.noResults +
+                          ': ${result.status.msg}'),
+                    ));
+                    return;
+                  }
+                  setState(() {
+                    music = result.metadata!.music.first;
+                    if (music != null) {
+                      _searchAudioAuthor = music!.artists.first.name;
+                      _searchAudioSong = music!.title;
+                      startSearch(context);
+                    }
+                  });
+                },
+                child: Text(AppLocalizations.of(context)!.msgListen),
+              ),
+            ),
+            // Spread operator to extend a children collection
+            if (music != null) ...[
+              Text(AppLocalizations.of(context)!.msgTrack +
+                  ' ${music!.title}\n'),
+              Text(AppLocalizations.of(context)!.msgAlbum +
+                  ' ${music!.album.name}\n'),
+              Text(AppLocalizations.of(context)!.msgTrack +
+                  ' ${music!.artists.first.name}\n'),
+            ],
+          ],
+        ),
       ]);
     }
   }
@@ -247,6 +322,8 @@ class _SearchScreenState extends State<SearchScreen> {
         Provider.of<AppStateManager>(context, listen: false).isTextSearch;
     bool isSongAuthorSearch =
         Provider.of<AppStateManager>(context, listen: false).isSongAuthorSearch;
+    bool isAudioSearch =
+        Provider.of<AppStateManager>(context, listen: false).isAudioSearch;
     if (isTextSearch && _searchStringText.length < minSearchLen ||
         isSongAuthorSearch &&
             (_searchStringSong.length < minSearchLen ||
@@ -262,9 +339,12 @@ class _SearchScreenState extends State<SearchScreen> {
     if (isTextSearch) {
       Provider.of<AppStateManager>(context, listen: false)
           .startSearchText(_searchStringText);
-    } else {
+    } else if (isSongAuthorSearch) {
       Provider.of<AppStateManager>(context, listen: false)
           .startSearchSongAuthor(_searchStringAuthor, _searchStringSong);
+    } else if (isAudioSearch) {
+      Provider.of<AppStateManager>(context, listen: false)
+          .startSearchSongAuthor(_searchAudioAuthor, _searchAudioSong);
     }
     showNoResultsMsg(
         Provider.of<AppStateManager>(context, listen: false).searchResults);
@@ -278,23 +358,6 @@ class _SearchScreenState extends State<SearchScreen> {
       List<LyricSearchResult> results =
           Provider.of<AppStateManager>(context, listen: false).searchResults;
       List<Widget> itemTiles = List<Widget>.empty(growable: true);
-      /*itemTiles.add(
-        TextField(
-          controller: _searchController,
-          decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  /* Clear the search field */
-                },
-              ),
-              hintText: 'Search...1',
-              border: InputBorder.none),
-          onEditingComplete: () =>
-              Provider.of<AppStateManager>(context, listen: false).goToTab(2),
-        ),
-      );*/
       for (LyricSearchResult lyricSearchResult in results) {
         var provider = Provider.of<AppStateManager>(context, listen: false);
         // Exclude invalid results
@@ -318,7 +381,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ));
         }
       }
-
       return SizedBox(
           height: _height,
           //color: Colors.green,

@@ -26,6 +26,7 @@ class MemoryRepository extends Repository with ChangeNotifier {
       _currentLyrics.firstWhere((lyric) => lyric.lyricId == id);
       return true;
     } on StateError catch (e) {
+      logger.e("Error ${e.message}");
       return false;
     }
   }

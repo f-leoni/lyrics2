@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lyrics_2/models/models.dart';
 import 'package:lyrics_2/api/chartlyrics_proxy.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:logger/logger.dart';
 
 class LyricsTab {
@@ -36,6 +37,7 @@ class AppStateManager extends ChangeNotifier {
   bool _isSongAuthorSearch = false;
   bool _isAudioSearch = false;
   int _searchType = SearchType.text;
+  //ACRCloudResponseMusicItem? _music;
 
   // Accessors
   bool get isInitialized => _initialized;
@@ -53,6 +55,10 @@ class AppStateManager extends ChangeNotifier {
   bool get isAudioSearch => _isAudioSearch;
   //bool get isSongAuthorSearch => !_isTextSearch;
   int get searchType => _searchType;
+  //ACRCloudResponseMusicItem? get music => _music;
+  //set music(ACRCloudResponseMusicItem? pMusic) {
+  //  _music = pMusic;
+  //}
 
   void initializeApp() {
     logger.d("Initialising...");
@@ -138,7 +144,6 @@ class AppStateManager extends ChangeNotifier {
   void switchSearch(BuildContext context) {
     String msg = "";
     int currSearchType = searchType;
-    int newSearchType;
     if (currSearchType == SearchType.text) {
       msg = AppLocalizations.of(context)!.msgSearchSongAuthor;
       _searchType = SearchType.songAuthor;
@@ -194,6 +199,10 @@ class AppStateManager extends ChangeNotifier {
   void goToLyrics() {
     _selectedTab = LyricsTab.search;
     notifyListeners();
+  }
+
+  startAudioSearch() {
+    final session = ACRCloud.startSession();
   }
 
   void logout() {

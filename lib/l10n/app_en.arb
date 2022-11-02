@@ -79,7 +79,7 @@
     "@splashInit": {
         "description": "Splash Screen  Msg"
     },
-    "info": "Lyrics 2 was created by Zitzusoft.\nIt is an open source app and uses some code from RayWenderlicht very good course 'Flutter Apprentice'.\n\nAlso, Lyrics 2 use some third party libraries. In appearance order:\n- provider\n- smooth_page_indicator\n- xml2json\n- logger.\n\nFinally, Lyrics 2 leverages APIs from ChartLyrics but is not related in any way with ChartLyrics\n\nThanks all!\nF. of Zitzusoft",
+    "info": "Lyrics 2 was created by Zitzusoft.\nIt is an open source app and uses some code from RayWenderlicht's very good course 'Flutter Apprentice'.\n\nAlso, Lyrics 2 use some third party libraries. In appearance order:\n- provider\n- smooth_page_indicator\n- xml2json\n- logger.\n\nFinally, Lyrics 2 leverages APIs from ChartLyrics but is not related in any way with ChartLyrics\n\nThanks all!\nF. of Zitzusoft",
     "@info": {
         "description": "Info text"
     },
@@ -102,12 +102,34 @@
     "msgSearchSongAuthor": "Searching by author/title",
     "@msgSearchSongAuthor": {
        "description": "Text of Snackbar shown when changing search mode to search by Autor/song"
-    }    ,
+    },
     "msgSearchAudio": "Searching by audio",
     "@msgSearchAudio": {
        "description": "Text of Snackbar shown when changing search mode to search by Audio"
+    },
+    "msgCancel": "Cancel",
+    "@msgCancel": {
+        "description": "Text for button to cancel audio search"
+    },
+    "msgListen": "Listen",
+    "@msgListen": {
+        "description": "Text for button to start audio search"
+    },
+    "msgListening": "Listening...",
+    "@msgListening": {
+        "description": "Text shown while audio searching"
+    },
+    "msgTrack": "Track",
+    "@msgTrack": {
+        "description": "Audio search track result"
+    },
+    "msgAlbum": "Album",
+    "@msgAlbum": {
+        "description": "Audio search album result"
+    },
+    "msgArtist": "Artist",
+    "@msgArtist": {
+        "description": "Audio search artist result"
     }
-
-
 
 }

@@ -26,5 +26,11 @@
     "searchTextTooShort": "Il testo da ricercare è troppo corto!",
     "msgSearchText": "Ricerca per testo",
     "msgSearchSongAuthor": "Ricerca per titolo/autore",
-     "msgSearchAudio": "Ricerca con riconoscimento audio"
+    "msgSearchAudio": "Ricerca con riconoscimento audio",
+    "msgCancel": "Annulla",
+    "msgListen": "Ascolta",
+    "msgListening": "Sto ascoltando...",
+    "msgTrack": "Traccia",
+    "msgAlbum": "Album",
+    "msgArtist": "Artista"
 }

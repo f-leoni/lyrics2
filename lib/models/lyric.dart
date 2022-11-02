@@ -36,19 +36,19 @@ class Lyric extends LyricData {
 
 // Copy
   Lyric copyWith(
-      {int? p_id,
-      String? p_author,
-      String? p_title,
-      String? p_imageUrl,
-      String? p_lyric,
-      String? p_checksum}) {
+      {int? pId,
+      String? pAuthor,
+      String? pTitle,
+      String? pImageUrl,
+      String? pLyric,
+      String? pChecksum}) {
     return Lyric(
-        lyricId: p_id ?? lyricId,
-        artist: p_author ?? artist,
-        song: p_title ?? song,
-        imageUrl: p_imageUrl ?? imageUrl,
-        lyric: p_lyric ?? lyric,
-        checksum: p_checksum ?? checksum);
+        lyricId: pId ?? lyricId,
+        artist: pAuthor ?? artist,
+        song: pTitle ?? song,
+        imageUrl: pImageUrl ?? imageUrl,
+        lyric: pLyric ?? lyric,
+        checksum: pChecksum ?? checksum);
   }
 
   // LyricData implementation
