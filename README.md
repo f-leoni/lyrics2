@@ -1,16 +1,30 @@
 # lyrics_2
 
-Your favourite songs' lyrics
+Find and read your favourite songs' lyrics
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a Flutter exercise but it's a complete app and it leverages some flutter features such as:
+* Multiple Providers
+* Multiple Routers
+* Full Localization
 
-A few resources to get you started if this is your first Flutter project:
+#Third Party
+Lyrics uses some third party libraries such as:
+* provider - for state management
+* smooth_page_indicator - For Onboarding screen navigation
+* xml2json - for XML to JSON conversion
+* logger - for logging
+* sqflite - for database management
+* flutter_acrcloud - For sound recognition
+* flutter_icons - For app icons generation
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Generate icons
+flutter pub run flutter_launcher_icons:main
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+TODO:
+* (feature) Database repository
+* (feature) Implement graphics theme (dark and light)
+* (feature) Implement Users Registration, Login and profile management via Firebase
+* (fix) Make sound recognition work
+* ...

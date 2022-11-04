@@ -1,8 +1,8 @@
 import 'dart:core';
 import 'package:flutter/foundation.dart';
 import 'package:lyrics_2/components/logger.dart';
+import 'package:lyrics_2/models/models.dart';
 import 'repository.dart';
-import '../models/models.dart';
 
 class MemoryRepository extends Repository with ChangeNotifier {
   final List<Lyric> _currentLyrics = <Lyric>[];
@@ -11,45 +11,45 @@ class MemoryRepository extends Repository with ChangeNotifier {
   //final _autoTheme = false;
 
   @override
-  List<Lyric> findAllFavsLyrics() {
-    return _currentLyrics;
+  Future<List<Lyric>> findAllFavsLyrics() {
+    return Future.value(_currentLyrics);
   }
 
   @override
-  Lyric findLyricById(int? id) {
-    return _currentLyrics.firstWhere((lyric) => lyric.lyricId == id);
+  Future<Lyric> findLyricById(int id) {
+    return Future.value(
+        _currentLyrics.firstWhere((lyric) => lyric.lyricId == id));
   }
 
   @override
-  bool isLyricFavoriteById(int? id) {
+  Future<bool> isLyricFavoriteById(int id) {
     try {
       _currentLyrics.firstWhere((lyric) => lyric.lyricId == id);
-      return true;
+      return Future.value(true);
     } on StateError catch (e) {
-      logger.e("Error ${e.message}");
-      return false;
+      logger.e("Error '${e.message}' ID: $id");
+      return Future.value(false);
     }
   }
 
 //List<Author> findAllAuthors();
   @override
-  int insertLyricInFavs(Lyric? lyric) {
-    if (lyric != null && !_currentLyrics.contains(lyric)) {
+  Future<int> insertLyricInFavs(Lyric lyric) {
+    if (!_currentLyrics.contains(lyric)) {
       _currentLyrics.add(lyric);
     } else {
-      logger
-          .i("Lyric ${lyric!.song} not added favorites because already added");
+      logger.v(
+          "Lyric ${lyric.song} not added to favorites because it has already been added");
     }
     notifyListeners();
-    return 0;
+    return Future.value(0);
   }
 
   @override
-  void deleteLyricFromFavs(Lyric? lyric) {
-    if (lyric != null) {
-      _currentLyrics.remove(lyric);
-      notifyListeners();
-    }
+  Future<void> deleteLyricFromFavs(Lyric lyric) {
+    _currentLyrics.remove(lyric);
+    notifyListeners();
+    return Future.value(null);
   }
 
   @override
@@ -59,8 +59,4 @@ class MemoryRepository extends Repository with ChangeNotifier {
 
   @override
   void close() {}
-
-  bool contains(Lyric lyric) {
-    return _currentLyrics.contains(lyric);
-  }
 }

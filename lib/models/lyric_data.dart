@@ -1,5 +1,5 @@
 abstract class LyricData {
-  int? getId();
+  int getId();
   String getSong();
   String getArtist();
 }

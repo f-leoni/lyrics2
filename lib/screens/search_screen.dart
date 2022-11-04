@@ -350,7 +350,7 @@ class _SearchScreenState extends State<SearchScreen> {
         Provider.of<AppStateManager>(context, listen: false).searchResults);
   }
 
-  // List of fount Lyrics
+  // List of found Lyrics
   Widget buildList(BuildContext context) {
     double _height = MediaQuery.of(context).size.height / 2 - 31; //, 236;
     if (Provider.of<AppStateManager>(context, listen: false)

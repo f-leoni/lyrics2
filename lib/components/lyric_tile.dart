@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lyrics_2/data/memory_repository.dart';
-import 'package:lyrics_2/data/repository.dart';
+//import 'package:lyrics_2/data/memory_repository.dart';
+import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:lyrics_2/models/lyric_data.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,8 @@ class LyricTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MemoryRepository repository = Provider.of<MemoryRepository>(context);
+    //MemoryRepository repository = Provider.of<MemoryRepository>(context);
+    SQLiteRepository repository = Provider.of<SQLiteRepository>(context);
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
@@ -97,14 +98,22 @@ class LyricTile extends StatelessWidget {
     );
   }
 
-  Widget buildFavoriteIcon(Repository repository, LyricData pLyric) {
-    if (repository.isLyricFavoriteById(pLyric.getId())) {
-      return const Icon(
-        Icons.favorite,
-        color: Colors.red,
-      );
-    } else {
-      return Container();
-    }
+  //Widget buildFavoriteIcon(MemoryRepository repository, LyricData pLyric) {
+  Widget buildFavoriteIcon(SQLiteRepository repository, LyricData pLyric) {
+    //bool isFavorite = await repository.isLyricFavoriteById(pLyric.getId());
+    Widget currIcon = Container();
+
+    return FutureBuilder(
+        future: repository.isLyricFavoriteById(pLyric.getId()),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData && snapshot.data as bool)
+              currIcon = Icon(
+                Icons.favorite,
+                color: Colors.red,
+              );
+          }
+          return currIcon;
+        });
   }
 }

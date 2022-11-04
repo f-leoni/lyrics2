@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
 import 'package:lyrics_2/models/favorites_manager.dart';
 import 'package:provider/provider.dart';
-import 'data/memory_repository.dart';
+//import 'data/memory_repository.dart';
 import 'models/models.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
@@ -51,10 +52,14 @@ class _LyricsAppState extends State<LyricsApp> {
         ChangeNotifierProvider(
           create: (context) => _appStateManager,
         ),
-        ChangeNotifierProvider<MemoryRepository>(
+        /*ChangeNotifierProvider<MemoryRepository>(
           lazy: false,
           create: (_) => MemoryRepository(),
-        ),
+        ),*/
+        ChangeNotifierProvider<SQLiteRepository>(
+          lazy: false,
+          create: (_) => SQLiteRepository(),
+        )
       ],
       child: Consumer<ProfileManager>(
         builder: (context, profileManager, child) {

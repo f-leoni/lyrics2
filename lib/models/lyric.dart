@@ -1,7 +1,7 @@
 import 'package:lyrics_2/models/lyric_data.dart';
 
 class Lyric extends LyricData {
-  int? lyricId;
+  int lyricId;
   String artist;
   String song;
   String lyric;
@@ -11,6 +11,7 @@ class Lyric extends LyricData {
   String? lyricUrl;
   int? rank;
   String? correctUrl;
+  bool isFavorite = false;
 
 // Constructor
   Lyric({
@@ -20,19 +21,38 @@ class Lyric extends LyricData {
     required this.lyric,
     required this.imageUrl,
     required this.checksum,
+    //required this.isFavorite,
   });
 
 // Create from json object
   factory Lyric.fromJson(Map<String, dynamic> json) {
+    String lyric = "";
+    try {
+      lyric = json['Lyric'];
+    } catch (e) {
+      lyric = json['lyric'];
+    }
     return Lyric(
-      lyricId: int.parse(json['LyricId']),
+      //lyricId: int.parse(json['LyricId']),
+      lyricId: int.parse(json['LyricId'].toString()),
       artist: json['LyricArtist'] as String,
       song: json['LyricSong'] as String,
-      lyric: json['Lyric'] as String,
+      lyric: lyric,
       imageUrl: json['LyricCovertArtUrl'] as String,
       checksum: json['LyricChecksum'] as String,
     );
   }
+
+  // Convert our Recipe to JSON to make it easier when you store
+// it in the database
+  Map<String, dynamic> toJson() => {
+        'LyricId': lyricId,
+        'LyricArtist': artist,
+        'LyricSong': song,
+        'LyricCovertArtUrl': imageUrl,
+        'LyricChecksum': checksum,
+        'lyric': lyric,
+      };
 
 // Copy
   Lyric copyWith(
@@ -53,7 +73,7 @@ class Lyric extends LyricData {
 
   // LyricData implementation
   @override
-  int? getId() {
+  int getId() {
     return lyricId;
   }
 
@@ -80,6 +100,15 @@ class Lyric extends LyricData {
         lyricId != null &&
         other.lyricId == lyricId;
   }
+
+  static get empty => Lyric(
+        lyricId: -1,
+        artist: "error",
+        song: "error",
+        lyric: "error",
+        checksum: "error",
+        imageUrl: "",
+      );
 
   static List<Lyric> samples = [
     Lyric(
