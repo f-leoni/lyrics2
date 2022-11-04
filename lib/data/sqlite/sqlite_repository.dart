@@ -61,8 +61,8 @@ class SQLiteRepository extends Repository with ChangeNotifier {
     dbHelper.close();
   }
 
+//TODO implement this method?
   /*bool contains(Lyric lyric) {
-    //TODO implement this method
     return false;
   }*/
 }
