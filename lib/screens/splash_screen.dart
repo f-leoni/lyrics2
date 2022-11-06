@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
@@ -22,7 +23,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Initialize App (16)
     Provider.of<AppStateManager>(context, listen: false).initializeApp();
   }
 

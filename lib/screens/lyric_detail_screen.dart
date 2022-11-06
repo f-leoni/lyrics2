@@ -178,6 +178,7 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               isFavorite = snapshot.data as bool;
+              isFavorite = snapshot.data as bool;
             } else {
               isFavorite = false;
             }

@@ -5,6 +5,9 @@ import 'package:lyrics_2/api/chartlyrics_proxy.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:logger/logger.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
+import 'package:provider/provider.dart';
 
 class LyricsTab {
   static const int favorites = 0;
@@ -24,7 +27,7 @@ class AppStateManager extends ChangeNotifier {
   );
   bool _initialized = false;
   bool _loggedIn = true;
-  bool _onboardingComplete = false;
+  //bool _onboardingComplete = false;
   int _selectedTab = LyricsTab.search;
   List<LyricSearchResult> _searchResults = List.empty();
   int _status = -1;
@@ -32,17 +35,19 @@ class AppStateManager extends ChangeNotifier {
   bool _searchCompleted = false;
   bool _isSearching = false;
   Future<Lyric>? _lyric;
-  // search mode - if true search by text else search by author/title
-  bool _isTextSearch = true;
-  bool _isSongAuthorSearch = false;
-  bool _isAudioSearch = false;
-  int _searchType = SearchType.text;
-  //ACRCloudResponseMusicItem? _music;
+  // default search mode
+  int _searchType = SearchType.audio;
+  String _version = "";
+  String _buildNr = "";
+  String _favoritesFilter = "";
+  //Map<String, String> _settings = Map<String, String>();
+  String _searchAudioAuthor = "";
+  String _searchAudioSong = "";
 
   // Accessors
   bool get isInitialized => _initialized;
   bool get isLoggedIn => _loggedIn;
-  bool get isOnboardingComplete => _onboardingComplete;
+  //bool get isOnboardingComplete => _onboardingComplete;
   bool get isSearchCompleted => _searchCompleted;
   int get getSelectedTab => _selectedTab;
   List<LyricSearchResult> get searchResults => _searchResults;
@@ -50,15 +55,27 @@ class AppStateManager extends ChangeNotifier {
   int get lastStatus => _status;
   String get lastErrorMsg => _errorMessage;
   bool get isSearching => _isSearching;
-  bool get isTextSearch => _isTextSearch;
-  bool get isSongAuthorSearch => _isSongAuthorSearch;
-  bool get isAudioSearch => _isAudioSearch;
+  //bool get isTextSearch => _isTextSearch;
+  //bool get isSongAuthorSearch => _isSongAuthorSearch;
+  //bool get isAudioSearch => _isAudioSearch;
   //bool get isSongAuthorSearch => !_isTextSearch;
   int get searchType => _searchType;
-  //ACRCloudResponseMusicItem? get music => _music;
-  //set music(ACRCloudResponseMusicItem? pMusic) {
-  //  _music = pMusic;
-  //}
+  String get version => _version;
+  String get buildNr => _buildNr;
+  String get favoritesFilter => _favoritesFilter;
+  void set favoritesFilter(String filter) {
+    _favoritesFilter = filter;
+  }
+
+  String get searchAudioAuthor => _searchAudioAuthor;
+  String get searchAudioSong => _searchAudioSong;
+  void set searchAudioAuthor(String author) {
+    _searchAudioAuthor = author;
+  }
+
+  void set searchAudioSong(String song) {
+    _searchAudioSong = song;
+  }
 
   void initializeApp() {
     logger.d("Initialising...");
@@ -66,15 +83,28 @@ class AppStateManager extends ChangeNotifier {
       const Duration(milliseconds: 2000),
       () {
         _initialized = true;
+        //_settings["initialized"] = "true";
         notifyListeners();
       },
     );
   }
 
-  void login(String username, String password) {
+  void login(BuildContext context, String username, String password) {
     logger.d("Logging in...");
-    _loggedIn = true;
+    final sqlRepository = Provider.of<SQLiteRepository>(context, listen: false);
+    //_loggedIn = true;
+    //_settings["logged_in"] = "true";
+    sqlRepository
+        .insertSetting(Setting(setting: Setting.loggedIn, value: "true"));
+
     notifyListeners();
+  }
+
+  Future<void> getVersionInfo() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    _version = packageInfo.version;
+    _buildNr = packageInfo.buildNumber;
   }
 
   Future<List<LyricSearchResult>> startSearchText(String searchText) async {
@@ -89,11 +119,10 @@ class AppStateManager extends ChangeNotifier {
       _isSearching = false;
     } on LyricException catch (e) {
       logger.e("An exception occurred: ${e.message} (${e.code})...");
-      //print("Error LyricException code: ${e.code}: ${e.message}");
       _status = e.code;
       _errorMessage = e.message;
       _isSearching = false;
-    } //*/
+    }
     notifyListeners();
     return _searchResults;
   }
@@ -111,7 +140,6 @@ class AppStateManager extends ChangeNotifier {
       _isSearching = false;
     } on LyricException catch (e) {
       logger.e("An exception occurred: ${e.message} (${e.code})...");
-      //print("Error LyricException code: ${e.code}: ${e.message}");
       _status = e.code;
       _errorMessage = e.message;
       _isSearching = false;
@@ -127,41 +155,27 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void switchSearchOld(BuildContext context) {
-    _isTextSearch = !_isTextSearch;
-    String msg = "";
-    if (_isTextSearch) {
-      msg = AppLocalizations.of(context)!.msgSearchText;
-    } else {
-      msg = AppLocalizations.of(context)!.msgSearchSongAuthor;
-    }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg),
-    ));
-    notifyListeners();
-  }
-
   void switchSearch(BuildContext context) {
     String msg = "";
     int currSearchType = searchType;
     if (currSearchType == SearchType.text) {
       msg = AppLocalizations.of(context)!.msgSearchSongAuthor;
       _searchType = SearchType.songAuthor;
-      _isTextSearch = false;
-      _isSongAuthorSearch = true;
-      _isAudioSearch = false;
+      //_isTextSearch = false;
+      //_isSongAuthorSearch = true;
+      //_isAudioSearch = false;
     } else if (currSearchType == SearchType.songAuthor) {
       msg = AppLocalizations.of(context)!.msgSearchAudio;
       _searchType = SearchType.audio;
-      _isTextSearch = false;
-      _isSongAuthorSearch = false;
-      _isAudioSearch = true;
+      //_isTextSearch = false;
+      //_isSongAuthorSearch = false;
+      //_isAudioSearch = true;
     } else if (currSearchType == SearchType.audio) {
       _searchType = SearchType.text;
       msg = AppLocalizations.of(context)!.msgSearchText;
-      _isTextSearch = true;
-      _isSongAuthorSearch = false;
-      _isAudioSearch = false;
+      //_isTextSearch = true;
+      //_isSongAuthorSearch = false;
+      //_isAudioSearch = false;
     }
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(msg),
@@ -186,8 +200,19 @@ class AppStateManager extends ChangeNotifier {
     }
   }
 
-  void completeOnboarding() {
-    _onboardingComplete = true;
+  Future<bool> checkOnboarding(BuildContext context) async {
+    final sqlRepository = Provider.of<SQLiteRepository>(context, listen: false);
+    Setting? onBoardingSavedStatus =
+        await sqlRepository.getSetting(Setting.onboardingComplete);
+    if (onBoardingSavedStatus == null) return false;
+    return onBoardingSavedStatus == "true";
+  }
+
+  void completeOnboarding(BuildContext context) {
+    //_onboardingComplete = true;
+    final sqlRepository = Provider.of<SQLiteRepository>(context, listen: false);
+    sqlRepository.insertSetting(
+        Setting(setting: Setting.onboardingComplete, value: "true"));
     notifyListeners();
   }
 
@@ -207,8 +232,12 @@ class AppStateManager extends ChangeNotifier {
 
   void logout() {
     logger.d("Executing user logout");
-    _loggedIn = false;
-    _onboardingComplete = false;
+    //final sqlRepository = Provider.of<SQLiteRepository>(context, listen: false);
+    //_loggedIn = false;
+    //_onboardingComplete = false;
+    //sqlRepository.insertSetting(
+    //    Setting(setting: Setting.onboardingComplete, value: "false"));
+
     _initialized = false;
     _selectedTab = 0;
 

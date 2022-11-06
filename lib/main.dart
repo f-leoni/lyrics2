@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
-import 'package:lyrics_2/models/favorites_manager.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics_2/models/profile_manager.dart';
+//import 'package:lyrics_2/models/favorites_manager.dart';
 import 'package:provider/provider.dart';
 //import 'data/memory_repository.dart';
 import 'models/models.dart';
@@ -24,7 +26,7 @@ class LyricsApp extends StatefulWidget {
 
 class _LyricsAppState extends State<LyricsApp> {
   // This widget is the root of your application.
-  final _favoritesManager = FavoritesManager();
+  //final _favoritesManager = FavoritesManager();
   final _profileManager = ProfileManager();
   final _appStateManager = AppStateManager();
   late AppRouter _appRouter;
@@ -34,7 +36,7 @@ class _LyricsAppState extends State<LyricsApp> {
     super.initState();
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
-      favoritesManager: _favoritesManager,
+      //favoritesManager: _favoritesManager,
       profileManager: _profileManager,
     );
   }
@@ -43,9 +45,9 @@ class _LyricsAppState extends State<LyricsApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        /*ChangeNotifierProvider(
           create: (context) => _favoritesManager,
-        ),
+        ),*/
         ChangeNotifierProvider(
           create: (context) => _profileManager,
         ),

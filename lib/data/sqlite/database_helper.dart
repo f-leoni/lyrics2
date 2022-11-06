@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlbrite/sqlbrite.dart';
@@ -10,7 +11,11 @@ class DatabaseHelper {
   static const lyricsTable = 'favorites';
   static const lyricsId = "LyricId";
   static const settingsTable = 'settings';
+  static const settingsId = 'id';
   static late BriteDatabase _streamDatabase;
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -39,7 +44,7 @@ class DatabaseHelper {
 
     await db.execute(''' 
     CREATE TABLE [$settingsTable] (
-      [id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+      [$settingsId] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
       [setting] varCHAR(20)  UNIQUE NOT NULL,
       [value] varchar(255)  NULL
       )''');
@@ -49,6 +54,8 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
+    logger.i(
+        "Database $_databaseName path is: $path. Versione: $_databaseVersion");
 
     // TODO: Remember to turn off debugging before deploying app to store(s).
     Sqflite.setDebugModeOn(true);
@@ -104,7 +111,14 @@ class DatabaseHelper {
 
   Future<int> insert(String table, Map<String, dynamic> row) async {
     final db = await instance.streamDatabase;
-    return db.insert(table, row);
+
+    //TODO ensure it is ok using ConflictAlgorithm.replace
+    return db.insert(table, row, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<int> update(String table, Map<String, dynamic> row) async {
+    final db = await instance.streamDatabase;
+    return db.update(table, row);
   }
 
   Future<int> insertLyric(Lyric lyric) {
@@ -131,5 +145,41 @@ class DatabaseHelper {
 
   void close() {
     _streamDatabase.close();
+  }
+
+  Future<int> insertSetting(Setting setting) async {
+    Setting? oldSetting = await findSettingByName(setting.setting);
+    if (oldSetting == null) {
+      return insert(settingsTable, setting.toJson());
+    } else {
+      return update(settingsTable, setting.toJson());
+    }
+  }
+
+  Future<Setting?> findSettingByName(String settingName) async {
+    final db = await instance.streamDatabase;
+    final settingsList =
+        await db.query(settingsTable, where: 'setting = "$settingName"');
+    final settings = parseSettings(settingsList);
+    if (settings[settingName] != null)
+      return settings[settingName]!;
+    else
+      return Future.value(null);
+  }
+
+  Map<String, Setting> parseSettings(List<Map<String, dynamic>> settingsList) {
+    final Map<String, Setting> settings = new Map<String, Setting>();
+    settingsList.forEach((settingsMap) {
+      final setting = Setting.fromJson(settingsMap);
+      settings[setting.setting] = setting;
+    });
+    return settings;
+  }
+
+  Future<Map<String, Setting>> getSettings() async {
+    final db = await instance.streamDatabase;
+    final settingsList = await db.query(settingsTable);
+    final settings = parseSettings(settingsList);
+    return settings;
   }
 }

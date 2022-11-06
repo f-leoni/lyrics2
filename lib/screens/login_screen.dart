@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
@@ -71,7 +72,7 @@ class LoginScreen extends StatelessWidget {
         onPressed: () async {
           // Login -> Navigate to home (20)
           Provider.of<AppStateManager>(context, listen: false)
-              .login('mockUsername', 'mockPassword');
+              .login(context, 'mockUsername', 'mockPassword');
         },
       ),
     );

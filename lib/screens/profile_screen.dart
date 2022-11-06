@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics_2/models/profile_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../components/circle_image.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
@@ -8,11 +9,13 @@ class InfoScreen extends StatelessWidget {
     return MaterialPage(
       name: LyricsPages.infoPath,
       key: ValueKey(LyricsPages.infoPath),
-      child: const InfoScreen(),
+      child: InfoScreen(),
     );
   }
 
-  const InfoScreen({Key? key}) : super(key: key);
+  InfoScreen({Key? key}) : super(key: key);
+  String version = "*";
+  String code = "*";
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +66,18 @@ class InfoScreen extends StatelessWidget {
                     width: 250,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: Text(AppLocalizations.of(context)!.info,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14,
-                              wordSpacing: 5)),
+                      child: Consumer<AppStateManager>(
+                          builder: (context, appStateManager, child) {
+                        Provider.of<AppStateManager>(context, listen: false)
+                            .getVersionInfo();
+                        return Text(
+                            AppLocalizations.of(context)!.info +
+                                "\n\nVersion: ${Provider.of<AppStateManager>(context, listen: false).version} - Build: ${Provider.of<AppStateManager>(context, listen: false).buildNr}\n",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14,
+                                wordSpacing: 5));
+                      }),
                     ),
                   ),
                 ),

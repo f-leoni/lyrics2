@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics_2/components/components_lyrics.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics_2/lyricstheme.dart';
 import 'package:lyrics_2/models/models.dart';
@@ -25,8 +26,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final Color rwColor = const Color.fromRGBO(64, 143, 77, 1);
-  final TextStyle focusedStyle = const TextStyle(color: Colors.green);
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+  ACRCloudResponseMusicItem? music;
+  final Color rwColor = Color.fromRGBO(64, 143, 77, 1);
+  final TextStyle focusedStyle =
+      const TextStyle(color: Color.fromRGBO(64, 143, 77, 1));
   final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
   final _searchControllerText = TextEditingController();
   final _searchControllerAuthor = TextEditingController();
@@ -34,13 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
   String _searchStringText = "";
   String _searchStringAuthor = "";
   String _searchStringSong = "";
-  String _searchAudioAuthor = "";
-  String _searchAudioSong = "";
-  var logger = Logger(
-    printer: PrettyPrinter(),
-  );
   int minSearchLen = 3;
-  ACRCloudResponseMusicItem? music;
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
       });
     });
 
-    ACRCloud.setUp(ACRCloudConfig(arApiAccess, arApiAccess, arApiHost));
+    ACRCloud.setUp(ACRCloudConfig(arApiAccessKey, arApiSecret, arApiHost));
     super.initState();
   }
 
@@ -84,7 +84,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   return buildSearchFields(context);
                 }),
               ),
-              Expanded(flex: 1, child: buildButton(context)),
+              Expanded(
+                  flex: 1,
+                  child: Consumer<AppStateManager>(
+                      builder: (context, appStateManager, child) {
+                    return buildButton(context);
+                  })),
               Expanded(
                 flex: 8,
                 child: Consumer<AppStateManager>(
@@ -98,13 +103,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget buildSearchFields(BuildContext context) {
-    bool isTextSearch =
-        Provider.of<AppStateManager>(context, listen: false).isTextSearch;
-    bool isSongAuthorSearch =
-        Provider.of<AppStateManager>(context, listen: false).isSongAuthorSearch;
-    bool isAudioSearch =
-        Provider.of<AppStateManager>(context, listen: false).isAudioSearch;
-    if (isTextSearch) {
+    int searchType =
+        Provider.of<AppStateManager>(context, listen: false).searchType;
+
+    if (searchType == SearchType.text) {
       return Row(
         //mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,13 +142,11 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
       );
-    } else if (isSongAuthorSearch) {
+    } else if (searchType == SearchType.songAuthor) {
       return Row(
-        //mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
-              //color: Colors.green,
               iconSize: 30,
               onPressed: () {
                 Provider.of<AppStateManager>(context, listen: false)
@@ -215,139 +215,148 @@ class _SearchScreenState extends State<SearchScreen> {
       );
     } else {
       // Search bu audio recognition
-      return Row(children: [
-        IconButton(
-            //color: Colors.green,
-            iconSize: 30,
-            onPressed: () {
-              Provider.of<AppStateManager>(context, listen: false)
-                  .switchSearch(context);
-            },
-            icon: const Icon(Icons.refresh_rounded)),
-        //Text("AUDIO SEARCH\nTO BE IMPLEMENTED"),
-        Column(
+      return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Builder(
-              builder: (context) => ElevatedButton(
-                onPressed: () async {
-                  setState(() {
-                    music = null;
-                  });
-
-                  final session = ACRCloud.startSession();
-
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.msgListening),
-                      content: StreamBuilder(
-                        stream: session.volumeStream,
-                        initialData: 0,
-                        builder: (_, snapshot) =>
-                            Text(snapshot.data.toString()),
+            Expanded(
+              flex: 1,
+              child: IconButton(
+                  alignment: Alignment.centerLeft,
+                  iconSize: 30,
+                  onPressed: () {
+                    Provider.of<AppStateManager>(context, listen: false)
+                        .switchSearch(context);
+                  },
+                  icon: const Icon(Icons.refresh_rounded)),
+            ),
+            Expanded(
+              flex: 5,
+              child: Column(
+                children: [
+                  Builder(
+                    builder: (context) => ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(minHeight: 30, maxHeight: 50),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0, 20, 30, 0),
+                        //color: Colors.red,
+                        child: MaterialButton(
+                          color: rwColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.msgListen,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          onPressed: startListening,
+                        ),
                       ),
-                      actions: [
-                        TextButton(
-                          child: Text(AppLocalizations.of(context)!.msgCancel),
-                          onPressed: session.cancel,
-                        )
-                      ],
                     ),
-                  );
-
-                  final result = await session.result;
-                  Navigator.of(context, rootNavigator: true).pop(result);
-                  //Navigator.pop(context);
-
-                  if (result == null) {
-                    // Cancelled.
-                    return;
-                  } else if (result.metadata == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(AppLocalizations.of(context)!.noResults +
-                          ': ${result.status.msg}'),
-                    ));
-                    return;
-                  }
-                  setState(() {
-                    music = result.metadata!.music.first;
-                    if (music != null) {
-                      _searchAudioAuthor = music!.artists.first.name;
-                      _searchAudioSong = music!.title;
-                      startSearch(context);
-                    }
-                  });
-                },
-                child: Text(AppLocalizations.of(context)!.msgListen),
+                  ),
+                  // Spread operator to extend a Column widget children collection
+                  if (music != null ||
+                      (Provider.of<AppStateManager>(context, listen: false)
+                                  .searchAudioAuthor !=
+                              "" &&
+                          Provider.of<AppStateManager>(context, listen: false)
+                                  .searchAudioSong !=
+                              "")) ...[
+                    SizedBox.fromSize(size: Size(1, 9)),
+                    Text(
+                        AppLocalizations.of(context)!.msgTrack +
+                            ': ${music != null ? music!.title : Provider.of<AppStateManager>(context, listen: false).searchAudioAuthor} - ${music != null ? music!.artists.first.name : Provider.of<AppStateManager>(context, listen: false).searchAudioSong}',
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(color: Colors.black)),
+                  ],
+                ],
               ),
             ),
-            // Spread operator to extend a children collection
-            if (music != null) ...[
-              Text(AppLocalizations.of(context)!.msgTrack +
-                  ' ${music!.title}\n'),
-              Text(AppLocalizations.of(context)!.msgAlbum +
-                  ' ${music!.album.name}\n'),
-              Text(AppLocalizations.of(context)!.msgTrack +
-                  ' ${music!.artists.first.name}\n'),
-            ],
-          ],
+          ]);
+    }
+  }
+
+  Future<void> startListening() async {
+    final provider = Provider.of<AppStateManager>(context, listen: false);
+    setState(() {
+      music = null;
+      provider.searchAudioAuthor = "";
+      provider.searchAudioSong = "";
+    });
+    final session = ACRCloud.startSession();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.msgListening),
+        content: StreamBuilder(
+          stream: session.volumeStream,
+          initialData: 0,
+          builder: (_, snapshot) => Text(snapshot.data.toString()),
         ),
-      ]);
+        actions: [
+          TextButton(
+            child: Text(AppLocalizations.of(context)!.msgCancel),
+            onPressed: session.cancel,
+          )
+        ],
+      ),
+    );
+
+    final result = await session.result;
+    // Hide dialog
+    Navigator.of(context, rootNavigator: true).pop(result);
+
+    if (result == null) {
+      // Search has been cancelled.
+      return;
+    } else if (result.metadata == null) {
+      // No results found
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+            AppLocalizations.of(context)!.noResults + ': ${result.status.msg}'),
+      ));
+      return;
+    } else {
+      setState(() {
+        music = result.metadata!.music.first;
+        if (music != null) {
+          provider.searchAudioAuthor = music!.artists.first.name;
+          provider.searchAudioSong = music!.title;
+          startSearch(context);
+        }
+      });
     }
   }
 
   Widget buildButton(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 30, maxHeight: 50),
-      child: MaterialButton(
-        color: rwColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+    /*bool isAudioSearch =
+        Provider.of<AppStateManager>(context, listen: false).isAudioSearch;*/
+    int searchType =
+        Provider.of<AppStateManager>(context, listen: false).searchType;
+    if (searchType == SearchType.audio) {
+      return Container();
+    } else {
+      return ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 30, maxHeight: 50),
+        child: MaterialButton(
+          color: rwColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Text(
+            AppLocalizations.of(context)!.searchText,
+            style: const TextStyle(color: Colors.white),
+          ),
+          onPressed: () async {
+            logger.v("Click on Search button in search screen");
+            startSearch(context);
+          },
         ),
-        child: Text(
-          AppLocalizations.of(context)!.searchText,
-          style: const TextStyle(color: Colors.white),
-        ),
-        onPressed: () async {
-          logger.v("Click on Search button in search screen");
-          startSearch(context);
-        },
-      ),
-    );
-  }
-
-  void startSearch(BuildContext context) {
-    bool isTextSearch =
-        Provider.of<AppStateManager>(context, listen: false).isTextSearch;
-    bool isSongAuthorSearch =
-        Provider.of<AppStateManager>(context, listen: false).isSongAuthorSearch;
-    bool isAudioSearch =
-        Provider.of<AppStateManager>(context, listen: false).isAudioSearch;
-    if (isTextSearch && _searchStringText.length < minSearchLen ||
-        isSongAuthorSearch &&
-            (_searchStringSong.length < minSearchLen ||
-                _searchStringAuthor.length < minSearchLen)) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.searchTextTooShort),
-      ));
-      return;
+      );
     }
-
-    //Hide virtual keyboard
-    FocusManager.instance.primaryFocus?.unfocus();
-    if (isTextSearch) {
-      Provider.of<AppStateManager>(context, listen: false)
-          .startSearchText(_searchStringText);
-    } else if (isSongAuthorSearch) {
-      Provider.of<AppStateManager>(context, listen: false)
-          .startSearchSongAuthor(_searchStringAuthor, _searchStringSong);
-    } else if (isAudioSearch) {
-      Provider.of<AppStateManager>(context, listen: false)
-          .startSearchSongAuthor(_searchAudioAuthor, _searchAudioSong);
-    }
-    showNoResultsMsg(
-        Provider.of<AppStateManager>(context, listen: false).searchResults);
   }
 
   // List of found Lyrics
@@ -396,6 +405,35 @@ class _SearchScreenState extends State<SearchScreen> {
           child: ListView(
               padding: const EdgeInsets.all(10.0), children: const []));
     }
+  }
+
+  void startSearch(BuildContext context) {
+    int searchType =
+        Provider.of<AppStateManager>(context, listen: false).searchType;
+    if (searchType == SearchType.text &&
+            _searchStringText.length < minSearchLen ||
+        searchType == SearchType.songAuthor &&
+            (_searchStringSong.length < minSearchLen ||
+                _searchStringAuthor.length < minSearchLen)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context)!.searchTextTooShort),
+      ));
+      return;
+    }
+
+    var provider = Provider.of<AppStateManager>(context, listen: false);
+    //Hide virtual keyboard
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (searchType == SearchType.text) {
+      provider.startSearchText(_searchStringText);
+    } else if (searchType == SearchType.songAuthor) {
+      provider.startSearchSongAuthor(_searchStringAuthor, _searchStringSong);
+    } else if (searchType == SearchType.audio) {
+      provider.startSearchSongAuthor(
+          provider.searchAudioAuthor, provider.searchAudioSong);
+    }
+    showNoResultsMsg(
+        Provider.of<AppStateManager>(context, listen: false).searchResults);
   }
 
   @override

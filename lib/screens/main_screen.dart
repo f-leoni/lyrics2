@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:lyrics_2/screens/info_screen.dart';
 import 'package:lyrics_2/screens/screens.dart';
 import 'package:lyrics_2/models/models.dart';
@@ -30,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
     List<Widget> pages = <Widget>[
       FavoritesScreen(),
       const SearchScreen(),
-      const InfoScreen(),
+      InfoScreen(),
       /*LyricDetailScreen(
         lyric: Provider.of<AppStateManager>(context, listen: false).lyric,
       ), //Container(color: Colors.green),*/

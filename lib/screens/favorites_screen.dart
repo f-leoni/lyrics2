@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:lyrics_2/components/lyric_tile.dart';
 //import 'package:lyrics_2/data/memory_repository.dart';
 import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:lyrics_2/models/models.dart';
 import 'package:lyrics_2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';

@@ -1,73 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics_2/models/favorites_manager.dart';
-
-import '../models/models.dart';
-import '../screens/screens.dart';
+import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics_2/models/models.dart';
+import 'package:lyrics_2/models/profile_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:lyrics_2/screens/screens.dart';
 
 class AppRouter extends RouterDelegate
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   @override
   final GlobalKey<NavigatorState> navigatorKey;
   final AppStateManager appStateManager;
-  final FavoritesManager favoritesManager;
+  //final FavoritesManager favoritesManager;
   final ProfileManager profileManager;
 
   AppRouter({
     required this.appStateManager,
-    required this.favoritesManager,
+    //required this.favoritesManager,
     required this.profileManager,
   }) : navigatorKey = GlobalKey<NavigatorState>() {
     appStateManager.addListener(notifyListeners);
-    favoritesManager.addListener(notifyListeners);
+    //favoritesManager.addListener(notifyListeners);
     profileManager.addListener(notifyListeners);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      onPopPage: _handlePopPage,
-      pages: [
-        if (!appStateManager.isInitialized) SplashScreen.page(),
-        if (appStateManager.isInitialized && !appStateManager.isLoggedIn)
-          LoginScreen.page(),
-        if (appStateManager.isLoggedIn && !appStateManager.isOnboardingComplete)
-          OnboardingScreen.page(),
-        if (appStateManager.isOnboardingComplete)
-          MainScreen.page(appStateManager.getSelectedTab),
-        //Home.page(appStateManager.getSelectedTab),
-        // Create new item
-        /*if (favoritesManager.isCreatingNewItem)
-          GroceryItemScreen.page(
-            onCreate: (item) {
-              favoritesManager.addItem(item);
-            },
-            onUpdate: (item, index) {
-            },
-          ),*/
-        // Select GroceryItemScreen
-        /*if (favoritesManager.selectedIndex != -1)
-          GroceryItemScreen.page(
-              item: favoritesManager.selectedGroceryItem,
-              index: favoritesManager.selectedIndex,
-              onUpdate: (item, index) {
-                favoritesManager.updateItem(item, index);
-              },
-              onCreate: (_) {
-                // 4 No create
-              }),*/
-        if (profileManager.didSelectUser)
-          ProfileScreen.page(profileManager.getUser),
-        // Add WebView Screen
-        //if (profileManager.didTapOnRaywenderlich) WebViewScreen.page(),
-      ], // pages[]
+    final repository = Provider.of<SQLiteRepository>(context);
+    Future<Map<String, Setting>> fSettings = repository.getSettings();
+    return FutureBuilder(
+      future: fSettings,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            Map<String, Setting> settings =
+                snapshot.data as Map<String, Setting>;
+            bool isOnboardingComplete =
+                settings[Setting.onboardingComplete]?.value == "true";
+            return Navigator(
+              key: navigatorKey,
+              onPopPage: _handlePopPage,
+              pages: [
+                if (!appStateManager.isInitialized) SplashScreen.page(),
+                if (appStateManager.isInitialized &&
+                    !appStateManager.isLoggedIn)
+                  LoginScreen.page(),
+                if (appStateManager.isLoggedIn && !isOnboardingComplete)
+                  OnboardingScreen.page(),
+                if (isOnboardingComplete)
+                  MainScreen.page(appStateManager.getSelectedTab),
+                if (profileManager.didSelectUser)
+                  ProfileScreen.page(profileManager.getUser),
+              ], // pages[]
+            );
+          } else {
+            return Container(
+                color: Colors.white,
+                child: const CircularProgressIndicator.adaptive(
+                  backgroundColor: Colors.white,
+                )); //;Text("No data found in settings")
+          }
+        } else {
+          return Container(
+              color: Colors.white,
+              child: const CircularProgressIndicator.adaptive(
+                backgroundColor: Colors.white,
+              )); //Text("Getting settings from DB")
+        }
+      },
     );
   }
 
   @override
   void dispose() {
     appStateManager.removeListener(notifyListeners);
-    favoritesManager.removeListener(notifyListeners);
+    //favoritesManager.removeListener(notifyListeners);
     profileManager.removeListener(notifyListeners);
     super.dispose();
   }
@@ -85,10 +92,6 @@ class AppRouter extends RouterDelegate
     if (route.settings.name == LyricsPages.onboardingPath) {
       appStateManager.logout();
     }
-    // Handle state when user closes grocery item screen
-    /*if (route.settings.name == LyricsPages.groceryItemDetails) {
-      favoritesManager.groceryItemTapped(-1);
-    }*/
     // Handle state when user closes profile screen
     if (route.settings.name == LyricsPages.profilePath) {
       profileManager.tapOnProfile(false);

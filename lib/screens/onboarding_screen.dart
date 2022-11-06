@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
@@ -61,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           onPressed: () {
             // Onboarding -> Navigate to home
             Provider.of<AppStateManager>(context, listen: false)
-                .completeOnboarding();
+                .completeOnboarding(context);
           },
         ),
       ],
@@ -90,7 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget onboardPageView(ImageProvider imageProvider, String text) {
     return Padding(
-      padding: const EdgeInsets.all(40),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

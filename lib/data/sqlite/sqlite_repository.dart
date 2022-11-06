@@ -8,6 +8,7 @@ import 'package:lyrics_2/data/repository.dart';
 class SQLiteRepository extends Repository with ChangeNotifier {
   //final List<Lyric> _currentLyrics = <Lyric>[];
   final dbHelper = DatabaseHelper.instance;
+
   //final _user = "";
   //final _darkTheme = false;
   //final _autoTheme = false;
@@ -50,6 +51,26 @@ class SQLiteRepository extends Repository with ChangeNotifier {
     return Future.value(null);
   }
 
+//TODO implement this method?
+/*bool contains(Lyric lyric) {
+    return false;
+  }*/
+
+  Future<void> insertSetting(Setting setting) {
+    dbHelper.insertSetting(setting);
+    notifyListeners();
+
+    return Future.value(null);
+  }
+
+  Future<Setting?> getSetting(String name) {
+    return dbHelper.findSettingByName(name);
+  }
+
+  Future<Map<String, Setting>> getSettings() {
+    return dbHelper.getSettings();
+  }
+
   @override
   Future init() async {
     await dbHelper.database;
@@ -60,9 +81,4 @@ class SQLiteRepository extends Repository with ChangeNotifier {
   void close() {
     dbHelper.close();
   }
-
-//TODO implement this method?
-  /*bool contains(Lyric lyric) {
-    return false;
-  }*/
 }
