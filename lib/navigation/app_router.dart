@@ -51,6 +51,9 @@ class AppRouter extends RouterDelegate
                   MainScreen.page(appStateManager.getSelectedTab),
                 if (profileManager.didSelectUser)
                   ProfileScreen.page(profileManager.getUser),
+                if (appStateManager.isViewingLyric)
+                  LyricDetailScreen.page(
+                      Future.value(appStateManager.viewedLyric)),
               ], // pages[]
             );
           } else {

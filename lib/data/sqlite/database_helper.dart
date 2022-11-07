@@ -12,6 +12,7 @@ class DatabaseHelper {
   static const lyricsId = "LyricId";
   static const settingsTable = 'settings';
   static const settingsId = 'id';
+  static const settingsName = 'setting';
   static late BriteDatabase _streamDatabase;
   var logger = Logger(
     printer: PrettyPrinter(),
@@ -45,7 +46,7 @@ class DatabaseHelper {
     await db.execute(''' 
     CREATE TABLE [$settingsTable] (
       [$settingsId] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
-      [setting] varCHAR(20)  UNIQUE NOT NULL,
+      [$settingsName] varCHAR(20)  UNIQUE NOT NULL,
       [value] varchar(255)  NULL
       )''');
   }
@@ -130,8 +131,19 @@ class DatabaseHelper {
     return db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
 
+  Future<int> _deleteByValue(
+      String table, String columnId, String value) async {
+    final db = await instance.streamDatabase;
+    return db.delete(table, where: '$columnId = ?', whereArgs: [value]);
+  }
+
   Future<int> deleteLyric(Lyric lyric) async {
     return _delete(lyricsTable, lyricsId, lyric.lyricId);
+  }
+
+  Future<int> deleteSetting(String setting) async {
+    // delete from table $settingsTable where $settingsName = $setting
+    return _deleteByValue(settingsTable, settingsName, setting);
   }
 
   Future<bool> isLyricFavoriteById(int id) async {

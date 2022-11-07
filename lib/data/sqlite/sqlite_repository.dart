@@ -71,6 +71,13 @@ class SQLiteRepository extends Repository with ChangeNotifier {
     return dbHelper.getSettings();
   }
 
+  Future<void> deleteSetting(String setting) {
+    dbHelper.deleteSetting(setting);
+    notifyListeners();
+
+    return Future.value(null);
+  }
+
   @override
   Future init() async {
     await dbHelper.database;

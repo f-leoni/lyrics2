@@ -21,14 +21,15 @@ Lyrics uses some third party libraries such as:
 # FEATURES LIST
 ## TODO:
 * (feature) Implement graphics theme (dark and light)
-* (feature) Implement show build infos
 * (feature) Implement Users Registration, Login and profile management via Firebase
 * (feature) order and paginate favorites page
+* (feature) swipe to delete favorite
 * ...
 
 ## DONE
 * (feature) Database repository 2022/11/04
 * (fix) Fix sound recognition
+* (feature) Implement show build infos
 
 # COMMANDS
 ## GENERATE ICONS

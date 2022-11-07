@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lyrics_2/components/logger.dart';
 //import 'package:lyrics_2/data/memory_repository.dart';
 import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
+import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics_2/lyricstheme.dart';
 import 'package:lyrics_2/models/models.dart';
@@ -38,7 +39,6 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 3
     return Center(
       child: FutureBuilder<Lyric>(
           future: widget.lyric,
@@ -65,7 +65,9 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
     BlendMode blend = BlendMode.darken;
     //final favorites = Provider.of<MemoryRepository>(context);
     final favorites = Provider.of<SQLiteRepository>(context);
-
+    final manager = Provider.of<AppStateManager>(context, listen: false);
+    manager.isViewingLyric = true;
+    manager.viewedLyric = lyric;
     BoxDecoration decoration = BoxDecoration(
         image: DecorationImage(
       image: const AssetImage("assets/lyrics_assets/logo.png"),
@@ -109,6 +111,10 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                   iconSize: 22,
                   color: Colors.white,
                   onPressed: () {
+                    /*final manager =
+                        Provider.of<AppStateManager>(context, listen: false);
+                    manager.isViewingLyric = true;
+                    manager.viewedLyric = Lyric.empty;*/
                     Navigator.pop(context);
                   },
                 ),
@@ -178,7 +184,6 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               isFavorite = snapshot.data as bool;
-              isFavorite = snapshot.data as bool;
             } else {
               isFavorite = false;
             }
@@ -192,6 +197,8 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
             iconSize: 22,
             color: Colors.white,
             onPressed: () {
+              logger.i(
+                  "Changing favorite state of ${lyric.song} to ${(!isFavorite).toString()}");
               if (isFavorite) {
                 favorites.deleteLyricFromFavs(lyric);
                 setState(() {

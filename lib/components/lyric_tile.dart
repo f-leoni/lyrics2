@@ -20,7 +20,7 @@ class LyricTile extends StatelessWidget {
         return SizedBox(
           height: 70.0,
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.5,
+            width: MediaQuery.of(context).size.width * 0.85,
             //color: Colors.yellow,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

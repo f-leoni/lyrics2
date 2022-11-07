@@ -43,6 +43,8 @@ class AppStateManager extends ChangeNotifier {
   //Map<String, String> _settings = Map<String, String>();
   String _searchAudioAuthor = "";
   String _searchAudioSong = "";
+  bool _isViewingLyric = false;
+  Lyric _viewedLyric = Lyric.empty;
 
   // Accessors
   bool get isInitialized => _initialized;
@@ -63,18 +65,28 @@ class AppStateManager extends ChangeNotifier {
   String get version => _version;
   String get buildNr => _buildNr;
   String get favoritesFilter => _favoritesFilter;
-  void set favoritesFilter(String filter) {
-    _favoritesFilter = filter;
+  void set favoritesFilter(String value) {
+    _favoritesFilter = value;
   }
 
   String get searchAudioAuthor => _searchAudioAuthor;
   String get searchAudioSong => _searchAudioSong;
-  void set searchAudioAuthor(String author) {
-    _searchAudioAuthor = author;
+  void set searchAudioAuthor(String value) {
+    _searchAudioAuthor = value;
   }
 
-  void set searchAudioSong(String song) {
-    _searchAudioSong = song;
+  void set searchAudioSong(String value) {
+    _searchAudioSong = value;
+  }
+
+  bool get isViewingLyric => _isViewingLyric;
+  void set isViewingLyric(bool value) {
+    _isViewingLyric = value;
+  }
+
+  Lyric get viewedLyric => _viewedLyric;
+  void set viewedLyric(Lyric value) {
+    _viewedLyric = value;
   }
 
   void initializeApp() {
@@ -224,10 +236,6 @@ class AppStateManager extends ChangeNotifier {
   void goToLyrics() {
     _selectedTab = LyricsTab.search;
     notifyListeners();
-  }
-
-  startAudioSearch() {
-    final session = ACRCloud.startSession();
   }
 
   void logout() {

@@ -43,21 +43,36 @@ class FavoritesScreen extends StatelessWidget {
   Widget createScreen(BuildContext context, List<Lyric> favorites) {
     List<Widget> itemTiles = List<Widget>.empty(growable: true);
     for (Lyric lyric in favorites) {
-      itemTiles.add(InkWell(
-        child: LyricTile(
-          lyric: lyric,
-        ),
-        onTap: () {
-          logger.i("Clicked on Search result. Song: ${lyric.song}");
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LyricDetailScreen(
-                lyric: Future.value(lyric),
-              ),
-            ),
-          );
+      itemTiles.add(Dismissible(
+        key: Key(lyric.lyricId.toString()),
+        direction: DismissDirection.endToStart,
+        background: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            child: const Icon(Icons.delete_forever,
+                color: Colors.white, size: 25.0)),
+        onDismissed: (direction) {
+          Provider.of<SQLiteRepository>(context, listen: false)
+              .deleteLyricFromFavs(lyric);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${lyric.song} dismissed')));
         },
+        child: InkWell(
+          child: LyricTile(
+            lyric: lyric,
+          ),
+          onTap: () {
+            logger.i("Clicked on Search result. Song: ${lyric.song}");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LyricDetailScreen(
+                  lyric: Future.value(lyric),
+                ),
+              ),
+            );
+          },
+        ),
       ));
     }
     double _height = MediaQuery.of(context).size.height;

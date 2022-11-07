@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
@@ -81,6 +82,14 @@ class InfoScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                TextButton(
+                  child: Text("Reset Settings"),
+                  onPressed: () {
+                    final sqlRepository =
+                        Provider.of<SQLiteRepository>(context, listen: false);
+                    sqlRepository.deleteSetting(Setting.onboardingComplete);
+                  },
+                )
               ],
             ),
           ),

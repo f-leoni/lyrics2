@@ -378,6 +378,10 @@ class _SearchScreenState extends State<SearchScreen> {
             onTap: () {
               logger.i(
                   "Clicked on Search result. Song: ${lyricSearchResult.song}");
+              /*Provider.of<AppStateManager>(context, listen: false).viewedLyric =
+                  provider.getLyric(lyricSearchResult)!;
+              Provider.of<AppStateManager>(context, listen: false)
+                  .isViewingLyric = true;*/
               Navigator.push(
                 context,
                 MaterialPageRoute(
