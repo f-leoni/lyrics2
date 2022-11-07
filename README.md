@@ -45,6 +45,9 @@ flutter build appbundle
 ## GENERATE APK
 flutter build apk
 
+## CLEAN PROJECT
+flutter clean
+
 ## CONNECT TO DB
 > adb -s emulator-5554 shell
 > > run-as it.zitzusoft.lyrics_2
