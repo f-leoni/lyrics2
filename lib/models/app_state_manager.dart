@@ -82,6 +82,7 @@ class AppStateManager extends ChangeNotifier {
   bool get isViewingLyric => _isViewingLyric;
   void set isViewingLyric(bool value) {
     _isViewingLyric = value;
+    //notifyListeners();
   }
 
   Lyric get viewedLyric => _viewedLyric;

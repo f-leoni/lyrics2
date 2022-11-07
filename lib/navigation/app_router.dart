@@ -57,21 +57,27 @@ class AppRouter extends RouterDelegate
               ], // pages[]
             );
           } else {
-            return Container(
-                color: Colors.white,
-                child: const CircularProgressIndicator.adaptive(
-                  backgroundColor: Colors.white,
-                )); //;Text("No data found in settings")
+            return buildSpinner(); //;Text("No data found in settings")
           }
         } else {
-          return Container(
-              color: Colors.white,
-              child: const CircularProgressIndicator.adaptive(
-                backgroundColor: Colors.white,
-              )); //Text("Getting settings from DB")
+          return buildSpinner(); //Text("Getting settings from DB")
         }
       },
     );
+  }
+
+  Container buildSpinner() {
+    return Container(
+        color: Colors.black,
+        child: Center(
+          child: SizedBox(
+            width: 50,
+            height: 50,
+            child: const CircularProgressIndicator.adaptive(
+              backgroundColor: Colors.amber,
+            ),
+          ),
+        ));
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics_2/models/profile_manager.dart';
 import 'package:lyrics_2/screens/info_screen.dart';
 import 'package:lyrics_2/screens/screens.dart';
 import 'package:lyrics_2/models/models.dart';
@@ -36,19 +37,31 @@ class _MainScreenState extends State<MainScreen> {
         lyric: Provider.of<AppStateManager>(context, listen: false).lyric,
       ), //Container(color: Colors.green),*/
     ];
-
+    bool darkMode =
+        Provider.of<ProfileManager>(context, listen: false).darkMode;
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
         return Scaffold(
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.appName,
                 style: Theme.of(context).textTheme.headline6),
+            actions: [
+              MaterialButton(
+                child: Icon(darkMode ? Icons.light_mode : Icons.dark_mode),
+                onPressed: () {
+                  bool darkMode =
+                      Provider.of<ProfileManager>(context, listen: false)
+                          .darkMode;
+                  Provider.of<ProfileManager>(context, listen: false).darkMode =
+                      !darkMode;
+                },
+              ),
+            ],
           ),
           // Select which tab is to be shown
           body: pages[widget.currentTab],
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor:
-                Theme.of(context).textSelectionTheme.selectionColor,
+            selectedItemColor: Theme.of(context).indicatorColor,
             // 3
             currentIndex: widget.currentTab,
             onTap: (index) {

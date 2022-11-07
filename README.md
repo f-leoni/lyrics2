@@ -20,7 +20,6 @@ Lyrics uses some third party libraries such as:
 
 # FEATURES LIST
 ## TODO:
-* (feature) Implement graphics theme (dark and light)
 * (feature) Implement Users Registration, Login and profile management via Firebase
 * (feature) order and paginate favorites page
 * (feature) swipe to delete favorite
@@ -30,8 +29,12 @@ Lyrics uses some third party libraries such as:
 * (feature) Database repository 2022/11/04
 * (fix) Fix sound recognition
 * (feature) Implement show build infos
+* (feature) Implement graphics theme (dark and light)
 
 # COMMANDS
+## GENERATE LOCALIZATION FILES
+flutter gen-l10n
+
 ## GENERATE ICONS
 flutter pub run flutter_launcher_icons:main
 

@@ -30,9 +30,8 @@ class _SearchScreenState extends State<SearchScreen> {
     printer: PrettyPrinter(),
   );
   ACRCloudResponseMusicItem? music;
-  final Color rwColor = Color.fromRGBO(64, 143, 77, 1);
-  final TextStyle focusedStyle =
-      const TextStyle(color: Color.fromRGBO(64, 143, 77, 1));
+  /*final TextStyle focusedStyle =
+      const TextStyle(color: Color.fromRGBO(64, 143, 77, 1));*/
   final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
   final _searchControllerText = TextEditingController();
   final _searchControllerAuthor = TextEditingController();
@@ -135,7 +134,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 hintText: AppLocalizations.of(context)!.searchHint,
                 border: const OutlineInputBorder(),
                 filled: true,
-                fillColor: Colors.yellow[50],
+                fillColor:
+                    Theme.of(context).backgroundColor, //Colors.yellow[50],
               ),
               onEditingComplete: () => startSearch(context),
             ),
@@ -178,7 +178,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         //hintStyle: const TextStyle(fontSize: 8),
                         border: const OutlineInputBorder(),
                         filled: true,
-                        fillColor: Colors.yellow[50],
+                        fillColor: Theme.of(context)
+                            .backgroundColor, //Colors.yellow[50],
                       ),
                       onEditingComplete: () => startSearch(context),
                     ),
@@ -201,7 +202,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         //hintStyle: const TextStyle(fontSize: 8),
                         border: const OutlineInputBorder(),
                         filled: true,
-                        fillColor: Colors.yellow[50],
+                        fillColor: Theme.of(context)
+                            .backgroundColor, //Colors.yellow[50],
                       ),
                       onEditingComplete: () => startSearch(context),
                     ),
@@ -242,7 +244,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         padding: EdgeInsets.fromLTRB(0, 20, 30, 0),
                         //color: Colors.red,
                         child: MaterialButton(
-                          color: rwColor,
+                          color: Theme.of(context).indicatorColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
@@ -342,7 +344,7 @@ class _SearchScreenState extends State<SearchScreen> {
       return ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 30, maxHeight: 50),
         child: MaterialButton(
-          color: rwColor,
+          color: Theme.of(context).indicatorColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
