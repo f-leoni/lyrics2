@@ -21,8 +21,8 @@ Lyrics uses some third party libraries such as:
 # FEATURES LIST
 ## TODO:
 * (feature) Implement Users Registration, Login and profile management via Firebase
-* (feature) order and paginate favorites page
-* (feature) swipe to delete favorite
+* (feature) Ordering and pagination for favorites page
+* (feature) Implement Genius Proxy
 * ...
 
 ## DONE
@@ -30,6 +30,7 @@ Lyrics uses some third party libraries such as:
 * (fix) Fix sound recognition
 * (feature) Implement show build infos
 * (feature) Implement graphics theme (dark and light)
+* (feature) swipe to delete favorite
 
 # COMMANDS
 ## GENERATE LOCALIZATION FILES
@@ -43,3 +44,12 @@ flutter build appbundle
 
 ## GENERATE APK
 flutter build apk
+
+## CONNECT TO DB
+> adb -s emulator-5554 shell
+> > run-as it.zitzusoft.lyrics_2
+> > cd /data/user/0/it.zitzusoft.lyrics_2/app_flutter/
+> > sqlite3 lyrics.db
+> > > .tables
+> > > .schema favorites
+> > > .schema settings
