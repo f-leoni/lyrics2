@@ -54,5 +54,11 @@ flutter clean
 > > cd /data/user/0/it.zitzusoft.lyrics_2/app_flutter/
 > > sqlite3 lyrics.db
 > > > .tables
+
+View tables list
 > > > .schema favorites
+
+describe table favorites
 > > > .schema settings
+
+describe table settings
