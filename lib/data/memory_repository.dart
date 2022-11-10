@@ -22,7 +22,7 @@ class MemoryRepository extends Repository with ChangeNotifier {
   }
 
   @override
-  Future<bool> isLyricFavoriteById(int id) {
+  Future<bool> isLyricFavoriteById(int id, String? owner) {
     try {
       _currentLyrics.firstWhere((lyric) => lyric.lyricId == id);
       return Future.value(true);
