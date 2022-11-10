@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lyrics_2/data/firebase_repository.dart';
 //import 'package:lyrics_2/data/memory_repository.dart';
 import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:lyrics_2/models/lyric_data.dart';
+import 'package:lyrics_2/models/profile_manager.dart';
 import 'package:provider/provider.dart';
 
 class LyricTile extends StatelessWidget {
@@ -13,7 +15,8 @@ class LyricTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //MemoryRepository repository = Provider.of<MemoryRepository>(context);
-    SQLiteRepository repository = Provider.of<SQLiteRepository>(context);
+    //SQLiteRepository repository = Provider.of<SQLiteRepository>(context);
+    FirebaseRepository repository = Provider.of<FirebaseRepository>(context);
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
@@ -58,7 +61,7 @@ class LyricTile extends StatelessWidget {
                         //buildImportance(),
                       ],
                     ),
-                    buildFavoriteIcon(repository, lyric),
+                    buildFavoriteIcon(context, repository, lyric),
                   ],
                 ),
               ],
@@ -99,12 +102,15 @@ class LyricTile extends StatelessWidget {
   }
 
   //Widget buildFavoriteIcon(MemoryRepository repository, LyricData pLyric) {
-  Widget buildFavoriteIcon(SQLiteRepository repository, LyricData pLyric) {
+  //Widget buildFavoriteIcon(SQLiteRepository repository, LyricData pLyric) {
+  Widget buildFavoriteIcon(
+      BuildContext context, FirebaseRepository repository, LyricData pLyric) {
+    ProfileManager profile = Provider.of<ProfileManager>(context);
     //bool isFavorite = await repository.isLyricFavoriteById(pLyric.getId());
     Widget currIcon = Container();
-
     return FutureBuilder(
-        future: repository.isLyricFavoriteById(pLyric.getId()),
+        future: repository.isLyricFavoriteById(
+            pLyric.getId(), profile.getUser.email),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData && snapshot.data as bool)

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyrics_2/models/lyric_data.dart';
 
 class Lyric extends LyricData {
@@ -13,6 +14,9 @@ class Lyric extends LyricData {
   String? correctUrl;
   bool isFavorite = false;
 
+  String? owner;
+  DocumentReference? reference;
+
 // Constructor
   Lyric({
     required this.lyricId,
@@ -22,16 +26,20 @@ class Lyric extends LyricData {
     required this.imageUrl,
     required this.checksum,
     //required this.isFavorite,
+    this.reference,
+    this.owner,
   });
 
 // Create from json object
   factory Lyric.fromJson(Map<String, dynamic> json) {
     String lyric = "";
+    String owner = "fraleoni@gmail.com";
     try {
-      lyric = json['Lyric'];
-    } catch (e) {
       lyric = json['lyric'];
+    } catch (e) {
+      lyric = json['Lyric'];
     }
+
     return Lyric(
       //lyricId: int.parse(json['LyricId']),
       lyricId: int.parse(json['LyricId'].toString()),
@@ -40,6 +48,7 @@ class Lyric extends LyricData {
       lyric: lyric,
       imageUrl: json['LyricCovertArtUrl'] as String,
       checksum: json['LyricChecksum'] as String,
+      owner: owner,
     );
   }
 
@@ -52,7 +61,14 @@ class Lyric extends LyricData {
         'LyricCovertArtUrl': imageUrl,
         'LyricChecksum': checksum,
         'lyric': lyric,
+        'owner': owner,
       };
+
+  factory Lyric.fromSnapshot(DocumentSnapshot snapshot) {
+    final lyric = Lyric.fromJson(snapshot.data() as Map<String, dynamic>);
+    lyric.reference = snapshot.reference;
+    return lyric;
+  }
 
 // Copy
   Lyric copyWith(

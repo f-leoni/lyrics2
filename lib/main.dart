@@ -10,10 +10,15 @@ import 'package:provider/provider.dart';
 import 'models/models.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:lyrics_2/data/firebase_repository.dart';
 
 //final _theme = LyricsTheme.light();
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Firebase Initialization
   runApp(const LyricsApp());
 }
 
@@ -58,6 +63,10 @@ class _LyricsAppState extends State<LyricsApp> {
           lazy: false,
           create: (_) => MemoryRepository(),
         ),*/
+        ChangeNotifierProvider<FirebaseRepository>(
+          lazy: false,
+          create: (_) => FirebaseRepository(),
+        ),
         ChangeNotifierProvider<SQLiteRepository>(
           lazy: false,
           create: (_) => SQLiteRepository(),

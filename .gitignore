@@ -47,3 +47,4 @@ app.*.map.json
 /lyrics2.jks
 /lib/env.dart
 /.gradle/gradle.properties
+/android/app/google-services.json

@@ -14,24 +14,25 @@ class SQLiteRepository extends Repository with ChangeNotifier {
   //final _autoTheme = false;
 
   @override
-  Future<List<Lyric>> findAllFavsLyrics() async {
+  Future<List<Lyric>> findAllFavsLyrics(String? owner) async {
     return await dbHelper.findAllLyrics();
   }
 
   @override
-  Future<Lyric> findLyricById(int id) {
+  Future<Lyric> findLyricById(int id, String? owner) {
     return dbHelper.findLyricById(id);
   }
 
   @override
-  Future<bool> isLyricFavoriteById(int id) {
+  Future<bool> isLyricFavoriteById(int id, String? owner) {
     return dbHelper.isLyricFavoriteById(id);
   }
 
 //List<Author> findAllAuthors();
   @override
   Future<int> insertLyricInFavs(Lyric lyric) async {
-    bool alreadyInserted = await isLyricFavoriteById(lyric.lyricId);
+    bool alreadyInserted =
+        await isLyricFavoriteById(lyric.lyricId, lyric.owner);
     if (!alreadyInserted) {
       final id = await dbHelper.insertLyric(lyric);
       logger.d("Lyric ${lyric.song} with id = $id has been added to favorites");
@@ -87,5 +88,11 @@ class SQLiteRepository extends Repository with ChangeNotifier {
   @override
   void close() {
     dbHelper.close();
+  }
+
+  @override
+  Stream<Object?> getLyricStream() {
+    // TODO: implement getLyricStream
+    throw UnimplementedError();
   }
 }

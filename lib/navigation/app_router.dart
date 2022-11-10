@@ -27,6 +27,8 @@ class AppRouter extends RouterDelegate
   @override
   Widget build(BuildContext context) {
     final repository = Provider.of<SQLiteRepository>(context);
+    final profile = Provider.of<ProfileManager>(context);
+
     Future<Map<String, Setting>> fSettings = repository.getSettings();
     return FutureBuilder(
       future: fSettings,
@@ -106,9 +108,9 @@ class AppRouter extends RouterDelegate
       profileManager.tapOnProfile(false);
     }
     // Handle state when user closes WebView screen
-    if (route.settings.name == LyricsPages.raywenderlich) {
+    /*if (route.settings.name == LyricsPages.raywenderlich) {
       profileManager.tapOnRaywenderlich(false);
-    }
+    }*/
     return true;
   }
 

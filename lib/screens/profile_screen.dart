@@ -59,14 +59,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListView(
       children: [
         buildDarkModeRow(),
-        ListTile(
+        /*ListTile(
           title: const Text('View raywenderlich.com'),
           onTap: () {
             // Open raywenderlich.com webview
             Provider.of<ProfileManager>(context, listen: false)
                 .tapOnRaywenderlich(true);
           },
-        ),
+        ),*/
         ListTile(
           title: const Text('Log out'),
           onTap: () {

@@ -7,26 +7,20 @@ class ProfileManager extends ChangeNotifier {
         firstName: 'Stef',
         lastName: 'Patt',
         role: 'Flutterista!',
+        email: 'fraleoni@gmail.com',
         profileImageUrl: 'assets/profile_pics/person_stef.jpeg',
         points: 100,
         darkMode: _darkMode,
       );
 
   bool get didSelectUser => _didSelectUser;
-  bool get didTapOnRaywenderlich => _tapOnRaywenderlich;
   bool get darkMode => _darkMode;
 
   var _didSelectUser = false;
-  var _tapOnRaywenderlich = false;
   var _darkMode = true;
 
   set darkMode(bool darkMode) {
     _darkMode = darkMode;
-    notifyListeners();
-  }
-
-  void tapOnRaywenderlich(bool selected) {
-    _tapOnRaywenderlich = selected;
     notifyListeners();
   }
 

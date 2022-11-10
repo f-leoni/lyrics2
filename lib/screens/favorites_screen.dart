@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 import 'package:lyrics_2/components/lyric_tile.dart';
+import 'package:lyrics_2/data/firebase_repository.dart';
 //import 'package:lyrics_2/data/memory_repository.dart';
 import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
 import 'package:lyrics_2/models/models.dart';
+import 'package:lyrics_2/models/profile_manager.dart';
 import 'package:lyrics_2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -19,8 +21,12 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final repository = Provider.of<MemoryRepository>(context);
-    final repository = Provider.of<SQLiteRepository>(context);
-    Future<List<Lyric>> favorites = repository.findAllFavsLyrics();
+    //final repository = Provider.of<SQLiteRepository>(context);
+    final repository = Provider.of<FirebaseRepository>(context);
+    final profile = Provider.of<ProfileManager>(context);
+
+    Future<List<Lyric>> favorites =
+        repository.findAllFavsLyrics(profile.getUser.email);
     return FutureBuilder(
         future: favorites,
         builder: (context, snapshot) {
@@ -52,7 +58,8 @@ class FavoritesScreen extends StatelessWidget {
             child: const Icon(Icons.delete_forever,
                 color: Colors.white, size: 25.0)),
         onDismissed: (direction) {
-          Provider.of<SQLiteRepository>(context, listen: false)
+          //Provider.of<SQLiteRepository>(context, listen: false)
+          Provider.of<FirebaseRepository>(context, listen: false)
               .deleteLyricFromFavs(lyric);
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text('${lyric.song} dismissed')));

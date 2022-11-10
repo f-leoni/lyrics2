@@ -11,12 +11,12 @@ class MemoryRepository extends Repository with ChangeNotifier {
   //final _autoTheme = false;
 
   @override
-  Future<List<Lyric>> findAllFavsLyrics() {
+  Future<List<Lyric>> findAllFavsLyrics(String? owner) {
     return Future.value(_currentLyrics);
   }
 
   @override
-  Future<Lyric> findLyricById(int id) {
+  Future<Lyric> findLyricById(int id, String? owner) {
     return Future.value(
         _currentLyrics.firstWhere((lyric) => lyric.lyricId == id));
   }
@@ -59,4 +59,10 @@ class MemoryRepository extends Repository with ChangeNotifier {
 
   @override
   void close() {}
+
+  @override
+  Stream<Object?> getLyricStream() {
+    // TODO: implement getLyricStream
+    throw UnimplementedError();
+  }
 }

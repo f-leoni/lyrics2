@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lyrics_2/components/logger.dart';
+import 'package:lyrics_2/data/firebase_repository.dart';
 //import 'package:lyrics_2/data/memory_repository.dart';
 import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
 import 'package:lyrics_2/models/app_state_manager.dart';
@@ -71,7 +72,8 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
       fit: BoxFit.cover,
     ));
     //final favorites = Provider.of<MemoryRepository>(context);
-    final favorites = Provider.of<SQLiteRepository>(context);
+    //final favorites = Provider.of<SQLiteRepository>(context);
+    final favorites = Provider.of<FirebaseRepository>(context);
     final manager = Provider.of<AppStateManager>(context, listen: false);
 
     return Scaffold(
@@ -186,7 +188,8 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
   }
 
   //Widget createButton(MemoryRepository favorites, Lyric lyric) {
-  Widget buildButton(SQLiteRepository favorites, Lyric lyric) {
+  //Widget buildButton(SQLiteRepository favorites, Lyric lyric) {
+  Widget buildButton(FirebaseRepository favorites, Lyric lyric) {
     return FutureBuilder(
         future: checkIfFavorite(favorites, lyric),
         builder: (context, snapshot) {
@@ -227,8 +230,10 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
   }
 
   //Future<bool> checkIfFavorite(MemoryRepository favorites, Lyric lyric) async =>
-  Future<bool> checkIfFavorite(SQLiteRepository favorites, Lyric lyric) async =>
-      await favorites.isLyricFavoriteById(lyric.lyricId);
+  //Future<bool> checkIfFavorite(SQLiteRepository favorites, Lyric lyric) async =>
+  Future<bool> checkIfFavorite(
+          FirebaseRepository favorites, Lyric lyric) async =>
+      await favorites.isLyricFavoriteById(lyric.lyricId, lyric.owner);
 
   Widget buildArtist(Lyric currLyric) {
     return SizedBox(
