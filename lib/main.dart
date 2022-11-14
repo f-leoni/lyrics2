@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
-import 'package:lyrics_2/models/profile_manager.dart';
-//import 'package:lyrics_2/models/favorites_manager.dart';
+import 'package:lyrics2/data/firebase_favorites_repository.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
-//import 'data/memory_repository.dart';
-import 'models/models.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
-import 'package:lyrics_2/data/firebase_repository.dart';
-
-//final _theme = LyricsTheme.light();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,8 +26,10 @@ class LyricsApp extends StatefulWidget {
 class _LyricsAppState extends State<LyricsApp> {
   // This widget is the root of your application.
   //final _favoritesManager = FavoritesManager();
-  final _profileManager = ProfileManager();
+  final _profileManager = FirebaseUserRepository(); //ProfileManager();
   final _appStateManager = AppStateManager();
+  final _favoritesManager = FirebaseFavoritesRepository();
+  final _settingsManager = SQLiteSettingsRepository();
   late AppRouter _appRouter;
 
   @override
@@ -41,7 +37,7 @@ class _LyricsAppState extends State<LyricsApp> {
     super.initState();
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
-      //favoritesManager: _favoritesManager,
+      favoritesManager: _favoritesManager,
       profileManager: _profileManager,
     );
   }
@@ -50,29 +46,22 @@ class _LyricsAppState extends State<LyricsApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        /*ChangeNotifierProvider(
-          create: (context) => _favoritesManager,
-        ),*/
         ChangeNotifierProvider(
           create: (context) => _profileManager,
         ),
         ChangeNotifierProvider(
           create: (context) => _appStateManager,
         ),
-        /*ChangeNotifierProvider<MemoryRepository>(
+        ChangeNotifierProvider(
           lazy: false,
-          create: (_) => MemoryRepository(),
-        ),*/
-        ChangeNotifierProvider<FirebaseRepository>(
-          lazy: false,
-          create: (_) => FirebaseRepository(),
+          create: (context) => _favoritesManager,
         ),
-        ChangeNotifierProvider<SQLiteRepository>(
+        ChangeNotifierProvider(
           lazy: false,
-          create: (_) => SQLiteRepository(),
+          create: (_) => _settingsManager,
         )
       ],
-      child: Consumer<ProfileManager>(
+      child: Consumer<FirebaseUserRepository>(
         builder: (context, profileManager, child) {
           ThemeData theme;
           if (profileManager.darkMode) {

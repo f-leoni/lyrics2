@@ -1,8 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
-import 'package:lyrics_2/models/profile_manager.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
-
 import '../components/circle_image.dart';
 import '../models/models.dart';
 
@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: const Icon(Icons.close),
           onPressed: () {
             // Close Profile Screen
-            Provider.of<ProfileManager>(context, listen: false)
+            Provider.of<FirebaseUserRepository>(context, listen: false)
                 .tapOnProfile(false);
           },
         ),
@@ -63,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: const Text('View raywenderlich.com'),
           onTap: () {
             // Open raywenderlich.com webview
-            Provider.of<ProfileManager>(context, listen: false)
+            Provider.of<FirebaseUserRepository>(context, listen: false)
                 .tapOnRaywenderlich(true);
           },
         ),*/
@@ -72,10 +72,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onTap: () {
             // Logout user
             // 1
-            Provider.of<ProfileManager>(context, listen: false)
+            Provider.of<FirebaseUserRepository>(context, listen: false)
                 .tapOnProfile(false);
             // 2
-            Provider.of<AppStateManager>(context, listen: false).logout();
+            Provider.of<AppStateManager>(context, listen: false)
+                .logout(context);
           },
         )
       ],
@@ -90,10 +91,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           const Text('Dark Mode'),
           Switch(
-            value: widget.user.darkMode,
+            value: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .darkMode, //widget.user.darkMode,
             onChanged: (value) {
-              Provider.of<ProfileManager>(context, listen: false).darkMode =
-                  value;
+              Provider.of<FirebaseUserRepository>(context, listen: false)
+                  .darkMode = value;
             },
           )
         ],
@@ -105,24 +107,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: [
         CircleImage(
-          imageProvider: AssetImage(widget.user.profileImageUrl),
+          imageProvider:
+              Provider.of<FirebaseUserRepository>(context, listen: false)
+                  .userImage,
           imageRadius: 60.0,
         ),
         const SizedBox(height: 16.0),
         Text(
-          widget.user.firstName,
+          widget.user.email!,
           style: const TextStyle(
             fontSize: 21,
           ),
         ),
-        Text(widget.user.role),
-        Text(
-          '${widget.user.points} points',
+        Text(widget.user.metadata.creationTime.toString()), //role
+        /*Text(
+          'Username: ${widget.user.email}',
           style: const TextStyle(
             fontSize: 30,
             color: Colors.green,
           ),
-        ),
+        ),*/
       ],
     );
   }

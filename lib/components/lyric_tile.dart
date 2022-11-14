@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lyrics_2/data/firebase_repository.dart';
-//import 'package:lyrics_2/data/memory_repository.dart';
-import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
-import 'package:lyrics_2/models/lyric_data.dart';
-import 'package:lyrics_2/models/profile_manager.dart';
+import 'package:lyrics2/data/firebase_favorites_repository.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
+import 'package:lyrics2/models/lyric_data.dart';
 import 'package:provider/provider.dart';
 
 class LyricTile extends StatelessWidget {
@@ -14,9 +12,8 @@ class LyricTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //MemoryRepository repository = Provider.of<MemoryRepository>(context);
-    //SQLiteRepository repository = Provider.of<SQLiteRepository>(context);
-    FirebaseRepository repository = Provider.of<FirebaseRepository>(context);
+    FirebaseFavoritesRepository repository =
+        Provider.of<FirebaseFavoritesRepository>(context);
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
@@ -30,7 +27,6 @@ class LyricTile extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    //Container(width: 5.0, color: Colors.amber),
                     const SizedBox(width: 16.0),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -51,13 +47,13 @@ class LyricTile extends StatelessWidget {
                         const SizedBox(height: 4.0),
                         buildAuthor(),
                         const SizedBox(height: 4.0),
-                        Center(
+                        /*Center(
                           child: Container(
                             color: Colors.amber,
                             width: MediaQuery.of(context).size.width * 0.5,
                             height: 3,
                           ),
-                        )
+                        )*/
                         //buildImportance(),
                       ],
                     ),
@@ -72,52 +68,33 @@ class LyricTile extends StatelessWidget {
     );
   }
 
-  Widget buildImportance() {
-    return const Text("...");
-    /*if (item.importance == Importance.low) {
-      return Text('Low', style: GoogleFonts.lato(decoration: textDecoration));
-    } else if (item.importance == Importance.medium) {
-      return Text('Medium',
-          style: GoogleFonts.lato(
-              fontWeight: FontWeight.w800, decoration: textDecoration));
-    } else if (item.importance == Importance.high) {
-      return Text(
-        'High',
-        style: GoogleFonts.lato(
-          color: Colors.red,
-          fontWeight: FontWeight.w900,
-          decoration: textDecoration,
-        ),
-      );
-    } else {
-      throw Exception('This importance type does not exist');
-    }*/
-  }
-
   Widget buildAuthor() {
     return Text(
       lyric.getArtist(),
-      //style: TextStyle(decoration: textDecoration),
     );
   }
 
-  //Widget buildFavoriteIcon(MemoryRepository repository, LyricData pLyric) {
-  //Widget buildFavoriteIcon(SQLiteRepository repository, LyricData pLyric) {
-  Widget buildFavoriteIcon(
-      BuildContext context, FirebaseRepository repository, LyricData pLyric) {
-    ProfileManager profile = Provider.of<ProfileManager>(context);
-    //bool isFavorite = await repository.isLyricFavoriteById(pLyric.getId());
+  Widget buildFavoriteIcon(BuildContext context,
+      FirebaseFavoritesRepository repository, LyricData pLyric) {
+    FirebaseUserRepository profile =
+        Provider.of<FirebaseUserRepository>(context, listen: false);
     Widget currIcon = Container();
     return FutureBuilder(
         future: repository.isLyricFavoriteById(
-            pLyric.getId(), profile.getUser.email),
+            pLyric.getId(), profile.getUser!.email),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData && snapshot.data as bool)
-              currIcon = Icon(
+            if (snapshot.hasData && snapshot.data as bool) {
+              currIcon = const Icon(
                 Icons.favorite,
                 color: Colors.red,
               );
+            } else {
+              currIcon = const SizedBox(width: 1);
+            }
+          } else {
+            currIcon = const SizedBox(
+                width: 20, height: 20, child: CircularProgressIndicator());
           }
           return currIcon;
         });

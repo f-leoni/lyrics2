@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
@@ -28,16 +29,22 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark =
+        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+    final logoImg = isDark
+        ? const AssetImage('assets/lyrics_assets/logo_dark.png')
+        : const AssetImage('assets/lyrics_assets/logo.png');
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Image(
               height: 200,
-              image: AssetImage('assets/lyrics_assets/logo.png'),
+              image: logoImg,
             ),
-            Text("Initializing..."),
+            const Text("Initializing..."),
           ],
         ),
       ),

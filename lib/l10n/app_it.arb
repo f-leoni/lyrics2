@@ -32,5 +32,11 @@
     "msgListening": "Sto ascoltando...",
     "msgTrack": "Traccia",
     "msgAlbum": "Album",
-    "msgArtist": "Artista"
+    "msgArtist": "Artista",
+    "msgError": "Errore",
+    "msgRegister": "Registrati",
+    "msgLogin": "Accedi",
+    "errPwdRequired": "Inserire una password",
+    "errEmailRequired": "Inserire una email"
+
 }

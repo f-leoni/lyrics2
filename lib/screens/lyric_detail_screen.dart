@@ -1,13 +1,12 @@
+import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lyrics_2/components/logger.dart';
-import 'package:lyrics_2/data/firebase_repository.dart';
-//import 'package:lyrics_2/data/memory_repository.dart';
-import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/data/firebase_favorites_repository.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:lyrics_2/lyricstheme.dart';
-import 'package:lyrics_2/models/models.dart';
+import 'package:lyrics2/lyricstheme.dart';
+import 'package:lyrics2/models/models.dart';
 
 class LyricDetailScreen extends StatefulWidget {
   static MaterialPage page(Future<Lyric> lyric) {
@@ -34,8 +33,8 @@ class LyricDetailScreen extends StatefulWidget {
 class _LyricDetailScreenState extends State<LyricDetailScreen> {
   double _fontSize = 13.0;
   double _baseFontSize = 13.0;
-  double _minFontSize = 11.0;
-  double _maxFontSize = 24.0;
+  final double _minFontSize = 11.0;
+  final double _maxFontSize = 24.0;
   bool isFavorite = false;
 
   @override
@@ -63,17 +62,15 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
   }
 
   Widget createLyricPage(BuildContext context, Future<Lyric> lyric) {
-    int _alpha = 180;
+    int alpha = 180;
     BlendMode blend = BlendMode.darken;
     BoxDecoration decoration = BoxDecoration(
         image: DecorationImage(
       image: const AssetImage("assets/lyrics_assets/logo.png"),
-      colorFilter: ColorFilter.mode(Colors.black.withAlpha(_alpha), blend),
+      colorFilter: ColorFilter.mode(Colors.black.withAlpha(alpha), blend),
       fit: BoxFit.cover,
     ));
-    //final favorites = Provider.of<MemoryRepository>(context);
-    //final favorites = Provider.of<SQLiteRepository>(context);
-    final favorites = Provider.of<FirebaseRepository>(context);
+    final favorites = Provider.of<FirebaseFavoritesRepository>(context);
     final manager = Provider.of<AppStateManager>(context, listen: false);
 
     return Scaffold(
@@ -93,7 +90,7 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                       image: DecorationImage(
                         image: NetworkImage(currLyric.imageUrl),
                         colorFilter: ColorFilter.mode(
-                            Colors.black.withAlpha(_alpha), blend),
+                            Colors.black.withAlpha(alpha), blend),
                         fit: BoxFit.cover,
                       ),
                       borderRadius:
@@ -107,7 +104,6 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                 return Container(
                   height: MediaQuery.of(context).size.height,
                   padding: const EdgeInsets.all(16),
-                  //constraints: const BoxConstraints.expand(width: 350, height: 450),
                   decoration: decoration,
                   child: Column(
                     children: [
@@ -129,16 +125,15 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                             },
                           ),
                           buildArtist(currLyric),
-                          //const Expanded(flex:1,child: Container()),
                           buildButton(favorites, currLyric),
                         ],
                       ),
                       SizedBox(
+                        height: 40,
                         child: Text(
                           currLyric.song,
                           style: LyricsTheme.darkTextTheme.headline3,
                         ),
-                        height: 40,
                       ),
                       Expanded(
                         flex: 1,
@@ -177,32 +172,30 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                 );
               } else {
                 //container hasn't data
-                return Container(color: Colors.black);
+                return const CircularProgressIndicator();
               }
             } else {
               // Snapshot  State is not done
-              return Container(color: Colors.black);
+              return const CircularProgressIndicator();
             }
           }),
     );
   }
 
-  //Widget createButton(MemoryRepository favorites, Lyric lyric) {
-  //Widget buildButton(SQLiteRepository favorites, Lyric lyric) {
-  Widget buildButton(FirebaseRepository favorites, Lyric lyric) {
+  Widget buildButton(FirebaseFavoritesRepository favorites, Lyric lyric) {
     return FutureBuilder(
         future: checkIfFavorite(favorites, lyric),
         builder: (context, snapshot) {
-          Icon currIcon = Icon(Icons.favorite_outline, color: Colors.red);
+          Icon currIcon = const Icon(Icons.favorite_outline, color: Colors.red);
           bool isFavorite = false;
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               isFavorite = snapshot.data as bool;
             } else {
-              isFavorite = false;
+              isFavorite = true;
             }
             if (isFavorite) {
-              currIcon = Icon(Icons.favorite, color: Colors.red);
+              currIcon = const Icon(Icons.favorite, color: Colors.red);
             }
           }
           return IconButton(
@@ -219,6 +212,10 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                   isFavorite = false;
                 });
               } else {
+                lyric.owner =
+                    Provider.of<FirebaseUserRepository>(context, listen: false)
+                        .getUser!
+                        .email!;
                 favorites.insertLyricInFavs(lyric);
                 setState(() {
                   isFavorite = true;
@@ -229,19 +226,21 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
         });
   }
 
-  //Future<bool> checkIfFavorite(MemoryRepository favorites, Lyric lyric) async =>
-  //Future<bool> checkIfFavorite(SQLiteRepository favorites, Lyric lyric) async =>
   Future<bool> checkIfFavorite(
-          FirebaseRepository favorites, Lyric lyric) async =>
-      await favorites.isLyricFavoriteById(lyric.lyricId, lyric.owner);
+      FirebaseFavoritesRepository favorites, Lyric lyric) async {
+    var userManager =
+        Provider.of<FirebaseUserRepository>(context, listen: false);
+    return await favorites.isLyricFavoriteById(
+        lyric.lyricId, userManager.getUser!.email);
+  }
 
   Widget buildArtist(Lyric currLyric) {
     return SizedBox(
+      height: 24,
       child: Text(
         currLyric.artist,
         style: LyricsTheme.darkTextTheme.bodyText1,
       ),
-      height: 24,
     );
   }
 }

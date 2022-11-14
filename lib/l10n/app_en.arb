@@ -130,6 +130,26 @@
     "msgArtist": "Artist",
     "@msgArtist": {
         "description": "Audio search artist result"
+    },
+     "msgError": "Error",
+     "@msgError": {
+         "description": "Simple error message"
+    },
+    "msgRegister": "Sign up",
+    "@msgRegister": {
+           "description": "Sign up message"
+    },
+    "msgLogin": "Login",
+    "@msgLogin": {
+           "description": "Sign in message"
+    },
+    "errPwdRequired": "Password Required",
+    "@errPwdRequired": {
+           "description": "Error for empty password"
+    },
+    "errEmailRequired": "Email Required",
+    "@errEmailRequired": {
+           "description": "Error for empty email"
     }
 
 }

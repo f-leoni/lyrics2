@@ -1,9 +1,8 @@
-import 'package:logger/logger.dart';
-import 'package:path/path.dart';
+import 'package:lyrics2/components/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlbrite/sqlbrite.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:lyrics_2/models/models.dart';
+import 'package:lyrics2/models/models.dart';
 
 class DatabaseHelper {
   static const _databaseName = 'lyrics.db';
@@ -14,9 +13,6 @@ class DatabaseHelper {
   static const settingsId = 'id';
   static const settingsName = 'setting';
   static late BriteDatabase _streamDatabase;
-  var logger = Logger(
-    printer: PrettyPrinter(),
-  );
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -54,12 +50,14 @@ class DatabaseHelper {
   // this opens the database (and creates it if it doesn't exist)
   Future<Database> _initDatabase() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, _databaseName);
+    final path =
+        //join(documentsDirectory.path, _databaseName);
+        "${documentsDirectory.path}$_databaseName";
     logger.i(
-        "Database $_databaseName path is: $path. Versione: $_databaseVersion");
+        "Database $_databaseName path is: $path. Version: $_databaseVersion");
 
     // TODO: Remember to turn off debugging before deploying app to store(s).
-    Sqflite.setDebugModeOn(true);
+    Sqflite.setDebugModeOn(false);
 
     return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
   }
@@ -84,10 +82,10 @@ class DatabaseHelper {
 
   List<Lyric> parseLyrics(List<Map<String, dynamic>> lyricsList) {
     final lyrics = <Lyric>[];
-    lyricsList.forEach((lyricsMap) {
-      final lyric = Lyric.fromJson(lyricsMap);
+    for (var lyricsMap in lyricsList) {
+      final lyric = Lyric.fromJson(lyricsMap, "");
       lyrics.add(lyric);
-    });
+    }
     return lyrics;
   }
 
@@ -100,7 +98,9 @@ class DatabaseHelper {
 
   Stream<List<Lyric>> watchAllLyrics() async* {
     final db = await instance.streamDatabase;
-    yield* db.createQuery(lyricsTable).mapToList((row) => Lyric.fromJson(row));
+    yield* db
+        .createQuery(lyricsTable)
+        .mapToList((row) => Lyric.fromJson(row, ""));
   }
 
   Future<Lyric> findLyricById(int id) async {
@@ -149,10 +149,11 @@ class DatabaseHelper {
   Future<bool> isLyricFavoriteById(int id) async {
     final db = await instance.streamDatabase;
     var result = await db.query(lyricsTable, where: "$lyricsId==$id", limit: 1);
-    if (result.length < 1)
+    if (result.isEmpty) {
       return Future.value(false);
-    else
+    } else {
       return Future.value(true);
+    }
   }
 
   void close() {
@@ -173,18 +174,19 @@ class DatabaseHelper {
     final settingsList =
         await db.query(settingsTable, where: 'setting = "$settingName"');
     final settings = parseSettings(settingsList);
-    if (settings[settingName] != null)
+    if (settings[settingName] != null) {
       return settings[settingName]!;
-    else
+    } else {
       return Future.value(null);
+    }
   }
 
   Map<String, Setting> parseSettings(List<Map<String, dynamic>> settingsList) {
-    final Map<String, Setting> settings = new Map<String, Setting>();
-    settingsList.forEach((settingsMap) {
+    final Map<String, Setting> settings = <String, Setting>{}; // Map literal
+    for (var settingsMap in settingsList) {
       final setting = Setting.fromJson(settingsMap);
       settings[setting.setting] = setting;
-    });
+    }
     return settings;
   }
 

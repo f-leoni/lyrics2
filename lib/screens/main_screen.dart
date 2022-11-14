@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
-import 'package:lyrics_2/models/profile_manager.dart';
-import 'package:lyrics_2/screens/info_screen.dart';
-import 'package:lyrics_2/screens/screens.dart';
-import 'package:lyrics_2/models/models.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
+import 'package:lyrics2/models/profile_manager.dart';
+import 'package:lyrics2/screens/info_screen.dart';
+import 'package:lyrics2/screens/screens.dart';
+import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -32,13 +33,16 @@ class _MainScreenState extends State<MainScreen> {
     List<Widget> pages = <Widget>[
       FavoritesScreen(),
       const SearchScreen(),
-      InfoScreen(),
+      const InfoScreen(),
       /*LyricDetailScreen(
         lyric: Provider.of<AppStateManager>(context, listen: false).lyric,
       ), //Container(color: Colors.green),*/
     ];
+    /*bool darkMode =
+        Provider.of<ProfileManager>(context, listen: false).darkMode;*/
     bool darkMode =
-        Provider.of<ProfileManager>(context, listen: false).darkMode;
+        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
         return Scaffold(
@@ -46,16 +50,20 @@ class _MainScreenState extends State<MainScreen> {
             title: Text(AppLocalizations.of(context)!.appName,
                 style: Theme.of(context).textTheme.headline6),
             actions: [
-              MaterialButton(
+              /*MaterialButton(
                 child: Icon(darkMode ? Icons.light_mode : Icons.dark_mode),
                 onPressed: () {
-                  bool darkMode =
+                  final user = Provider.of<FirebaseUserRepository>(context,
+                      listen: false);
+                  user.darkMode = !user.darkMode;
+                  /*bool darkMode =
                       Provider.of<ProfileManager>(context, listen: false)
                           .darkMode;
                   Provider.of<ProfileManager>(context, listen: false).darkMode =
-                      !darkMode;
+                      !darkMode;*/
                 },
-              ),
+              ),*/
+              profileButton(widget.currentTab),
             ],
           ),
           // Select which tab is to be shown
@@ -86,6 +94,25 @@ class _MainScreenState extends State<MainScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget profileButton(int currentTab) {
+    //var manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    return Padding(
+      padding: const EdgeInsets.only(right: 16.0),
+      child: GestureDetector(
+        child: const CircleAvatar(
+          backgroundColor: Colors.transparent,
+          backgroundImage: AssetImage(
+            'assets/lyrics_assets/logo.png',
+          ),
+        ),
+        onTap: () {
+          users.tapOnProfile(true);
+        },
+      ),
     );
   }
 }

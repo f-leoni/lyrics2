@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'models.dart';
 
 class ProfileManager extends ChangeNotifier {
-  User get getUser => User(
+  MyUser get getUser => MyUser(
         firstName: 'Stef',
         lastName: 'Patt',
         role: 'Flutterista!',

@@ -16,11 +16,10 @@ Lyrics uses some third party libraries such as:
 * sqflite - for database management
 * flutter_acrcloud - For sound recognition
 * flutter_icons - For app icons generation
-* package_info_plus - To show build information
+* package_info_plus - To show build information 
 
 # FEATURES LIST
 ## TODO:
-* (feature) Implement Users Registration, Login and profile management via Firebase
 * (feature) Ordering and pagination for favorites page
 * (feature) Implement Genius Proxy
 * ...
@@ -31,6 +30,9 @@ Lyrics uses some third party libraries such as:
 * (feature) Implement show build infos
 * (feature) Implement graphics theme (dark and light)
 * (feature) swipe to delete favorite
+* (feature) Implement Users Registration, Login and profile management via Firebase
+* (fix) Use different graphic elements based on active theme
+
 
 # COMMANDS
 ## GENERATE LOCALIZATION FILES

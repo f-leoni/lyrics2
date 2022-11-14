@@ -1,6 +1,6 @@
-import 'package:lyrics_2/models/models.dart';
+import 'package:lyrics2/models/models.dart';
 
-abstract class Repository {
+abstract class FavoritesRepository {
   Future<List<Lyric>> findAllFavsLyrics(String? owner);
   Stream<Object?> getLyricStream();
   Future<Lyric> findLyricById(int id, String? owner);

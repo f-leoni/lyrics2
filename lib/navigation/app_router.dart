@@ -1,35 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
-import 'package:lyrics_2/models/models.dart';
-import 'package:lyrics_2/models/profile_manager.dart';
+import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/data/firebase_favorites_repository.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
+import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
-import 'package:lyrics_2/screens/screens.dart';
+import 'package:lyrics2/screens/screens.dart';
 
 class AppRouter extends RouterDelegate
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   @override
   final GlobalKey<NavigatorState> navigatorKey;
   final AppStateManager appStateManager;
-  //final FavoritesManager favoritesManager;
-  final ProfileManager profileManager;
+  final FirebaseFavoritesRepository favoritesManager;
+  final FirebaseUserRepository profileManager;
+  BuildContext? _context;
 
   AppRouter({
     required this.appStateManager,
-    //required this.favoritesManager,
+    required this.favoritesManager,
     required this.profileManager,
   }) : navigatorKey = GlobalKey<NavigatorState>() {
     appStateManager.addListener(notifyListeners);
-    //favoritesManager.addListener(notifyListeners);
+    favoritesManager.addListener(notifyListeners);
     profileManager.addListener(notifyListeners);
   }
 
   @override
   Widget build(BuildContext context) {
-    final repository = Provider.of<SQLiteRepository>(context);
-    final profile = Provider.of<ProfileManager>(context);
-
+    _context = context;
+    final repository = Provider.of<SQLiteSettingsRepository>(context);
+    final profile = Provider.of<FirebaseUserRepository>(context);
     Future<Map<String, Setting>> fSettings = repository.getSettings();
+
     return FutureBuilder(
       future: fSettings,
       builder: (context, snapshot) {
@@ -39,20 +43,25 @@ class AppRouter extends RouterDelegate
                 snapshot.data as Map<String, Setting>;
             bool isOnboardingComplete =
                 settings[Setting.onboardingComplete]?.value == "true";
+            bool isLoggedIn = profile.isLoggedIn();
+            logger.d(
+                "didSelectUser = ${profileManager.didSelectUser} in Navigator's build");
             return Navigator(
               key: navigatorKey,
               onPopPage: _handlePopPage,
               pages: [
                 if (!appStateManager.isInitialized) SplashScreen.page(),
                 if (appStateManager.isInitialized &&
-                    !appStateManager.isLoggedIn)
+                    //!appStateManager.isLoggedIn)
+                    !isLoggedIn)
                   LoginScreen.page(),
-                if (appStateManager.isLoggedIn && !isOnboardingComplete)
+                //if (appStateManager.isLoggedIn && !isOnboardingComplete)
+                if (isLoggedIn && !isOnboardingComplete)
                   OnboardingScreen.page(),
                 if (isOnboardingComplete)
                   MainScreen.page(appStateManager.getSelectedTab),
                 if (profileManager.didSelectUser)
-                  ProfileScreen.page(profileManager.getUser),
+                  ProfileScreen.page(profileManager.getUser!),
                 if (appStateManager.isViewingLyric)
                   LyricDetailScreen.page(
                       Future.value(appStateManager.viewedLyric)),
@@ -71,23 +80,15 @@ class AppRouter extends RouterDelegate
   Container buildSpinner() {
     return Container(
         color: Colors.black,
-        child: Center(
+        child: const Center(
           child: SizedBox(
             width: 50,
             height: 50,
-            child: const CircularProgressIndicator.adaptive(
+            child: CircularProgressIndicator.adaptive(
               backgroundColor: Colors.amber,
             ),
           ),
         ));
-  }
-
-  @override
-  void dispose() {
-    appStateManager.removeListener(notifyListeners);
-    //favoritesManager.removeListener(notifyListeners);
-    profileManager.removeListener(notifyListeners);
-    super.dispose();
   }
 
   // What do do when a page is closed or dismissed ("popped")?
@@ -101,7 +102,7 @@ class AppRouter extends RouterDelegate
     }
     // Handle Onboarding and splash
     if (route.settings.name == LyricsPages.onboardingPath) {
-      appStateManager.logout();
+      appStateManager.logout(_context!);
     }
     // Handle state when user closes profile screen
     if (route.settings.name == LyricsPages.profilePath) {
@@ -116,4 +117,12 @@ class AppRouter extends RouterDelegate
 
   @override
   Future<void> setNewRoutePath(configuration) async => {};
+
+  @override
+  void dispose() {
+    appStateManager.removeListener(notifyListeners);
+    favoritesManager.removeListener(notifyListeners);
+    profileManager.removeListener(notifyListeners);
+    super.dispose();
+  }
 }

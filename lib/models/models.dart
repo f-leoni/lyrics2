@@ -8,4 +8,4 @@ export 'tab_manager.dart';
 //export 'profile_manager.dart';
 export 'lyrics_pages.dart';
 export 'explore_data.dart';
-export 'user.dart';
+export 'my_user.dart';

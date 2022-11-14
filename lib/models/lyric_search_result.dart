@@ -1,5 +1,5 @@
-import 'package:lyrics_2/components/logger.dart';
-import 'package:lyrics_2/models/lyric_data.dart';
+import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/models/lyric_data.dart';
 
 class LyricSearchResult extends LyricData {
   int lyricId;

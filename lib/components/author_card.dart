@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics_2/lyricstheme.dart';
+import 'package:lyrics2/lyricstheme.dart';
 import 'circle_image.dart';
 
 class AuthorCard extends StatefulWidget {

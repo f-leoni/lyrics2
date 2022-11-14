@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
-import 'package:lyrics_2/components/lyric_tile.dart';
-import 'package:lyrics_2/data/firebase_repository.dart';
-//import 'package:lyrics_2/data/memory_repository.dart';
-import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
-import 'package:lyrics_2/models/models.dart';
-import 'package:lyrics_2/models/profile_manager.dart';
-import 'package:lyrics_2/screens/lyric_detail_screen.dart';
+import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/components/lyric_tile.dart';
+import 'package:lyrics2/data/firebase_favorites_repository.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
+import 'package:lyrics2/models/models.dart';
+import 'package:lyrics2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatelessWidget {
-  final Logger logger = Logger(
-    printer: PrettyPrinter(),
-  );
-
   FavoritesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //final repository = Provider.of<MemoryRepository>(context);
-    //final repository = Provider.of<SQLiteRepository>(context);
-    final repository = Provider.of<FirebaseRepository>(context);
-    final profile = Provider.of<ProfileManager>(context);
+    final favoritesRepository =
+        Provider.of<FirebaseFavoritesRepository>(context);
+    final profile = Provider.of<FirebaseUserRepository>(context);
 
     Future<List<Lyric>> favorites =
-        repository.findAllFavsLyrics(profile.getUser.email);
+        favoritesRepository.findAllFavsLyrics(profile.getUser!.email);
     return FutureBuilder(
         future: favorites,
         builder: (context, snapshot) {
@@ -41,7 +35,8 @@ class FavoritesScreen extends StatelessWidget {
               return createScreen(context, favoritesData);
             }
           } else {
-            return Text("Wait Please");
+            return Center(child: CircularProgressIndicator());
+            ;
           }
         });
   }
@@ -58,27 +53,32 @@ class FavoritesScreen extends StatelessWidget {
             child: const Icon(Icons.delete_forever,
                 color: Colors.white, size: 25.0)),
         onDismissed: (direction) {
-          //Provider.of<SQLiteRepository>(context, listen: false)
-          Provider.of<FirebaseRepository>(context, listen: false)
+          Provider.of<FirebaseFavoritesRepository>(context, listen: false)
               .deleteLyricFromFavs(lyric);
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text('${lyric.song} dismissed')));
         },
-        child: InkWell(
-          child: LyricTile(
-            lyric: lyric,
-          ),
-          onTap: () {
-            logger.i("Clicked on Search result. Song: ${lyric.song}");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LyricDetailScreen(
-                  lyric: Future.value(lyric),
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border(
+            bottom: BorderSide(width: 1.0, color: Colors.grey),
+          )),
+          child: InkWell(
+            child: LyricTile(
+              lyric: lyric,
+            ),
+            onTap: () {
+              logger.i("Clicked on Search result. Song: ${lyric.song}");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LyricDetailScreen(
+                    lyric: Future.value(lyric),
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ));
     }

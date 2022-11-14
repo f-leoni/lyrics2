@@ -2,19 +2,16 @@ library lyrics_library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lyrics2/components/logger.dart';
 import 'package:xml2json/xml2json.dart';
-import 'package:lyrics_2/models/models.dart';
-import 'package:logger/logger.dart';
+import 'package:lyrics2/models/models.dart';
 
 class ChartLyricsProxy {
-  var logger = Logger(
-    printer: PrettyPrinter(),
-  );
   static String apiBase = "http://api.chartlyrics.com/apiv1.asmx/";
-  String searchBase = apiBase + "SearchLyric?";
-  String searchDirectBase = apiBase + "SearchLyricDirect?";
-  String searchTextBase = apiBase + "SearchLyricText?";
-  String getLyricBase = apiBase + "GetLyric?";
+  String searchBase = "${apiBase}SearchLyric?";
+  String searchDirectBase = "${apiBase}SearchLyricDirect?";
+  String searchTextBase = "${apiBase}SearchLyricText?";
+  String getLyricBase = "${apiBase}GetLyric?";
   final String _lyricRoot = "ArrayOfSearchLyricResult";
   final String _lyricSearchResult = "SearchLyricResult";
   final String _lyricGetResult = "GetLyricResult";
@@ -41,7 +38,7 @@ class ChartLyricsProxy {
   // Search by text and title
   Future<String> _searchLyric(String artist, String song) async {
     http.Response value =
-        await _getFutureResponse(searchBase + "artist=$artist&song=$song");
+        await _getFutureResponse("${searchBase}artist=$artist&song=$song");
     if (value.statusCode != 200) {
       logger.e(
           "Error in _searchLyric($artist, $song): ${value.body} (${value.statusCode}");
@@ -53,7 +50,7 @@ class ChartLyricsProxy {
 // Search lyrics by artist and title
   Future<String> _searchLyricDirect(String artist, String song) async {
     http.Response value = await _getFutureResponse(
-        searchDirectBase + "artist=$artist&song=$song");
+        "${searchDirectBase}artist=$artist&song=$song");
     if (value.statusCode != 200) {
       logger.e(
           "Error in _searchLyricDirect($artist, $song): ${value.body} (${value.statusCode}");
@@ -65,7 +62,7 @@ class ChartLyricsProxy {
 // Search lyrics by text
   Future<String> _searchLyricText(String text) async {
     http.Response value =
-        await _getFutureResponse(searchTextBase + "lyricText=$text");
+        await _getFutureResponse("${searchTextBase}lyricText=$text");
     if (value.statusCode != 200) {
       logger.e(
           "Error in _searchLyricText($text): ${value.body} (${value.statusCode}");
@@ -76,15 +73,15 @@ class ChartLyricsProxy {
 
   // Get complete lyric data by Id and Checksum
   Future<Lyric> getLyric(LyricSearchResult lyric) async {
-    http.Response value = await _getFutureResponse(getLyricBase +
-        "lyricId=${lyric.lyricId}&lyricCheckSum=${lyric.lyricChecksum}");
+    http.Response value = await _getFutureResponse(
+        "${getLyricBase}lyricId=${lyric.lyricId}&lyricCheckSum=${lyric.lyricChecksum}");
     if (value.statusCode != 200) {
       logger.e(
           "Error in getLyric([${lyric.song}]): ${value.body} (${value.statusCode}");
       throw LyricException(value.statusCode, value.body);
     }
     Map<String, dynamic> jsonResults = _convertToJson(value.body);
-    Lyric out = Lyric.fromJson(jsonResults[_lyricGetResult]);
+    Lyric out = Lyric.fromJson(jsonResults[_lyricGetResult], "");
     return out;
   }
 

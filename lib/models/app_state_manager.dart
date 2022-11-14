@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:lyrics_2/models/models.dart';
-import 'package:lyrics_2/api/chartlyrics_proxy.dart';
+import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/models/models.dart';
+import 'package:lyrics2/api/chartlyrics_proxy.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_acrcloud/flutter_acrcloud.dart';
-import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:provider/provider.dart';
 
 class LyricsTab {
@@ -22,11 +22,8 @@ class SearchType {
 }
 
 class AppStateManager extends ChangeNotifier {
-  var logger = Logger(
-    printer: PrettyPrinter(),
-  );
   bool _initialized = false;
-  bool _loggedIn = true;
+  bool _loggedIn = false;
   //bool _onboardingComplete = false;
   int _selectedTab = LyricsTab.search;
   List<LyricSearchResult> _searchResults = List.empty();
@@ -39,12 +36,15 @@ class AppStateManager extends ChangeNotifier {
   int _searchType = SearchType.audio;
   String _version = "";
   String _buildNr = "";
-  String _favoritesFilter = "";
+  String favoritesFilter = "";
   //Map<String, String> _settings = Map<String, String>();
-  String _searchAudioAuthor = "";
-  String _searchAudioSong = "";
-  bool _isViewingLyric = false;
-  Lyric _viewedLyric = Lyric.empty;
+  String searchAudioAuthor = "";
+  String searchAudioSong = "";
+  bool isViewingLyric = false;
+  Lyric viewedLyric = Lyric.empty;
+  String lastTextSearch = "";
+  String lastAuthorSearch = "";
+  String lastSongSearch = "";
 
   // Accessors
   bool get isInitialized => _initialized;
@@ -64,31 +64,6 @@ class AppStateManager extends ChangeNotifier {
   int get searchType => _searchType;
   String get version => _version;
   String get buildNr => _buildNr;
-  String get favoritesFilter => _favoritesFilter;
-  void set favoritesFilter(String value) {
-    _favoritesFilter = value;
-  }
-
-  String get searchAudioAuthor => _searchAudioAuthor;
-  String get searchAudioSong => _searchAudioSong;
-  void set searchAudioAuthor(String value) {
-    _searchAudioAuthor = value;
-  }
-
-  void set searchAudioSong(String value) {
-    _searchAudioSong = value;
-  }
-
-  bool get isViewingLyric => _isViewingLyric;
-  void set isViewingLyric(bool value) {
-    _isViewingLyric = value;
-    //notifyListeners();
-  }
-
-  Lyric get viewedLyric => _viewedLyric;
-  void set viewedLyric(Lyric value) {
-    _viewedLyric = value;
-  }
 
   void initializeApp() {
     logger.d("Initialising...");
@@ -96,7 +71,6 @@ class AppStateManager extends ChangeNotifier {
       const Duration(milliseconds: 2000),
       () {
         _initialized = true;
-        //_settings["initialized"] = "true";
         notifyListeners();
       },
     );
@@ -104,11 +78,8 @@ class AppStateManager extends ChangeNotifier {
 
   void login(BuildContext context, String username, String password) {
     logger.d("Logging in...");
-    final sqlRepository = Provider.of<SQLiteRepository>(context, listen: false);
-    //_loggedIn = true;
-    //_settings["logged_in"] = "true";
-    sqlRepository
-        .insertSetting(Setting(setting: Setting.loggedIn, value: "true"));
+    //final sqlRepository = Provider.of<SQLiteFavoritesRepository>(context, listen: false);
+    _loggedIn = true;
 
     notifyListeners();
   }
@@ -120,7 +91,8 @@ class AppStateManager extends ChangeNotifier {
     _buildNr = packageInfo.buildNumber;
   }
 
-  Future<List<LyricSearchResult>> startSearchText(String searchText) async {
+  //Future<List<LyricSearchResult>> startSearchText(String searchText) async {
+  Future<String> startSearchText(String searchText) async {
     logger.d("Starting Search for [$searchText]...");
     _isSearching = true;
     _searchCompleted = false;
@@ -137,11 +109,14 @@ class AppStateManager extends ChangeNotifier {
       _isSearching = false;
     }
     notifyListeners();
-    return _searchResults;
+    //return _searchResults;
+    return searchText;
   }
 
-  Future<List<LyricSearchResult>> startSearchSongAuthor(
-      String author, String song) async {
+  Future<List<String>> startSearchSongAuthor(
+      //Future<List<LyricSearchResult>> startSearchSongAuthor(
+      String author,
+      String song) async {
     logger.d("Starting Search for [$author], [$song]...");
     _isSearching = true;
     _searchCompleted = false;
@@ -156,9 +131,10 @@ class AppStateManager extends ChangeNotifier {
       _status = e.code;
       _errorMessage = e.message;
       _isSearching = false;
-    } //*/
+    }
     notifyListeners();
-    return _searchResults;
+    //return _searchResults;
+    return [author, song];
   }
 
   void endSearch() {
@@ -168,33 +144,37 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void switchSearch(BuildContext context) {
+  void switchSearch(BuildContext context, String textSearch,
+      String authorSearch, String songSearch) {
     String msg = "";
     int currSearchType = searchType;
     if (currSearchType == SearchType.text) {
+      // Save Textfield text
+      lastTextSearch = textSearch;
       msg = AppLocalizations.of(context)!.msgSearchSongAuthor;
       _searchType = SearchType.songAuthor;
-      //_isTextSearch = false;
-      //_isSongAuthorSearch = true;
-      //_isAudioSearch = false;
     } else if (currSearchType == SearchType.songAuthor) {
+      // Save Textfield text
+      lastAuthorSearch = authorSearch;
+      lastSongSearch = songSearch;
       msg = AppLocalizations.of(context)!.msgSearchAudio;
       _searchType = SearchType.audio;
-      //_isTextSearch = false;
-      //_isSongAuthorSearch = false;
-      //_isAudioSearch = true;
     } else if (currSearchType == SearchType.audio) {
       _searchType = SearchType.text;
       msg = AppLocalizations.of(context)!.msgSearchText;
-      //_isTextSearch = true;
-      //_isSongAuthorSearch = false;
-      //_isAudioSearch = false;
     }
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(msg),
       duration: const Duration(milliseconds: 500),
     ));
     notifyListeners();
+  }
+
+  int nextSearchType(int currSearchType) {
+    if (currSearchType == SearchType.text) return SearchType.songAuthor;
+    if (currSearchType == SearchType.songAuthor) return SearchType.audio;
+    // if (currSearchType == SearchType.audio)
+    return SearchType.text;
   }
 
   Future<Lyric>? getLyric(LyricSearchResult lsr) {
@@ -214,16 +194,17 @@ class AppStateManager extends ChangeNotifier {
   }
 
   Future<bool> checkOnboarding(BuildContext context) async {
-    final sqlRepository = Provider.of<SQLiteRepository>(context, listen: false);
+    final sqlRepository =
+        Provider.of<SQLiteSettingsRepository>(context, listen: false);
     Setting? onBoardingSavedStatus =
         await sqlRepository.getSetting(Setting.onboardingComplete);
     if (onBoardingSavedStatus == null) return false;
-    return onBoardingSavedStatus == "true";
+    return onBoardingSavedStatus.value == "true";
   }
 
   void completeOnboarding(BuildContext context) {
-    //_onboardingComplete = true;
-    final sqlRepository = Provider.of<SQLiteRepository>(context, listen: false);
+    final sqlRepository =
+        Provider.of<SQLiteSettingsRepository>(context, listen: false);
     sqlRepository.insertSetting(
         Setting(setting: Setting.onboardingComplete, value: "true"));
     notifyListeners();
@@ -239,13 +220,16 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() {
+  void logout(BuildContext context) {
     logger.d("Executing user logout");
-    //final sqlRepository = Provider.of<SQLiteRepository>(context, listen: false);
-    //_loggedIn = false;
-    //_onboardingComplete = false;
-    //sqlRepository.insertSetting(
-    //    Setting(setting: Setting.onboardingComplete, value: "false"));
+    final userRepository =
+        Provider.of<FirebaseUserRepository>(context, listen: false);
+    final favoritesRepository =
+        Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    userRepository.logout();
+    _loggedIn = false;
+    favoritesRepository.insertSetting(
+        Setting(setting: Setting.onboardingComplete, value: "false"));
 
     _initialized = false;
     _selectedTab = 0;

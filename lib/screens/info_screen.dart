@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lyrics_2/data/sqlite/sqlite_repository.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
@@ -10,16 +12,20 @@ class InfoScreen extends StatelessWidget {
     return MaterialPage(
       name: LyricsPages.infoPath,
       key: ValueKey(LyricsPages.infoPath),
-      child: InfoScreen(),
+      child: const InfoScreen(),
     );
   }
 
-  InfoScreen({Key? key}) : super(key: key);
-  String version = "*";
-  String code = "*";
+  const InfoScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool isDark =
+        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+    final logoImg = isDark
+        ? const AssetImage('assets/lyrics_assets/logo_dark.png')
+        : const AssetImage('assets/lyrics_assets/logo.png');
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -35,6 +41,8 @@ class InfoScreen extends StatelessWidget {
                   //color: Colors.yellow,
                   child: Center(
                     child: SizedBox(
+                      width: double.infinity,
+                      height: 80,
                       child: Row(
                         children: [
                           IconButton(
@@ -45,10 +53,8 @@ class InfoScreen extends StatelessWidget {
                                   .goToTab(LyricsTab.search);
                             },
                           ),
-                          const Image(
-                              height: 80,
-                              image:
-                                  AssetImage("assets/lyrics_assets/logo.png")),
+                          Image(height: 80, image: logoImg),
+                          //AssetImage("assets/lyrics_assets/logo.png")),
                           Text(AppLocalizations.of(context)!.infoTitle,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -56,8 +62,6 @@ class InfoScreen extends StatelessWidget {
                               )),
                         ],
                       ),
-                      width: double.infinity,
-                      height: 80,
                     ),
                   ),
                 ),
@@ -71,25 +75,38 @@ class InfoScreen extends StatelessWidget {
                           builder: (context, appStateManager, child) {
                         Provider.of<AppStateManager>(context, listen: false)
                             .getVersionInfo();
-                        return Text(
-                            AppLocalizations.of(context)!.info +
-                                "\n\nVersion: ${Provider.of<AppStateManager>(context, listen: false).version} - Build: ${Provider.of<AppStateManager>(context, listen: false).buildNr}\n",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14,
-                                wordSpacing: 5));
+                        return Column(
+                          children: [
+                            Text("${AppLocalizations.of(context)!.info}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14,
+                                    wordSpacing: 5)),
+                            const SizedBox(height: 30),
+                            Text(
+                                "Version: ${Provider.of<AppStateManager>(context, listen: false).version} - Build: ${Provider.of<AppStateManager>(context, listen: false).buildNr}\n",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    wordSpacing: 5)),
+                          ],
+                        );
                       }),
                     ),
                   ),
                 ),
-                TextButton(
-                  child: Text("Reset Settings"),
+                /*TextButton(
+                  child: const Text("Logout"),
                   onPressed: () {
-                    final sqlRepository =
-                        Provider.of<SQLiteRepository>(context, listen: false);
+                    var manager =
+                        Provider.of<AppStateManager>(context, listen: false);
+                    manager.logout(context);
+                    final sqlRepository = Provider.of<SQLiteSettingsRepository>(
+                        context,
+                        listen: false);
                     sqlRepository.deleteSetting(Setting.onboardingComplete);
                   },
-                )
+                )*/
               ],
             ),
           ),

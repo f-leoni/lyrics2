@@ -1,11 +1,13 @@
 import 'dart:core';
 import 'package:flutter/foundation.dart';
-import 'package:lyrics_2/models/models.dart';
-import 'package:lyrics_2/components/logger.dart';
-import 'package:lyrics_2/data/sqlite/database_helper.dart';
-import 'package:lyrics_2/data/repository.dart';
+import 'package:lyrics2/models/models.dart';
+import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/data/sqlite/database_helper.dart';
+import 'package:lyrics2/data/favorites_repository.dart';
 
-class SQLiteRepository extends Repository with ChangeNotifier {
+class SQLiteSettingsRepository //extends FavoritesRepository
+    with
+        ChangeNotifier {
   //final List<Lyric> _currentLyrics = <Lyric>[];
   final dbHelper = DatabaseHelper.instance;
 
@@ -13,7 +15,7 @@ class SQLiteRepository extends Repository with ChangeNotifier {
   //final _darkTheme = false;
   //final _autoTheme = false;
 
-  @override
+  /*@override
   Future<List<Lyric>> findAllFavsLyrics(String? owner) async {
     return await dbHelper.findAllLyrics();
   }
@@ -53,9 +55,11 @@ class SQLiteRepository extends Repository with ChangeNotifier {
   }
 
 //TODO implement this method?
-/*bool contains(Lyric lyric) {
-    return false;
-  }*/
+//bool contains(Lyric lyric) {
+//    return false;
+//  }
+
+*/
 
   Future<void> insertSetting(Setting setting) {
     dbHelper.insertSetting(setting);
@@ -79,7 +83,7 @@ class SQLiteRepository extends Repository with ChangeNotifier {
     return Future.value(null);
   }
 
-  @override
+/*  @override
   Future init() async {
     await dbHelper.database;
     return Future.value();
@@ -95,4 +99,5 @@ class SQLiteRepository extends Repository with ChangeNotifier {
     // TODO: implement getLyricStream
     throw UnimplementedError();
   }
+  */
 }

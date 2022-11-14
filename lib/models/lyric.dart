@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lyrics_2/models/lyric_data.dart';
+import 'package:lyrics2/models/lyric_data.dart';
 
 class Lyric extends LyricData {
   int lyricId;
@@ -31,9 +31,9 @@ class Lyric extends LyricData {
   });
 
 // Create from json object
-  factory Lyric.fromJson(Map<String, dynamic> json) {
+  factory Lyric.fromJson(Map<String, dynamic> json, String owner) {
     String lyric = "";
-    String owner = "fraleoni@gmail.com";
+    //String owner = "fraleoni@gmail.com";
     try {
       lyric = json['lyric'];
     } catch (e) {
@@ -64,8 +64,9 @@ class Lyric extends LyricData {
         'owner': owner,
       };
 
-  factory Lyric.fromSnapshot(DocumentSnapshot snapshot) {
-    final lyric = Lyric.fromJson(snapshot.data() as Map<String, dynamic>);
+  factory Lyric.fromSnapshot(DocumentSnapshot snapshot, String owner) {
+    final lyric =
+        Lyric.fromJson(snapshot.data() as Map<String, dynamic>, owner);
     lyric.reference = snapshot.reference;
     return lyric;
   }

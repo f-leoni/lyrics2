@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lyrics_2/models/app_state_manager.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
