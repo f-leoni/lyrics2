@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
-import 'package:lyrics2/data/sqlite_settings_repository.dart';
-import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
@@ -77,7 +75,7 @@ class InfoScreen extends StatelessWidget {
                             .getVersionInfo();
                         return Column(
                           children: [
-                            Text("${AppLocalizations.of(context)!.info}",
+                            Text(AppLocalizations.of(context)!.info,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.normal,
                                     fontSize: 14,

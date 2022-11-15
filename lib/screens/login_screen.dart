@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildEmailField(
       BuildContext context, String hintText, TextInputType keyboardType) {
-    final userDao = Provider.of<FirebaseUserRepository>(context, listen: false);
+    //final userDao = Provider.of<FirebaseUserRepository>(context, listen: false);
 
     return TextFormField(
       cursorColor: rwColor,
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildPasswordField(
       BuildContext context, String hintText, TextInputType keyboardType) {
-    final userDao = Provider.of<FirebaseUserRepository>(context, listen: false);
+    //final userDao = Provider.of<FirebaseUserRepository>(context, listen: false);
 
     return TextFormField(
       cursorColor: rwColor,

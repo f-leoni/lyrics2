@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
-import 'package:lyrics2/models/profile_manager.dart';
 import 'package:lyrics2/screens/info_screen.dart';
 import 'package:lyrics2/screens/screens.dart';
 import 'package:lyrics2/models/models.dart';
@@ -31,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = <Widget>[
-      FavoritesScreen(),
+      const FavoritesScreen(),
       const SearchScreen(),
       const InfoScreen(),
       /*LyricDetailScreen(
@@ -40,8 +39,8 @@ class _MainScreenState extends State<MainScreen> {
     ];
     /*bool darkMode =
         Provider.of<ProfileManager>(context, listen: false).darkMode;*/
-    bool darkMode =
-        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+    /*bool darkMode =
+        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;*/
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {

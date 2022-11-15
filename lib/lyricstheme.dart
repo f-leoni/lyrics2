@@ -24,20 +24,18 @@ class LyricsTheme {
         fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white),
   );
 
-// 3
   static ThemeData light() {
     return ThemeData(
       primarySwatch: Colors.amber,
       brightness: Brightness.light,
       primaryColor: Colors.white,
-      /*colorScheme:
-          ColorScheme(background: Colors.white, secondary: Colors.black),*/
+      /* colorScheme: //ColorScheme.fromSeed(seedColor: Colors.white),
+         ColorScheme(background: Colors.white, secondary: Colors.black),*/
       accentColor: Colors.black,
       textTheme: lightTextTheme,
     );
   }
 
-// 4
   static ThemeData dark() {
     return ThemeData(
       primarySwatch: Colors.amber,

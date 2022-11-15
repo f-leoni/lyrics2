@@ -11,7 +11,7 @@ import 'package:lyrics2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatelessWidget {
-  FavoritesScreen({Key? key}) : super(key: key);
+  const FavoritesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class FavoritesScreen extends StatelessWidget {
     return FutureBuilder(
         future: favorites,
         builder: (context, snapshot) {
-          List<Lyric> favoritesData = new List<Lyric>.empty();
+          List<Lyric> favoritesData = List<Lyric>.empty();
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               favoritesData = snapshot.data as List<Lyric>;
@@ -35,8 +35,7 @@ class FavoritesScreen extends StatelessWidget {
               return createScreen(context, favoritesData);
             }
           } else {
-            return Center(child: CircularProgressIndicator());
-            ;
+            return const Center(child: CircularProgressIndicator());
           }
         });
   }
@@ -59,7 +58,7 @@ class FavoritesScreen extends StatelessWidget {
               .showSnackBar(SnackBar(content: Text('${lyric.song} dismissed')));
         },
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               border: Border(
             bottom: BorderSide(width: 1.0, color: Colors.grey),
           )),
@@ -82,10 +81,10 @@ class FavoritesScreen extends StatelessWidget {
         ),
       ));
     }
-    double _height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
 
     return SizedBox(
-        height: _height,
+        height: height,
         //color: Colors.green,
         child: ListView(
           padding: const EdgeInsets.all(10.0),
@@ -117,7 +116,6 @@ class FavoritesScreen extends StatelessWidget {
             ),
             MaterialButton(
               textColor: Colors.white,
-              child: Text(AppLocalizations.of(context)!.lblSearch),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
@@ -125,6 +123,7 @@ class FavoritesScreen extends StatelessWidget {
               onPressed: () {
                 Provider.of<AppStateManager>(context, listen: false).goToTab(1);
               },
+              child: Text(AppLocalizations.of(context)!.lblSearch),
             ),
           ],
         ),

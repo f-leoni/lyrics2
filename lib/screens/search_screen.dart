@@ -44,6 +44,9 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchControllerText.text = manager.lastTextSearch;
     _searchControllerAuthor.text = manager.lastAuthorSearch;
     _searchControllerSong.text = manager.lastSongSearch;
+    _searchStringText = _searchControllerText.text;
+    _searchStringAuthor = _searchControllerAuthor.text;
+    _searchStringSong = _searchControllerSong.text;
     _searchControllerText.addListener(() {
       _searchStringText = _searchControllerText.text;
     });
@@ -286,8 +289,7 @@ class _SearchScreenState extends State<SearchScreen> {
     provider.searchAudioAuthor = "";
     provider.searchAudioSong = "";
     final session = ACRCloud.startSession();
-
-    showDialog(
+    await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
@@ -307,6 +309,8 @@ class _SearchScreenState extends State<SearchScreen> {
     );
 
     final result = await session.result;
+    // Avoid lint error "Do not use BuildContexts across async gaps"
+    if (!mounted) return;
     // Hide dialog
     Navigator.of(context, rootNavigator: true).pop(result);
 

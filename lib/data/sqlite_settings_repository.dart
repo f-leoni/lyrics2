@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/sqlite/database_helper.dart';
-import 'package:lyrics2/data/favorites_repository.dart';
 
 class SQLiteSettingsRepository //extends FavoritesRepository
     with
