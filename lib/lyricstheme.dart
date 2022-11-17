@@ -31,7 +31,7 @@ class LyricsTheme {
       primaryColor: Colors.white,
       /* colorScheme: //ColorScheme.fromSeed(seedColor: Colors.white),
          ColorScheme(background: Colors.white, secondary: Colors.black),*/
-      accentColor: Colors.black,
+      accentColor: Colors.amber.shade700,
       textTheme: lightTextTheme,
     );
   }

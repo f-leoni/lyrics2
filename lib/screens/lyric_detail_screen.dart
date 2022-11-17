@@ -172,11 +172,15 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                 );
               } else {
                 //container hasn't data
-                return const CircularProgressIndicator();
+                return const Center(
+                    child: CircularProgressIndicator(color: Colors.blue));
               }
             } else {
               // Snapshot  State is not done
-              return const CircularProgressIndicator();
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: Colors.red,
+              ));
             }
           }),
     );

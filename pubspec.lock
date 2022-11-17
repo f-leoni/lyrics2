@@ -120,6 +120,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  enum_to_string:
+    dependency: transitive
+    description:
+      name: enum_to_string
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   equatable:
     dependency: "direct main"
     description:
@@ -231,6 +238,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  genius_api_unofficial:
+    dependency: "direct main"
+    description:
+      name: genius_api_unofficial
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   google_fonts:
     dependency: "direct main"
     description:

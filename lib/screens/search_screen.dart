@@ -56,8 +56,8 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchControllerSong.addListener(() {
       _searchStringSong = _searchControllerSong.text;
     });
-    ACRCloud.setUp(
-        const ACRCloudConfig(arApiAccessKey, arApiSecret, arApiHost));
+    ACRCloud.setUp(const ACRCloudConfig(
+        Env.arApiAccessKey, Env.arApiSecret, Env.arApiHost));
     super.initState();
   }
 
@@ -78,7 +78,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               Expanded(
                 flex: 1,
-                child: buildButton(context),
+                child: buildSearchButton(context),
               ),
               Expanded(
                 flex: 8,
@@ -334,7 +334,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  Widget buildButton(BuildContext context) {
+  Widget buildSearchButton(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     int searchType = manager.searchType;
     if (searchType == SearchType.audio) {

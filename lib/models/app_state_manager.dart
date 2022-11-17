@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lyrics2/api/genius_proxy.dart';
+import 'package:lyrics2/api/proxy.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/models.dart';
@@ -45,6 +47,8 @@ class AppStateManager extends ChangeNotifier {
   String lastTextSearch = "";
   String lastAuthorSearch = "";
   String lastSongSearch = "";
+  final Proxy _currService = GeniusProxy();
+  //final Proxy _currService = ChartLyricsProxy();
 
   // Accessors
   bool get isInitialized => _initialized;
@@ -96,9 +100,9 @@ class AppStateManager extends ChangeNotifier {
     logger.d("Starting Search for [$searchText]...");
     _isSearching = true;
     _searchCompleted = false;
-    ChartLyricsProxy clp = ChartLyricsProxy();
+    Proxy lyricsService = _currService;
     try {
-      _searchResults = await clp.simpleSearchText(searchText);
+      _searchResults = await lyricsService.simpleSearchText(searchText);
       _status = 200;
       _searchCompleted = true;
       _isSearching = false;
@@ -120,9 +124,9 @@ class AppStateManager extends ChangeNotifier {
     logger.d("Starting Search for [$author], [$song]...");
     _isSearching = true;
     _searchCompleted = false;
-    ChartLyricsProxy clp = ChartLyricsProxy();
+    Proxy lyricsService = _currService;
     try {
-      _searchResults = await clp.simpleSearch(author, song);
+      _searchResults = await lyricsService.simpleSearch(author, song);
       _status = 200;
       _searchCompleted = true;
       _isSearching = false;
@@ -182,8 +186,8 @@ class AppStateManager extends ChangeNotifier {
     _status = -1;
     _errorMessage = "";
     try {
-      ChartLyricsProxy clp = ChartLyricsProxy();
-      _lyric = clp.getLyric(lsr);
+      Proxy lyricsService = _currService;
+      _lyric = lyricsService.getLyric(lsr);
       return _lyric;
     } on LyricException catch (e) {
       logger.e("An exception occurred: ${e.message} (${e.code})...");
