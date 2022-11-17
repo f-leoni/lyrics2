@@ -11,6 +11,7 @@ import 'package:lyrics2/models/models.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:lyrics2/env.dart';
+import 'package:lyrics2/lyricstheme.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -33,7 +34,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final _searchControllerText = TextEditingController();
   final _searchControllerAuthor = TextEditingController();
   final _searchControllerSong = TextEditingController();
-  final buttonTextStyle = const TextStyle(color: Colors.black87);
+  //final buttonTextStyle = const TextStyle(color: Colors.black87);
   String _searchStringText = "";
   String _searchStringAuthor = "";
   String _searchStringSong = "";
@@ -110,6 +111,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildAudioSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
+    bool isDarkMode =
+        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+    var currLyricsTheme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+    var currTextTheme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -140,14 +147,14 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: MaterialButton(
                           minWidth: 150,
                           height: 50,
-                          color: Theme.of(context).focusColor,
+                          color: currLyricsTheme.indicatorColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           onPressed: startListening,
                           child: Text(
                             AppLocalizations.of(context)!.msgListen,
-                            style: buttonTextStyle,
+                            style: currTextTheme.bodyText1,
                           ),
                         ),
                       ),
@@ -342,6 +349,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildSearchButton(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
+    bool isDarkMode =
+        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+    var currLyricsTheme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+    var currTextTheme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
     int searchType = manager.searchType;
     if (searchType == SearchType.audio) {
       return const SizedBox(
@@ -353,13 +366,13 @@ class _SearchScreenState extends State<SearchScreen> {
         child: MaterialButton(
           minWidth: 150,
           height: 50,
-          color: Theme.of(context).focusColor,
+          color: currLyricsTheme.indicatorColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
             AppLocalizations.of(context)!.searchText,
-            style: buttonTextStyle,
+            style: currTextTheme.bodyText1,
           ),
           onPressed: () async {
             logger.v("Click on Search button in search screen");

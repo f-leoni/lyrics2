@@ -20,9 +20,10 @@ Lyrics uses some third party libraries such as:
 
 # FEATURES LIST
 ## TODO:
-* (feature) Ordering and pagination for favorites page
-* (fix) Create an id independent from what service has been used 
-        to find lyric (at the moment the numeric ID is used)
+* (feature) Search, pagination and ordering for favorites page
+* (fix) Create an id (hash?) independent from which service has been used 
+        to find lyric (at the moment the numeric ID is used, which is 
+        specific for each service)
 * ...
 
 ## DONE

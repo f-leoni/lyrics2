@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/lyricstheme.dart';
 
 class FirebaseUserRepository with ChangeNotifier {
   final auth = FirebaseAuth.instance;
@@ -16,6 +18,16 @@ class FirebaseUserRepository with ChangeNotifier {
   set useGenius(bool value) {
     _useGenius = value;
     notifyListeners();
+  }
+
+  ThemeData get themeData {
+    if (_darkMode) return LyricsTheme.dark();
+    return LyricsTheme.light();
+  }
+
+  TextTheme get textTheme {
+    if (_darkMode) return LyricsTheme.darkTextTheme;
+    return LyricsTheme.lightTextTheme;
   }
 
   User? get getUser => auth.currentUser;

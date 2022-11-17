@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/lyricstheme.dart';
+import 'package:provider/provider.dart';
 import 'circle_image.dart';
 
 class AuthorCard extends StatefulWidget {
@@ -20,8 +22,11 @@ class AuthorCard extends StatefulWidget {
 
 class _AuthorCardState extends State<AuthorCard> {
   bool _isFavorited = false;
+
   @override
   Widget build(BuildContext context) {
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    bool isDarkMode = users.darkMode;
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -38,11 +43,15 @@ class _AuthorCardState extends State<AuthorCard> {
               children: [
                 Text(
                   widget.authorName,
-                  style: LyricsTheme.lightTextTheme.headline2,
+                  style: isDarkMode
+                      ? LyricsTheme.darkTextTheme.headline2
+                      : LyricsTheme.lightTextTheme.headline2,
                 ),
                 Text(
                   widget.title,
-                  style: LyricsTheme.lightTextTheme.headline3,
+                  style: isDarkMode
+                      ? LyricsTheme.darkTextTheme.headline3
+                      : LyricsTheme.lightTextTheme.headline3,
                 )
               ],
             ),
