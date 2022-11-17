@@ -23,13 +23,11 @@ class GeniusProxy extends Proxy {
 
   // PRIVATE METHODS
   Future<dynamic> _getSong(id) async {
-    // Get info about song "https://genius.com/Yxngxr1-riley-reid-lyrics".
     final res = await geniusApi.getSong(id);
     return res.data!['song'];
   }
 
   Future<LyricSearchResult> _resultToLSR(result) async {
-    //"https://genius.com/Polo-g-broken-guitars-lyrics"
     var resValue = result['result'];
     var tempLyric = LyricSearchResult(
       artist: resValue["artist_names"],
@@ -41,15 +39,13 @@ class GeniusProxy extends Proxy {
   }
 
   Future<Lyric> _resultToLyric(result) async {
-    //var resValue = result['result'];
-    //print("${resValue['title']}\n");
     var tempLyric = Lyric(
       artist: result["artist_names"],
       lyricId: result["id"],
       song: result["title"],
       checksum: result["url"],
       imageUrl: result["header_image_url"],
-      owner: _getOwner(),
+      owner: "",
       lyric: await _scrape(result["url"]),
     );
     return Future.value(tempLyric);
@@ -65,7 +61,6 @@ class GeniusProxy extends Proxy {
   }
 
   Future<String> _scrape(String url) async {
-    //Uri uri = Uri.parse("https://www.repubblica.it/index.html");
     final uri = Uri.parse(url);
     String body = "";
     try {
@@ -77,14 +72,12 @@ class GeniusProxy extends Proxy {
       logger.e(e.toString());
       rethrow;
     }
-
     BeautifulSoup bs = BeautifulSoup(body);
     String outLyric = bs
         .find('*', id: 'lyrics-root')!
         .children[2]
         .innerHtml
         .replaceAll("<br>", "\n");
-
     return _parseHtmlString(outLyric);
   }
 
@@ -92,15 +85,7 @@ class GeniusProxy extends Proxy {
     final document = parse(htmlString);
     final String parsedString =
         parse(document.body!.text).documentElement!.text;
-
     return parsedString;
-  }
-
-  //TODO to be implemented
-  String _getOwner() {
-    String owner = "";
-    //owner = Provider.of<FirebaseUserRepository>(context,listen: false).getUser.email;
-    return owner;
   }
 
   Future<List<LyricSearchResult>> _getResults(List<dynamic> results) async {
