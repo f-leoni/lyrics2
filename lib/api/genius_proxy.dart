@@ -2,16 +2,14 @@ library lyrics_library;
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:lyrics2/api/proxy.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/lyric.dart';
 import 'package:lyrics2/models/lyric_exception.dart';
 import 'package:lyrics2/models/lyric_search_result.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:genius_api_unofficial/genius_api_unofficial.dart';
 import 'package:lyrics2/env.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:html/parser.dart';
+import 'package:html/parser.dart' show parse;
 
 class GeniusProxy extends Proxy {
   GeniusApiRaw geniusApi = GeniusApiRaw(
@@ -24,12 +22,6 @@ class GeniusProxy extends Proxy {
   geniusProxy() {}
 
   // PRIVATE METHODS
-  Future<dynamic> _getFullSearch(query) async {
-    final res = await geniusApi.getSearch(query);
-    var x = _getResults(res.data!['hits']);
-    return x; // Outp
-  }
-
   Future<dynamic> _getSong(id) async {
     // Get info about song "https://genius.com/Yxngxr1-riley-reid-lyrics".
     final res = await geniusApi.getSong(id);
@@ -122,8 +114,8 @@ class GeniusProxy extends Proxy {
 
   // PROXY IMPLEMENTATION
   @override
-  Future<List<LyricSearchResult>> simpleSearchText(String query) async {
-    final queryResult = await _getSearch(query, null);
+  Future<List<LyricSearchResult>> simpleSearchText(String song) async {
+    final queryResult = await _getSearch(song, null);
     return queryResult;
   }
 
@@ -139,8 +131,6 @@ class GeniusProxy extends Proxy {
     final result = await _getSong(lyric.lyricId).onError((error, stackTrace) {
       logger.e("Error: $error\n$stackTrace");
     });
-    var x = 1;
-    final out = _resultToLyric(result);
-    return out;
+    return _resultToLyric(result);
   }
 }

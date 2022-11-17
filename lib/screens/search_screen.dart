@@ -29,17 +29,15 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   ACRCloudResponseMusicItem? music;
-  /*final TextStyle focusedStyle =
-      const TextStyle(color: Color.fromRGBO(64, 143, 77, 1));*/
   final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
   final _searchControllerText = TextEditingController();
   final _searchControllerAuthor = TextEditingController();
   final _searchControllerSong = TextEditingController();
+  final buttonTextStyle = const TextStyle(color: Colors.black87);
   String _searchStringText = "";
   String _searchStringAuthor = "";
   String _searchStringSong = "";
   int minSearchLen = 3;
-  //final String _lastSearchText = "";
 
   @override
   void initState() {
@@ -76,18 +74,19 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Center(
                 child: Column(children: [
               Expanded(
-                flex: 3,
-                child: buildSearchFields(context),
+                flex: 2,
+                child: Container(
+                    //color: Colors.blue.shade200,
+                    child: buildSearchFields(context)),
               ),
-              Expanded(
-                flex: 1,
-                child: buildSearchButton(context),
-              ),
+              buildSearchButton(context),
               Expanded(
                 flex: 8,
                 child: Consumer<AppStateManager>(
                     builder: (context, appStateManager, child) {
-                  return buildList(context);
+                  return Container(
+                      //color: Colors.red.shade200,
+                      child: buildList(context));
                 }),
               )
             ])),
@@ -133,7 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 Builder(
                   builder: (context) => ConstrainedBox(
                     constraints:
-                        const BoxConstraints(minHeight: 30, maxHeight: 120),
+                        const BoxConstraints(minHeight: 30, maxHeight: 90),
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
                       //color: Colors.red,
@@ -141,14 +140,14 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: MaterialButton(
                           minWidth: 150,
                           height: 50,
-                          color: Theme.of(context).indicatorColor,
+                          color: Theme.of(context).focusColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           onPressed: startListening,
                           child: Text(
                             AppLocalizations.of(context)!.msgListen,
-                            style: const TextStyle(color: Colors.white),
+                            style: buttonTextStyle,
                           ),
                         ),
                       ),
@@ -279,8 +278,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 },
               ),
               hintText: AppLocalizations.of(context)!.searchHint,
-              border: const OutlineInputBorder(),
-              filled: true,
+              border: const UnderlineInputBorder(), //OutlineInputBorder(),
+              filled: false,
               fillColor: Theme.of(context).backgroundColor, //Colors.yellow[50],
             ),
             onEditingComplete: () => startSearch(context),
@@ -345,20 +344,22 @@ class _SearchScreenState extends State<SearchScreen> {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     int searchType = manager.searchType;
     if (searchType == SearchType.audio) {
-      return Container();
+      return const SizedBox(
+        height: 1,
+      );
     } else {
       return ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 30, maxHeight: 50),
         child: MaterialButton(
           minWidth: 150,
           height: 50,
-          color: Theme.of(context).indicatorColor,
+          color: Theme.of(context).focusColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
             AppLocalizations.of(context)!.searchText,
-            style: const TextStyle(color: Colors.white),
+            style: buttonTextStyle,
           ),
           onPressed: () async {
             logger.v("Click on Search button in search screen");

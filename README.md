@@ -21,7 +21,8 @@ Lyrics uses some third party libraries such as:
 # FEATURES LIST
 ## TODO:
 * (feature) Ordering and pagination for favorites page
-* (feature) Implement Genius Proxy
+* (fix) Create an id independent from what service has been used 
+        to find lyric (at the moment the numeric ID is used)
 * ...
 
 ## DONE
@@ -32,7 +33,7 @@ Lyrics uses some third party libraries such as:
 * (feature) swipe to delete favorite
 * (feature) Implement Users Registration, Login and profile management via Firebase
 * (fix) Use different graphic elements based on active theme
-
+* (feature) Implement Genius Proxy
 
 # COMMANDS
 ## GENERATE LOCALIZATION FILES

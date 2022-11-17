@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:lyrics2/api/genius_proxy.dart';
 import 'package:lyrics2/api/proxy.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/models.dart';
-import 'package:lyrics2/api/chartlyrics_proxy.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
@@ -26,7 +24,6 @@ class SearchType {
 class AppStateManager extends ChangeNotifier {
   bool _initialized = false;
   bool _loggedIn = false;
-  //bool _onboardingComplete = false;
   int _selectedTab = LyricsTab.search;
   List<LyricSearchResult> _searchResults = List.empty();
   int _status = -1;
@@ -39,7 +36,6 @@ class AppStateManager extends ChangeNotifier {
   String _version = "";
   String _buildNr = "";
   String favoritesFilter = "";
-  //Map<String, String> _settings = Map<String, String>();
   String searchAudioAuthor = "";
   String searchAudioSong = "";
   bool isViewingLyric = false;
@@ -47,15 +43,10 @@ class AppStateManager extends ChangeNotifier {
   String lastTextSearch = "";
   String lastAuthorSearch = "";
   String lastSongSearch = "";
-  //Proxy _currService = ChartLyricsProxy();
-  Proxy _geniusService = GeniusProxy();
-  Proxy _chartLyricsService = ChartLyricsProxy();
-  //final Proxy _currService = ChartLyricsProxy();
 
   // Accessors
   bool get isInitialized => _initialized;
   bool get isLoggedIn => _loggedIn;
-  //bool get isOnboardingComplete => _onboardingComplete;
   bool get isSearchCompleted => _searchCompleted;
   int get getSelectedTab => _selectedTab;
   List<LyricSearchResult> get searchResults => _searchResults;
@@ -63,10 +54,6 @@ class AppStateManager extends ChangeNotifier {
   int get lastStatus => _status;
   String get lastErrorMsg => _errorMessage;
   bool get isSearching => _isSearching;
-  //bool get isTextSearch => _isTextSearch;
-  //bool get isSongAuthorSearch => _isSongAuthorSearch;
-  //bool get isAudioSearch => _isAudioSearch;
-  //bool get isSongAuthorSearch => !_isTextSearch;
   int get searchType => _searchType;
   String get version => _version;
   String get buildNr => _buildNr;
@@ -84,9 +71,7 @@ class AppStateManager extends ChangeNotifier {
 
   void login(BuildContext context, String username, String password) {
     logger.d("Logging in...");
-    //final sqlRepository = Provider.of<SQLiteFavoritesRepository>(context, listen: false);
     _loggedIn = true;
-
     notifyListeners();
   }
 
@@ -97,12 +82,10 @@ class AppStateManager extends ChangeNotifier {
     _buildNr = packageInfo.buildNumber;
   }
 
-  //Future<List<LyricSearchResult>> startSearchText(String searchText) async {
   Future<String> startSearchText(String searchText, Proxy lyricsService) async {
     logger.d("Starting Search for [$searchText]...");
     _isSearching = true;
     _searchCompleted = false;
-    //Proxy lyricsService = _currService;
     try {
       _searchResults = await lyricsService.simpleSearchText(searchText);
       _status = 200;
@@ -120,14 +103,10 @@ class AppStateManager extends ChangeNotifier {
   }
 
   Future<List<String>> startSearchSongAuthor(
-      //Future<List<LyricSearchResult>> startSearchSongAuthor(
-      String author,
-      String song,
-      Proxy lyricsService) async {
+      String author, String song, Proxy lyricsService) async {
     logger.d("Starting Search for [$author], [$song]...");
     _isSearching = true;
     _searchCompleted = false;
-    //Proxy lyricsService = _currService;
     try {
       _searchResults = await lyricsService.simpleSearch(author, song);
       _status = 200;
@@ -155,24 +134,6 @@ class AppStateManager extends ChangeNotifier {
       String authorSearch, String songSearch) {
     String msg = "";
     int currSearchType = searchType;
-    // TEXT -> SONGAUTHOR
-    /*if (currSearchType == SearchType.text) {
-      // Save Textfield text
-      lastTextSearch = textSearch;
-      msg = AppLocalizations.of(context)!.msgSearchSongAuthor;
-      _searchType = SearchType.songAuthor;
-      // SONGAUTHOR -> AUDIO
-    } else if (currSearchType == SearchType.songAuthor) {
-      // Save Textfield text
-      lastAuthorSearch = authorSearch;
-      lastSongSearch = songSearch;
-      msg = AppLocalizations.of(context)!.msgSearchAudio;
-      _searchType = SearchType.audio;
-      // AUDIO -> TEXT
-    } else if (currSearchType == SearchType.audio) {
-      _searchType = SearchType.text;
-      msg = AppLocalizations.of(context)!.msgSearchText;
-    }*/
     // TEXT -> AUDIO
     if (currSearchType == SearchType.text) {
       // Save Textfield text

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:logger/logger.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:lyrics2/data/firebase_favorites_repository.dart';
@@ -15,6 +14,7 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logger.d("Building favorites screen");
     final favoritesRepository =
         Provider.of<FirebaseFavoritesRepository>(context);
     final profile = Provider.of<FirebaseUserRepository>(context);
@@ -30,9 +30,9 @@ class FavoritesScreen extends StatelessWidget {
               favoritesData = snapshot.data as List<Lyric>;
             }
             if (favoritesData.isEmpty) {
-              return createEmptyScreen(context);
+              return buildEmptyScreen(context);
             } else {
-              return createScreen(context, favoritesData);
+              return buildScreen(context, favoritesData);
             }
           } else {
             return const Center(child: CircularProgressIndicator());
@@ -40,7 +40,8 @@ class FavoritesScreen extends StatelessWidget {
         });
   }
 
-  Widget createScreen(BuildContext context, List<Lyric> favorites) {
+  Widget buildScreen(BuildContext context, List<Lyric> favorites) {
+    logger.d("Building Favorites Screen");
     List<Widget> itemTiles = List<Widget>.empty(growable: true);
     for (Lyric lyric in favorites) {
       itemTiles.add(Dismissible(
@@ -92,7 +93,8 @@ class FavoritesScreen extends StatelessWidget {
         ));
   }
 
-  Widget createEmptyScreen(BuildContext context) {
+  Widget buildEmptyScreen(BuildContext context) {
+    logger.d("Building empty favorites screen");
     return Padding(
       padding: const EdgeInsets.all(30.0),
       child: Center(
