@@ -47,7 +47,9 @@ class AppStateManager extends ChangeNotifier {
   String lastTextSearch = "";
   String lastAuthorSearch = "";
   String lastSongSearch = "";
-  final Proxy _currService = GeniusProxy();
+  //Proxy _currService = ChartLyricsProxy();
+  Proxy _geniusService = GeniusProxy();
+  Proxy _chartLyricsService = ChartLyricsProxy();
   //final Proxy _currService = ChartLyricsProxy();
 
   // Accessors
@@ -96,11 +98,11 @@ class AppStateManager extends ChangeNotifier {
   }
 
   //Future<List<LyricSearchResult>> startSearchText(String searchText) async {
-  Future<String> startSearchText(String searchText) async {
+  Future<String> startSearchText(String searchText, Proxy lyricsService) async {
     logger.d("Starting Search for [$searchText]...");
     _isSearching = true;
     _searchCompleted = false;
-    Proxy lyricsService = _currService;
+    //Proxy lyricsService = _currService;
     try {
       _searchResults = await lyricsService.simpleSearchText(searchText);
       _status = 200;
@@ -120,11 +122,12 @@ class AppStateManager extends ChangeNotifier {
   Future<List<String>> startSearchSongAuthor(
       //Future<List<LyricSearchResult>> startSearchSongAuthor(
       String author,
-      String song) async {
+      String song,
+      Proxy lyricsService) async {
     logger.d("Starting Search for [$author], [$song]...");
     _isSearching = true;
     _searchCompleted = false;
-    Proxy lyricsService = _currService;
+    //Proxy lyricsService = _currService;
     try {
       _searchResults = await lyricsService.simpleSearch(author, song);
       _status = 200;
@@ -152,26 +155,48 @@ class AppStateManager extends ChangeNotifier {
       String authorSearch, String songSearch) {
     String msg = "";
     int currSearchType = searchType;
-    if (currSearchType == SearchType.text) {
+    // TEXT -> SONGAUTHOR
+    /*if (currSearchType == SearchType.text) {
       // Save Textfield text
       lastTextSearch = textSearch;
       msg = AppLocalizations.of(context)!.msgSearchSongAuthor;
       _searchType = SearchType.songAuthor;
+      // SONGAUTHOR -> AUDIO
     } else if (currSearchType == SearchType.songAuthor) {
       // Save Textfield text
       lastAuthorSearch = authorSearch;
       lastSongSearch = songSearch;
       msg = AppLocalizations.of(context)!.msgSearchAudio;
       _searchType = SearchType.audio;
+      // AUDIO -> TEXT
     } else if (currSearchType == SearchType.audio) {
       _searchType = SearchType.text;
       msg = AppLocalizations.of(context)!.msgSearchText;
+    }*/
+    // TEXT -> AUDIO
+    if (currSearchType == SearchType.text) {
+      // Save Textfield text
+      msg = switchText2Audio(context, textSearch);
+      // AUDIO -> TEXT
+    } else if (currSearchType == SearchType.audio) {
+      msg = switchAudio2Text(context);
     }
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(msg),
       duration: const Duration(milliseconds: 500),
     ));
     notifyListeners();
+  }
+
+  String switchAudio2Text(BuildContext context) {
+    _searchType = SearchType.text;
+    return AppLocalizations.of(context)!.msgSearchText;
+  }
+
+  String switchText2Audio(BuildContext context, String textSearch) {
+    lastTextSearch = textSearch;
+    _searchType = SearchType.audio;
+    return AppLocalizations.of(context)!.msgSearchAudio;
   }
 
   int nextSearchType(int currSearchType) {
@@ -181,12 +206,12 @@ class AppStateManager extends ChangeNotifier {
     return SearchType.text;
   }
 
-  Future<Lyric>? getLyric(LyricSearchResult lsr) {
+  Future<Lyric>? getLyric(LyricSearchResult lsr, Proxy lyricsService) {
     logger.d("Getting lyrics for song [${lsr.song}]...");
     _status = -1;
     _errorMessage = "";
     try {
-      Proxy lyricsService = _currService;
+      //Proxy lyricsService = _currService;
       _lyric = lyricsService.getLyric(lsr);
       return _lyric;
     } on LyricException catch (e) {

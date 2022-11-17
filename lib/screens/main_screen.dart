@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/components/circle_image.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/screens/info_screen.dart';
@@ -102,11 +103,11 @@ class _MainScreenState extends State<MainScreen> {
     return Padding(
       padding: const EdgeInsets.only(right: 16.0),
       child: GestureDetector(
-        child: const CircleAvatar(
-          backgroundColor: Colors.transparent,
-          backgroundImage: AssetImage(
-            'assets/lyrics_assets/logo.png',
-          ),
+        child: CircleImage(
+          //backgroundColor: Colors.transparent,
+          imageProvider:
+              Provider.of<FirebaseUserRepository>(context, listen: false)
+                  .userImage,
         ),
         onTap: () {
           users.tapOnProfile(true);

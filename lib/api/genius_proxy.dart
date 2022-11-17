@@ -1,13 +1,17 @@
 library lyrics_library;
 
+import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:lyrics2/api/proxy.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/lyric.dart';
+import 'package:lyrics2/models/lyric_exception.dart';
 import 'package:lyrics2/models/lyric_search_result.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:genius_api_unofficial/genius_api_unofficial.dart';
 import 'package:lyrics2/env.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart';
 
 class GeniusProxy extends Proxy {
   GeniusApiRaw geniusApi = GeniusApiRaw(
@@ -35,8 +39,6 @@ class GeniusProxy extends Proxy {
   Future<LyricSearchResult> _resultToLSR(result) async {
     //"https://genius.com/Polo-g-broken-guitars-lyrics"
     var resValue = result['result'];
-    var x = await _scrape(resValue['url'], resValue['path']);
-    //print("${resValue['title']}\n");
     var tempLyric = LyricSearchResult(
       artist: resValue["artist_names"],
       lyricId: resValue["id"],
@@ -50,27 +52,56 @@ class GeniusProxy extends Proxy {
     //var resValue = result['result'];
     //print("${resValue['title']}\n");
     var tempLyric = Lyric(
-        artist: result["artist_names"],
-        lyricId: result["id"],
-        song: result["title"],
-        checksum: result["url"],
-        imageUrl: result["header_image_url"],
-        owner: _getOwner(),
-        lyric: await _scrape(
-          result["url"],
-          result["path"],
-        ));
+      artist: result["artist_names"],
+      lyricId: result["id"],
+      song: result["title"],
+      checksum: result["url"],
+      imageUrl: result["header_image_url"],
+      owner: _getOwner(),
+      lyric: await _scrape(result["url"]),
+    );
     return Future.value(tempLyric);
   }
 
-  Future<dynamic> _getSearch(String query) async {
-    final res = await geniusApi.getSearch(query);
+  Future<dynamic> _getSearch(String query, GeniusApiOptions? options) async {
+    if (options == null) {
+      final res = await geniusApi.getSearch(query);
+      return _getResults(res.data!['hits']);
+    }
+    final res = await geniusApi.getSearch(query, options: options);
     return _getResults(res.data!['hits']);
   }
 
-  //TODO to be implemented
-  Future<String> _scrape(String url, String path) {
-    return Future.value("To be implemented");
+  Future<String> _scrape(String url) async {
+    //Uri uri = Uri.parse("https://www.repubblica.it/index.html");
+    final uri = Uri.parse(url);
+    String body = "";
+    try {
+      body = await http.read(uri).onError((error, stackTrace) {
+        logger.e("Error: $error\n$stackTrace");
+        throw LyricException(500, error.toString());
+      });
+    } catch (e) {
+      logger.e(e.toString());
+      rethrow;
+    }
+
+    BeautifulSoup bs = BeautifulSoup(body);
+    String outLyric = bs
+        .find('*', id: 'lyrics-root')!
+        .children[2]
+        .innerHtml
+        .replaceAll("<br>", "\n");
+
+    return _parseHtmlString(outLyric);
+  }
+
+  String _parseHtmlString(String htmlString) {
+    final document = parse(htmlString);
+    final String parsedString =
+        parse(document.body!.text).documentElement!.text;
+
+    return parsedString;
   }
 
   //TODO to be implemented
@@ -90,14 +121,19 @@ class GeniusProxy extends Proxy {
   }
 
   // PROXY IMPLEMENTATION
-  //TODO to be implemented
   @override
   Future<List<LyricSearchResult>> simpleSearchText(String query) async {
-    final queryResult = await _getSearch(query);
+    final queryResult = await _getSearch(query, null);
     return queryResult;
   }
 
-  //TODO to be implemented
+  @override
+  Future<List<LyricSearchResult>> simpleSearch(
+      String author, String song) async {
+    final queryResult = await _getSearch("$author $song", null);
+    return queryResult;
+  }
+
   @override
   Future<Lyric> getLyric(LyricSearchResult lyric) async {
     final result = await _getSong(lyric.lyricId).onError((error, stackTrace) {
@@ -106,13 +142,5 @@ class GeniusProxy extends Proxy {
     var x = 1;
     final out = _resultToLyric(result);
     return out;
-  }
-
-  //TODO to be implemented
-  @override
-  Future<List<LyricSearchResult>> simpleSearch(
-      String author, String song) async {
-    //var result =
-    return Future<List<LyricSearchResult>>.value([]);
   }
 }

@@ -7,14 +7,22 @@ class FirebaseUserRepository with ChangeNotifier {
   String _lastError = "";
   bool get didSelectUser => _didSelectUser;
   bool get darkMode => _darkMode;
+  bool get useGenius => _useGenius;
   set darkMode(bool value) {
     _darkMode = value;
+    notifyListeners();
+  }
+
+  set useGenius(bool value) {
+    _useGenius = value;
     notifyListeners();
   }
 
   User? get getUser => auth.currentUser;
   var _didSelectUser = false;
   var _darkMode = true;
+  var _useGenius = false;
+
   ImageProvider<Object> get userImage {
     if ((auth.currentUser != null) & (auth.currentUser!.photoURL == null)) {
       return const AssetImage('assets/icon.png');

@@ -59,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListView(
       children: [
         buildDarkModeRow(),
+        buildProxyRow(),
         /*ListTile(
           title: const Text('View raywenderlich.com'),
           onTap: () {
@@ -128,6 +129,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),*/
       ],
+    );
+  }
+
+  buildProxyRow() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Use Genius Proxy'),
+          Switch(
+            value: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .useGenius, //widget.user.darkMode,
+            onChanged: (value) {
+              Provider.of<FirebaseUserRepository>(context, listen: false)
+                  .useGenius = value;
+            },
+          )
+        ],
+      ),
     );
   }
 }

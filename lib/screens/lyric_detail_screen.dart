@@ -241,8 +241,11 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
   Widget buildArtist(Lyric currLyric) {
     return SizedBox(
       height: 24,
+      width: 261,
       child: Text(
         currLyric.artist,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
         style: LyricsTheme.darkTextTheme.bodyText1,
       ),
     );

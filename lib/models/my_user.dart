@@ -6,6 +6,7 @@ class MyUser {
   final String profileImageUrl;
   final int points;
   final bool darkMode;
+  final bool useGenius;
 
   MyUser({
     required this.firstName,
@@ -15,5 +16,6 @@ class MyUser {
     required this.profileImageUrl,
     required this.points,
     required this.darkMode,
+    required this.useGenius,
   });
 }
