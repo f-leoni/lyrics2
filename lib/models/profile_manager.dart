@@ -11,6 +11,7 @@ class ProfileManager extends ChangeNotifier {
         profileImageUrl: 'assets/profile_pics/person_stef.jpeg',
         points: 100,
         darkMode: _darkMode,
+        useGenius: _useGenius,
       );
 
   bool get didSelectUser => _didSelectUser;
@@ -18,9 +19,15 @@ class ProfileManager extends ChangeNotifier {
 
   var _didSelectUser = false;
   var _darkMode = true;
+  var _useGenius = false;
 
   set darkMode(bool darkMode) {
     _darkMode = darkMode;
+    notifyListeners();
+  }
+
+  set useGenius(bool useGenius) {
+    _useGenius = useGenius;
     notifyListeners();
   }
 

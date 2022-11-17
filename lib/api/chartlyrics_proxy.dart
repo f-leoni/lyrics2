@@ -2,11 +2,12 @@ library lyrics_library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lyrics2/api/proxy.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:lyrics2/models/models.dart';
 
-class ChartLyricsProxy {
+class ChartLyricsProxy extends Proxy {
   static String apiBase = "http://api.chartlyrics.com/apiv1.asmx/";
   String searchBase = "${apiBase}SearchLyric?";
   String searchDirectBase = "${apiBase}SearchLyricDirect?";
@@ -72,6 +73,7 @@ class ChartLyricsProxy {
   }
 
   // Get complete lyric data by Id and Checksum
+  @override
   Future<Lyric> getLyric(LyricSearchResult lyric) async {
     http.Response value = await _getFutureResponse(
         "${getLyricBase}lyricId=${lyric.lyricId}&lyricCheckSum=${lyric.lyricChecksum}");
@@ -86,6 +88,7 @@ class ChartLyricsProxy {
   }
 
   // Simplified search lyrics by text
+  @override
   Future<List<LyricSearchResult>> simpleSearchText(String song) async {
     List<LyricSearchResult> result =
         List<LyricSearchResult>.empty(growable: true);
@@ -107,6 +110,7 @@ class ChartLyricsProxy {
   }
 
 //Simplified search lyrics by author and title
+  @override
   Future<List<LyricSearchResult>> simpleSearch(
       String author, String song) async {
     List<LyricSearchResult> result =

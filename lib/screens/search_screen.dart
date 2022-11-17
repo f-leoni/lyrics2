@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/api/chartlyrics_proxy.dart';
+import 'package:lyrics2/api/genius_proxy.dart';
 import 'package:lyrics2/components/components_lyrics.dart';
 import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/models/models.dart';
@@ -56,8 +59,8 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchControllerSong.addListener(() {
       _searchStringSong = _searchControllerSong.text;
     });
-    ACRCloud.setUp(
-        const ACRCloudConfig(arApiAccessKey, arApiSecret, arApiHost));
+    ACRCloud.setUp(const ACRCloudConfig(
+        Env.arApiAccessKey, Env.arApiSecret, Env.arApiHost));
     super.initState();
   }
 
@@ -78,7 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               Expanded(
                 flex: 1,
-                child: buildButton(context),
+                child: buildSearchButton(context),
               ),
               Expanded(
                 flex: 8,
@@ -130,19 +133,23 @@ class _SearchScreenState extends State<SearchScreen> {
                 Builder(
                   builder: (context) => ConstrainedBox(
                     constraints:
-                        const BoxConstraints(minHeight: 30, maxHeight: 50),
+                        const BoxConstraints(minHeight: 30, maxHeight: 120),
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
                       //color: Colors.red,
-                      child: MaterialButton(
-                        color: Theme.of(context).indicatorColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        onPressed: startListening,
-                        child: Text(
-                          AppLocalizations.of(context)!.msgListen,
-                          style: const TextStyle(color: Colors.white),
+                      child: Center(
+                        child: MaterialButton(
+                          minWidth: 150,
+                          height: 50,
+                          color: Theme.of(context).indicatorColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          onPressed: startListening,
+                          child: Text(
+                            AppLocalizations.of(context)!.msgListen,
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     ),
@@ -334,7 +341,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  Widget buildButton(BuildContext context) {
+  Widget buildSearchButton(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     int searchType = manager.searchType;
     if (searchType == SearchType.audio) {
@@ -343,6 +350,8 @@ class _SearchScreenState extends State<SearchScreen> {
       return ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 30, maxHeight: 50),
         child: MaterialButton(
+          minWidth: 150,
+          height: 50,
           color: Theme.of(context).indicatorColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -363,6 +372,7 @@ class _SearchScreenState extends State<SearchScreen> {
   // List of found Lyrics
   Widget buildList(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     logger.d("Building results list");
     double height = MediaQuery.of(context).size.height / 2 - 31; //, 236;
     if (manager.isSearchCompleted) {
@@ -391,7 +401,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => LyricDetailScreen(
-                      lyric: manager.getLyric(lyricSearchResult),
+                      lyric: manager.getLyric(lyricSearchResult,
+                          users.useGenius ? GeniusProxy() : ChartLyricsProxy()),
                     ),
                   ),
                 );
@@ -419,6 +430,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> startSearch(BuildContext context) async {
     final manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
     manager.lastTextSearch = _searchControllerText.text;
     manager.lastAuthorSearch = _searchControllerAuthor.text;
     manager.lastSongSearch = _searchControllerSong.text;
@@ -437,13 +450,13 @@ class _SearchScreenState extends State<SearchScreen> {
     //Hide virtual keyboard
     FocusManager.instance.primaryFocus?.unfocus();
     if (searchType == SearchType.text) {
-      await manager.startSearchText(_searchStringText);
+      await manager.startSearchText(_searchStringText, currProxy);
     } else if (searchType == SearchType.songAuthor) {
       await manager.startSearchSongAuthor(
-          _searchStringAuthor, _searchStringSong);
+          _searchStringAuthor, _searchStringSong, currProxy);
     } else if (searchType == SearchType.audio) {
       await manager.startSearchSongAuthor(
-          manager.searchAudioAuthor, manager.searchAudioSong);
+          manager.searchAudioAuthor, manager.searchAudioSong, currProxy);
     }
     showNoResultsMsg(manager.searchResults);
   }
