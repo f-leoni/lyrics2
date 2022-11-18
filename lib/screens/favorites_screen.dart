@@ -6,7 +6,6 @@ import 'package:lyrics2/data/firebase_favorites_repository.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
-import 'package:lyrics2/screens/favorites_screen.dart';
 import 'package:lyrics2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +43,10 @@ class FavoritesScreen extends StatelessWidget {
               return buildScreen(context, favoritesData);
             }
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+                    backgroundColor: profile.themeData.backgroundColor,
+                    color: Colors.blue));
           }
         });
   }

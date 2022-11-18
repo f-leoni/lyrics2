@@ -93,12 +93,12 @@ class LyricTile extends StatelessWidget {
 
   Widget buildFavoriteIcon(BuildContext context,
       FirebaseFavoritesRepository repository, LyricData pLyric) {
-    FirebaseUserRepository profile =
+    FirebaseUserRepository profileManager =
         Provider.of<FirebaseUserRepository>(context, listen: false);
     Widget currIcon = Container();
     return FutureBuilder(
         future: repository.isLyricFavoriteById(
-            pLyric.getId(), profile.getUser!.email),
+            pLyric.getId(), profileManager.getUser!.email),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData && snapshot.data as bool) {
@@ -112,8 +112,12 @@ class LyricTile extends StatelessWidget {
               currIcon = const SizedBox(width: 1);
             }
           } else {
-            currIcon = const SizedBox(
-                width: 20, height: 20, child: CircularProgressIndicator());
+            currIcon = SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator.adaptive(
+                  backgroundColor: profileManager.themeData.primaryColor,
+                ));
           }
           return currIcon;
         });

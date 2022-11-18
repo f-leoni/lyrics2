@@ -7,6 +7,7 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/lyricstheme.dart';
 import 'package:lyrics2/models/models.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LyricDetailScreen extends StatefulWidget {
   static MaterialPage page(Future<Lyric> lyric) {
@@ -56,7 +57,12 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
   }
 
   Widget createSpinner(BuildContext context) {
-    return const CircularProgressIndicator.adaptive();
+    return CircularProgressIndicator.adaptive(
+      backgroundColor:
+          Provider.of<FirebaseUserRepository>(context, listen: false)
+              .themeData
+              .primaryColor,
+    );
   }
 
   Widget createLyricPage(BuildContext context, Future<Lyric> lyric) {
@@ -201,7 +207,12 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
         builder: (context, snapshot) {
           Widget tempIcon = Container();
           if (isFavorite == null) {
-            tempIcon = const CircularProgressIndicator();
+            tempIcon = CircularProgressIndicator.adaptive(
+              backgroundColor:
+                  Provider.of<FirebaseUserRepository>(context, listen: false)
+                      .themeData
+                      .primaryColor,
+            );
           } else if (isFavorite == true) {
             tempIcon = const Icon(Icons.favorite, size: 30, color: Colors.red);
           } else {

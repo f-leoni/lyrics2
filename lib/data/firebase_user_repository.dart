@@ -11,13 +11,9 @@ class FirebaseUserRepository with ChangeNotifier {
   String _lastErrorCode = "";
 
   bool get didSelectUser => _didSelectUser;
-
   bool get darkMode => _darkMode;
-
   bool get useGenius => _useGenius;
-
   String get lastErrorMsg => _lastErrorMsg;
-
   String get lastErrorCode => _lastErrorCode;
 
   set darkMode(bool value) {
@@ -42,7 +38,7 @@ class FirebaseUserRepository with ChangeNotifier {
 
   User? get getUser => auth.currentUser;
   var _didSelectUser = false;
-  var _darkMode = true;
+  var _darkMode = false;
   var _useGenius = false;
 
   ImageProvider<Object> get userImage {

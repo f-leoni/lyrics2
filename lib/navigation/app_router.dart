@@ -77,15 +77,16 @@ class AppRouter extends RouterDelegate
     );
   }
 
-  Container buildSpinner() {
+  Widget buildSpinner() {
+    //return Container();
     return Container(
-        color: Colors.black,
-        child: const Center(
+        color: profileManager.themeData.backgroundColor,
+        child: Center(
           child: SizedBox(
             width: 50,
             height: 50,
             child: CircularProgressIndicator.adaptive(
-              backgroundColor: Colors.amber,
+              backgroundColor: profileManager.themeData.primaryColor,
             ),
           ),
         ));
