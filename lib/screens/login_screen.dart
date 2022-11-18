@@ -35,6 +35,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isRegistering = false;
+  bool _passwordVisible = false;
+
+  @override
+  void initState() {
+    _passwordVisible = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,41 +125,49 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildPasswordField(
       BuildContext context, String hintText, TextInputType keyboardType) {
-    //final userDao = Provider.of<FirebaseUserRepository>(context, listen: false);
-
+    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return TextFormField(
-      cursorColor: rwColor,
-      controller: _passwordController,
-      keyboardType: keyboardType,
-      obscureText: true,
-      textCapitalization: TextCapitalization.none,
-      autocorrect: false,
-      enableSuggestions: false,
-      validator: (String? value) {
-        if (value == null || value.isEmpty) {
-          return AppLocalizations.of(context)!.errPwdRequired;
-        }
-        if (value.length < 6) {
-          return AppLocalizations.of(context)!.errWeakPassword;
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        border: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.green,
-            width: 1.0,
-          ),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.green,
-          ),
-        ),
-        hintText: hintText,
-        hintStyle: const TextStyle(height: 0.5),
-      ),
-    );
+        cursorColor: rwColor,
+        controller: _passwordController,
+        keyboardType: keyboardType,
+        obscureText: !_passwordVisible,
+        textCapitalization: TextCapitalization.none,
+        autocorrect: false,
+        enableSuggestions: false,
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return AppLocalizations.of(context)!.errPwdRequired;
+          }
+          if (value.length < 6) {
+            return AppLocalizations.of(context)!.errWeakPassword;
+          }
+          return null;
+        },
+        decoration: InputDecoration(
+            border: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.green,
+                width: 1.0,
+              ),
+            ),
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.green,
+              ),
+            ),
+            hintText: hintText,
+            hintStyle: TextStyle(height: 0.5),
+            suffixIcon: IconButton(
+              icon: Icon(
+                  _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: users.themeData.highlightColor),
+              onPressed: () {
+                // Update the state i.e. toogle the state of passwordVisible variable
+                setState(() {
+                  _passwordVisible = !_passwordVisible;
+                });
+              },
+            )));
   }
 
   Widget buildButtons(BuildContext context) {

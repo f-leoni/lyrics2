@@ -6,6 +6,7 @@ import 'package:lyrics2/components/components_lyrics.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
+import 'package:lyrics2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:lyrics2/components/lyric_tile.dart';

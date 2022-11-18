@@ -35,6 +35,9 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
   final double _minFontSize = 11.0;
   final double _maxFontSize = 35.0;
   bool? isFavorite;
+  ImageProvider<Object> bgImage =
+      const AssetImage("assets/lyrics_assets/logo.png");
+  bool bgImageCreated = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +88,13 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   Lyric currLyric = snapshot.data as Lyric;
-                  ImageProvider<Object> bgImage;
-                  try {
-                    bgImage = NetworkImage(currLyric.imageUrl);
-                  } catch (e) {
-                    bgImage = const AssetImage("assets/lyrics_assets/logo.png");
+                  if (!bgImageCreated) {
+                    try {
+                      bgImage = NetworkImage(currLyric.imageUrl);
+                    } catch (e) {
+                      logger.e("Error Creating background image ${e.hashCode}");
+                    }
+                    bgImageCreated = true;
                   }
                   manager.viewedLyric = currLyric;
                   manager.isViewingLyric = true;

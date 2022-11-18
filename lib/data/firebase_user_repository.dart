@@ -113,6 +113,8 @@ class FirebaseUserRepository with ChangeNotifier {
   }
 
   void logout() async {
+    _darkMode = false;
+    _useGenius = false;
     await auth.signOut();
     notifyListeners();
   }

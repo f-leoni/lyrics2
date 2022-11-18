@@ -32,7 +32,7 @@ class AppStateManager extends ChangeNotifier {
   bool _isSearching = false;
   Future<Lyric>? _lyric;
   // default search mode
-  int _searchType = SearchType.audio;
+  int _searchType = SearchType.text;
   String _version = "";
   String _buildNr = "";
   String favoritesFilter = "";
@@ -218,13 +218,17 @@ class AppStateManager extends ChangeNotifier {
     final favoritesRepository =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
     _searchResults = List.empty();
+    _searchType = SearchType.text;
+    isViewingLyric = false;
+    lastTextSearch = "";
+    lastAuthorSearch = "";
+    _selectedTab = LyricsTab.search;
     userRepository.logout();
     _loggedIn = false;
     favoritesRepository.insertSetting(
         Setting(setting: Setting.onboardingComplete, value: "false"));
 
     _initialized = false;
-    _selectedTab = 0;
 
     initializeApp();
     notifyListeners();

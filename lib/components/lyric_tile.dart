@@ -115,7 +115,7 @@ class LyricTile extends StatelessWidget {
             currIcon = SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator.adaptive(
+                child: LinearProgressIndicator(
                   backgroundColor: profileManager.themeData.primaryColor,
                 ));
           }
