@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 
 class LyricTile extends StatelessWidget {
   final LyricData lyric;
-  const LyricTile({Key? key, required this.lyric}) : super(key: key);
+  final bool isFavoritePage;
+  const LyricTile({Key? key, required this.lyric, required this.isFavoritePage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +95,14 @@ class LyricTile extends StatelessWidget {
 
   Widget buildFavoriteIcon(BuildContext context,
       FirebaseFavoritesRepository repository, LyricData pLyric) {
+    if (isFavoritePage) {
+      return const Center(
+        child: Icon(
+          Icons.favorite,
+          color: Colors.red,
+        ),
+      );
+    }
     FirebaseUserRepository profileManager =
         Provider.of<FirebaseUserRepository>(context, listen: false);
     Widget currIcon = Container();

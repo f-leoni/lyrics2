@@ -415,6 +415,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: InkWell(
               child: LyricTile(
                 lyric: lyricSearchResult,
+                isFavoritePage: false,
               ),
               onTap: () {
                 logger.i(

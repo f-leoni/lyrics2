@@ -78,6 +78,7 @@ class FavoritesScreen extends StatelessWidget {
           child: InkWell(
             child: LyricTile(
               lyric: lyric,
+              isFavoritePage: true,
             ),
             onTap: () {
               logger.i("Clicked on Search result. Song: ${lyric.song}");
