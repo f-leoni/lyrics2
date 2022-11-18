@@ -16,8 +16,8 @@ import 'package:lyrics2/lyricstheme.dart';
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
     return MaterialPage(
-      name: LyricsPages.loginPath,
-      key: ValueKey(LyricsPages.loginPath),
+      name: LyricsPages.searchResultsPath,
+      key: ValueKey(LyricsPages.searchResultsPath),
       child: const SearchScreen(),
     );
   }

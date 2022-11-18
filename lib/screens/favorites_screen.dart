@@ -6,10 +6,19 @@ import 'package:lyrics2/data/firebase_favorites_repository.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
+import 'package:lyrics2/screens/favorites_screen.dart';
 import 'package:lyrics2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatelessWidget {
+  static MaterialPage page() {
+    return MaterialPage(
+      name: LyricsPages.favoritesPath,
+      key: ValueKey(LyricsPages.favoritesPath),
+      child: const FavoritesScreen(),
+    );
+  }
+
   const FavoritesScreen({Key? key}) : super(key: key);
 
   @override

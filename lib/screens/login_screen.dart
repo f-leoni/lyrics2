@@ -125,8 +125,10 @@ class _LoginScreenState extends State<LoginScreen> {
       cursorColor: rwColor,
       controller: _passwordController,
       keyboardType: keyboardType,
+      obscureText: true,
       textCapitalization: TextCapitalization.none,
       autocorrect: false,
+      enableSuggestions: false,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return AppLocalizations.of(context)!.errPwdRequired;

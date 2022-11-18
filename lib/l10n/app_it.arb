@@ -40,7 +40,7 @@
     "msgRegisterExtended": "Non hai ancora un account? Clicca qui e",
     "errPwdRequired": "Inserire una password",
     "errEmailRequired": "Inserire una email",
-    "errWrongPwd": "Wrong Password",
+    "errWrongPwd": "Password errata",
     "errInvalidEmail": "Email non valida",
     "errUserDisabled": "Utente disabilitato",
     "errUserNotFound": "Utente non trovato",
