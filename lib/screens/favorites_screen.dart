@@ -66,8 +66,9 @@ class FavoritesScreen extends StatelessWidget {
         onDismissed: (direction) {
           Provider.of<FirebaseFavoritesRepository>(context, listen: false)
               .deleteLyricFromFavs(lyric);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('${lyric.song} dismissed')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}')));
         },
         child: Container(
           decoration: const BoxDecoration(
