@@ -11,7 +11,6 @@ import 'package:lyrics2/models/models.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:lyrics2/env.dart';
-import 'package:lyrics2/lyricstheme.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -111,8 +110,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildAudioSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    bool isDarkMode =
-        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
     var currLyricsTheme =
         Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
     var currTextTheme =
