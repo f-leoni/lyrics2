@@ -151,7 +151,72 @@ class _SearchScreenState extends State<SearchScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          onPressed: startListening,
+                          onPressed: () async {
+                            final provider = Provider.of<AppStateManager>(
+                                context,
+                                listen: false);
+                            music = null;
+                            provider.searchAudioAuthor = "";
+                            provider.searchAudioSong = "";
+                            final session = ACRCloud.startSession();
+                            logger.d("Showing Audio panel");
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                    AppLocalizations.of(context)!.msgListening),
+                                content: StreamBuilder(
+                                  stream: session.volumeStream,
+                                  initialData: -1,
+                                  builder: (_, snapshot) =>
+                                      Text(snapshot.data.toString()),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      logger.d("Cancel Listening");
+                                      session.cancel;
+                                    },
+                                    child: Text(AppLocalizations.of(context)!
+                                        .msgCancel),
+                                  )
+                                ],
+                              ),
+                            );
+                            logger.d("Wait for results");
+                            final result = await session.result;
+                            // Avoid lint error "Do not use BuildContexts across async gaps"
+                            if (!mounted) return;
+                            logger.d("Hide audio dialog");
+                            // Hide dialog
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(result);
+
+                            if (result == null) {
+                              logger.d("Audio search Canceled");
+                              // Search has been cancelled.
+                              return;
+                            } else if (result.metadata == null) {
+                              logger.d(
+                                  "Error in Audio Search: ${result.status.msg}");
+                              // No results found
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                    '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}'),
+                              ));
+                              return;
+                            } else {
+                              music = result.metadata!.music.first;
+                              if (music != null) {
+                                provider.searchAudioAuthor =
+                                    music!.artists.first.name;
+                                provider.searchAudioSong = music!.title;
+                                startSearch(context);
+                              }
+                            }
+                          },
                           child: Text(
                             AppLocalizations.of(context)!.msgListen,
                             style: currTextTheme.bodyText1,
@@ -294,57 +359,6 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ],
     );
-  }
-
-  Future<void> startListening() async {
-    final provider = Provider.of<AppStateManager>(context, listen: false);
-    music = null;
-    provider.searchAudioAuthor = "";
-    provider.searchAudioSong = "";
-    final session = ACRCloud.startSession();
-    await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.msgListening),
-        content: StreamBuilder(
-          stream: session.volumeStream,
-          initialData: 0,
-          builder: (_, snapshot) => Text(snapshot.data.toString()),
-        ),
-        actions: [
-          TextButton(
-            onPressed: session.cancel,
-            child: Text(AppLocalizations.of(context)!.msgCancel),
-          )
-        ],
-      ),
-    );
-
-    final result = await session.result;
-    // Avoid lint error "Do not use BuildContexts across async gaps"
-    if (!mounted) return;
-    // Hide dialog
-    Navigator.of(context, rootNavigator: true).pop(result);
-
-    if (result == null) {
-      // Search has been cancelled.
-      return;
-    } else if (result.metadata == null) {
-      // No results found
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-            '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}'),
-      ));
-      return;
-    } else {
-      music = result.metadata!.music.first;
-      if (music != null) {
-        provider.searchAudioAuthor = music!.artists.first.name;
-        provider.searchAudioSong = music!.title;
-        startSearch(context);
-      }
-    }
   }
 
   Widget buildSearchButton(BuildContext context) {

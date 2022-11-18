@@ -108,6 +108,11 @@ class AppRouter extends RouterDelegate
     if (route.settings.name == LyricsPages.profilePath) {
       profileManager.tapOnProfile(false);
     }
+    // Handle state when user closes Lyrics View Screen
+    if (route.settings.name == LyricsPages.showLyricPath) {
+      appStateManager.isViewingLyric = false;
+      appStateManager.viewedLyric = Lyric.empty;
+    }
     // Handle state when user closes WebView screen
     /*if (route.settings.name == LyricsPages.raywenderlich) {
       profileManager.tapOnRaywenderlich(false);

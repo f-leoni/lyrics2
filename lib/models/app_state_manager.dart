@@ -75,11 +75,12 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getVersionInfo() async {
+  Future<List<String>> getVersionInfo() async {
     WidgetsFlutterBinding.ensureInitialized();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _version = packageInfo.version;
     _buildNr = packageInfo.buildNumber;
+    return Future.value([packageInfo.version, packageInfo.buildNumber]);
   }
 
   Future<String> startSearchText(String searchText, Proxy lyricsService) async {
@@ -216,6 +217,7 @@ class AppStateManager extends ChangeNotifier {
         Provider.of<FirebaseUserRepository>(context, listen: false);
     final favoritesRepository =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    _searchResults = List.empty();
     userRepository.logout();
     _loggedIn = false;
     favoritesRepository.insertSetting(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:provider/provider.dart';
-import '../models/models.dart';
+import 'package:lyrics2/models/models.dart';
 
 class LoginScreen extends StatefulWidget {
   // LoginScreen MaterialPage Helper
@@ -28,11 +28,13 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final Color rwColor = const Color.fromRGBO(64, 143, 77, 1);
+  final Color rwColorRegistration = const Color.fromRGBO(143, 64, 77, 1);
   final TextStyle focusedStyle = const TextStyle(color: Colors.green);
   final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isRegistering = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         AppLocalizations.of(context)!.password,
                         TextInputType.visiblePassword),
                     const SizedBox(height: 16),
-                    buildButton(context),
+                    buildButtons(context),
                   ],
                 ),
               ),
@@ -98,13 +100,13 @@ class _LoginScreenState extends State<LoginScreen> {
         return null;
       },
       decoration: InputDecoration(
-        border: const OutlineInputBorder(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.green,
             width: 1.0,
           ),
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.green,
           ),
@@ -129,16 +131,19 @@ class _LoginScreenState extends State<LoginScreen> {
         if (value == null || value.isEmpty) {
           return AppLocalizations.of(context)!.errPwdRequired;
         }
+        if (value.length < 6) {
+          return AppLocalizations.of(context)!.errWeakPassword;
+        }
         return null;
       },
       decoration: InputDecoration(
-        border: const OutlineInputBorder(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.green,
             width: 1.0,
           ),
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.green,
           ),
@@ -149,14 +154,15 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget buildButton(BuildContext context) {
-    return SizedBox(
-      height: 55,
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: MaterialButton(
+  Widget buildButtons(BuildContext context) {
+    if (!_isRegistering) {
+      return SizedBox(
+        height: 100,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            MaterialButton(
               color: rwColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
@@ -167,15 +173,23 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
+                  UserCredential? uc;
+                  var users = Provider.of<FirebaseUserRepository>(context,
+                      listen: false);
                   // Login -> Navigate to home
                   try {
-                    await Provider.of<FirebaseUserRepository>(context,
-                            listen: false)
-                        .login(_emailController.text, _passwordController.text);
+                    uc = await users.login(
+                        _emailController.text, _passwordController.text);
+                    if (uc == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}'),
+                      ));
+                    }
                   } on FirebaseAuthException catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
-                          '${AppLocalizations.of(context)!.msgError}: ${e.message}'),
+                          '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, e.code)}'),
                     ));
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -186,12 +200,38 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
               },
             ),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            flex: 1,
-            child: MaterialButton(
-              color: rwColor,
+            const SizedBox(width: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.msgRegisterExtended,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isRegistering = true;
+                    });
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.msgRegister,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SizedBox(
+        height: 100,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MaterialButton(
+              color: rwColorRegistration,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -201,15 +241,23 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
+                  UserCredential? uc;
+                  var users = Provider.of<FirebaseUserRepository>(context,
+                      listen: false);
                   // Register -> Sign-up then Navigate to home
                   try {
-                    Provider.of<FirebaseUserRepository>(context, listen: false)
-                        .signup(
-                            _emailController.text, _passwordController.text);
+                    uc = await users.signup(
+                        _emailController.text, _passwordController.text);
+                    if (uc == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}'),
+                      ));
+                    }
                   } on FirebaseAuthException catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
-                          '${AppLocalizations.of(context)!.msgError}: ${e.message}'),
+                          '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, e.code)}'),
                     ));
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -220,10 +268,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
               },
             ),
-          ),
-        ],
-      ),
-    );
+            const SizedBox(width: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(AppLocalizations.of(context)!.msgLoginExtended,
+                    style: const TextStyle(color: Colors.white)),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isRegistering = false;
+                    });
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.msgLogin,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+      ;
+    }
   }
 
   @override

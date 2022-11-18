@@ -17,6 +17,7 @@ class LyricTile extends StatelessWidget {
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
+        var authorRowOffset = 0.7495;
         return SizedBox(
           height: 70.0,
           child: SizedBox(
@@ -30,34 +31,38 @@ class LyricTile extends StatelessWidget {
                   child: Row(
                     children: [
                       const SizedBox(width: 16.0),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7185,
-                            child: Text(
-                              lyric.getSong(),
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.roboto(
-                                  //decoration: textDecoration,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width *
+                                  authorRowOffset,
+                              child: Text(
+                                lyric.getSong(),
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.roboto(
+                                    //decoration: textDecoration,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4.0),
-                          buildAuthor(context),
-                          const SizedBox(height: 4.0),
-                          /*Center(
-                            child: Container(
-                              color: Colors.amber,
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              height: 3,
-                            ),
-                          )*/
-                          //buildImportance(),
-                        ],
+                            const SizedBox(height: 4.0),
+                            buildAuthor(context),
+                            const SizedBox(height: 4.0),
+                            /*Center(
+                              child: Container(
+                                color: Colors.amber,
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                height: 3,
+                              ),
+                            )*/
+                            //buildImportance(),
+                          ],
+                        ),
                       ),
                       buildFavoriteIcon(context, repository, lyric),
                     ],
@@ -97,9 +102,11 @@ class LyricTile extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData && snapshot.data as bool) {
-              currIcon = const Icon(
-                Icons.favorite,
-                color: Colors.red,
+              currIcon = const Center(
+                child: Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                ),
               );
             } else {
               currIcon = const SizedBox(width: 1);

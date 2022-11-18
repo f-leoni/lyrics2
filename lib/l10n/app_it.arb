@@ -36,7 +36,18 @@
     "msgError": "Errore",
     "msgRegister": "Registrati",
     "msgLogin": "Accedi",
+    "msgLoginExtended": "Hai già creato il tuo account? Clicca qui e",
+    "msgRegisterExtended": "Non hai ancora un account? Clicca qui e",
     "errPwdRequired": "Inserire una password",
-    "errEmailRequired": "Inserire una email"
-
+    "errEmailRequired": "Inserire una email",
+    "errWrongPwd": "Wrong Password",
+    "errInvalidEmail": "Email non valida",
+    "errUserDisabled": "Utente disabilitato",
+    "errUserNotFound": "Utente non trovato",
+    "errEmailAlreadyInUse": "Email già in uso",
+    "errOperationNotAllowed": "Operazione non permessa",
+    "errWeakPassword": "La password è troppo corta. Usare almeno 6 caratteri",
+    "msgLogout": "Esci",
+    "msgDarkMode": "Modalità scura",
+    "msgUseGenius": "Usa il servizio Genius"
 }

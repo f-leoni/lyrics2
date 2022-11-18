@@ -51,8 +51,13 @@ class _MainScreenState extends State<MainScreen> {
             selectedItemColor: Theme.of(context).indicatorColor,
             currentIndex: widget.currentTab,
             onTap: (index) {
-              Provider.of<AppStateManager>(context, listen: false)
-                  .goToTab(index);
+              //only redraw if we are not already in that tab
+              if (index !=
+                  Provider.of<AppStateManager>(context, listen: false)
+                      .getSelectedTab) {
+                Provider.of<AppStateManager>(context, listen: false)
+                    .goToTab(index);
+              }
             },
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(

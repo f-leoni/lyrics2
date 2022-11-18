@@ -139,9 +139,17 @@
     "@msgRegister": {
            "description": "Sign up message"
     },
+    "msgRegisterExtended": "Don't have an account? Click here to",
+    "@msgRegister": {
+           "description": "Sign up long message"
+    },
     "msgLogin": "Login",
     "@msgLogin": {
            "description": "Sign in message"
+    },
+    "msgLoginExtended": "Already have an account? Click here to",
+    "@msgLoginExtended": {
+           "description": "Sign in long message"
     },
     "errPwdRequired": "Password Required",
     "@errPwdRequired": {
@@ -150,6 +158,45 @@
     "errEmailRequired": "Email Required",
     "@errEmailRequired": {
            "description": "Error for empty email"
+    },
+    "errWrongPwd": "Wrong Password",
+    "@errWrongPwd": {
+           "description": "Error for wrong password"
+    },
+    "errInvalidEmail": "Invalid Email",
+    "@errInvalidEmail": {
+           "description": "Error for invalid Email"
+    },
+    "errUserDisabled": "User Disabled",
+    "@errUserDisabled": {
+           "description": "Error for User disabled"
+    },
+    "errUserNotFound": "User Not found",
+    "@errUserNotFound": {
+           "description": "Error for User disabled"
+    },
+    "errEmailAlreadyInUse": "Email already in use",
+    "@errEmailAlreadyInUse": {
+           "description": "Error for Email already in use"
+    },
+    "errOperationNotAllowed": "Operation not allowed",
+    "@errOperationNotAllowed": {
+           "description": "Error for Operation not allowed"
+    },
+    "errWeakPassword": "Password is too weak. Please use at least 6 characters",
+    "@errWeakPassword": {
+           "description": "Error for weak password"
+    },
+    "msgLogout": "Log Out",
+    "@msgLogout": {
+           "description": "Message for logout button"
+    },
+    "msgDarkMode": "Dark Mode",
+    "@msgDarkMode": {
+           "description": "Message for dark mode switch"
+    },
+    "msgUseGenius": "Use Genius Service",
+    "@msgUseGenius": {
+           "description": "Message for Genius Service switch"
     }
-
 }

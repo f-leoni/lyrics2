@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
-import '../components/circle_image.dart';
-import '../models/models.dart';
+import 'package:lyrics2/components/circle_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/models/models.dart';
 
 class ProfileScreen extends StatefulWidget {
   // ProfileScreen MaterialPage Helper
@@ -69,13 +70,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),*/
         ListTile(
-          title: const Text('Log out'),
+          title: Text(AppLocalizations.of(context)!.msgLogout),
           onTap: () {
             // Logout user
-            // 1
             Provider.of<FirebaseUserRepository>(context, listen: false)
                 .tapOnProfile(false);
-            // 2
             Provider.of<AppStateManager>(context, listen: false)
                 .logout(context);
           },
@@ -90,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Dark Mode'),
+          Text(AppLocalizations.of(context)!.msgDarkMode),
           Switch(
             value: Provider.of<FirebaseUserRepository>(context, listen: false)
                 .darkMode, //widget.user.darkMode,
@@ -138,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Use Genius Proxy'),
+          Text(AppLocalizations.of(context)!.msgUseGenius),
           Switch(
             value: Provider.of<FirebaseUserRepository>(context, listen: false)
                 .useGenius, //widget.user.darkMode,

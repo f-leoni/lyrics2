@@ -24,6 +24,7 @@ Lyrics uses some third party libraries such as:
 * (fix) Create an id (hash?) independent from which service has been used 
         to find lyric (at the moment the numeric ID is used, which is 
         specific for each service)
+* * (fix) Double onboarding?
 * ...
 
 ## DONE

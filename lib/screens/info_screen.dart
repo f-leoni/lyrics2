@@ -18,6 +18,9 @@ class InfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final manager = Provider.of<AppStateManager>(context, listen: false);
+    var version = manager.version;
+    var build = manager.buildNr;
     bool isDark =
         Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
     final logoImg = isDark
@@ -81,30 +84,38 @@ class InfoScreen extends StatelessWidget {
                                     fontSize: 14,
                                     wordSpacing: 5)),
                             const SizedBox(height: 30),
-                            Text(
-                                "Version: ${Provider.of<AppStateManager>(context, listen: false).version} - Build: ${Provider.of<AppStateManager>(context, listen: false).buildNr}\n",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    wordSpacing: 5)),
+                            FutureBuilder(
+                              future: Provider.of<AppStateManager>(context,
+                                      listen: false)
+                                  .getVersionInfo(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  if (snapshot.hasData) {
+                                    var result = snapshot.data as List<String>;
+                                    version = result[0];
+                                    build = result[1];
+                                    return Text(
+                                      "Version: $version - Build: $build\n",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          wordSpacing: 5),
+                                    );
+                                  } else {
+                                    return Container(); //Text("Retrieving version info....");
+                                  }
+                                } else {
+                                  return Container(); //Text("Retrieving version info...");
+                                }
+                              },
+                            ),
                           ],
                         );
                       }),
                     ),
                   ),
                 ),
-                /*TextButton(
-                  child: const Text("Logout"),
-                  onPressed: () {
-                    var manager =
-                        Provider.of<AppStateManager>(context, listen: false);
-                    manager.logout(context);
-                    final sqlRepository = Provider.of<SQLiteSettingsRepository>(
-                        context,
-                        listen: false);
-                    sqlRepository.deleteSetting(Setting.onboardingComplete);
-                  },
-                )*/
               ],
             ),
           ),
