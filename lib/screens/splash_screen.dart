@@ -32,8 +32,8 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isDark =
         Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
     final logoImg = isDark
-        ? const AssetImage('assets/lyrics_assets/logo_dark.png')
-        : const AssetImage('assets/lyrics_assets/logo.png');
+        ? const AssetImage('assets/lyrics_assets/splash_dark.png')
+        : const AssetImage('assets/lyrics_assets/splash.png');
 
     return Scaffold(
       body: Center(
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image(
-              height: 200,
+              height: 300,
               image: logoImg,
             ),
             const Text("Initializing..."),

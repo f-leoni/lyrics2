@@ -84,13 +84,17 @@ class FirebaseUserRepository with ChangeNotifier {
     return auth.currentUser?.email;
   }
 
-  Future<UserCredential?> signup(String email, String password) async {
+  Future<UserCredential?> signup(
+      //String email, String password, String name) async {
+      String email,
+      String password) async {
     UserCredential? uc;
     try {
       uc = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      //uc.additionalUserInfo!.profile?.update("name", (value) => name);
       notifyListeners();
       return uc;
     } on FirebaseAuthException catch (e) {
@@ -113,7 +117,7 @@ class FirebaseUserRepository with ChangeNotifier {
   }
 
   void logout() async {
-    _darkMode = false;
+    //_darkMode = false;
     _useGenius = false;
     await auth.signOut();
     notifyListeners();

@@ -51,11 +51,11 @@
     "@somethingWrong": {
         "description": "Show Lyric - error"
     },
-    "username": "🎭 username",
+    "username": "🎭 Username",
     "@username": {
         "description": "Login - username hint"
     },
-    "password": "🎹 password",
+    "password": "🎹 Password",
     "@password": {
         "description": "Login - password hint"
     },
