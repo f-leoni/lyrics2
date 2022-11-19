@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/api/chartlyrics_proxy.dart';
 import 'package:lyrics2/api/genius_proxy.dart';
-import 'package:lyrics2/components/components_lyrics.dart';
 import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/env.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
+import 'package:lyrics2/models/models.dart';
 import 'package:lyrics2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:lyrics2/models/models.dart';
-import 'package:lyrics2/components/lyric_tile.dart';
-import 'package:flutter_acrcloud/flutter_acrcloud.dart';
-import 'package:lyrics2/env.dart';
 
 //TODO implement as a sliverAppBar
 class SearchScreen extends StatefulWidget {
@@ -172,7 +171,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               provider.searchAudioSong = "";
                               final session = ACRCloud.startSession();
                               logger.d("Showing Audio panel");
-                              var dialog = showDialog(
+                              showDialog(
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (context) => AlertDialog(
@@ -377,8 +376,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildSearchButton(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    bool isDarkMode =
-        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
     var currLyricsTheme =
         Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
     var currTextTheme =
@@ -461,7 +458,7 @@ class _SearchScreenState extends State<SearchScreen> {
   // List of found Lyrics
   Widget buildList(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    //var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     logger.d("Building results list");
     double height = MediaQuery.of(context).size.height / 2 - 31; //, 236;
     if (manager.isSearchCompleted) {
