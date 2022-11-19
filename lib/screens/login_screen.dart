@@ -222,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.msgRegisterExtended,
-                  style: const TextStyle(color: Colors.white),
+                  //style: const TextStyle(color: Colors.white),
                 ),
                 TextButton(
                   onPressed: () {
@@ -232,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Text(
                     AppLocalizations.of(context)!.msgRegister,
-                    style: const TextStyle(color: Colors.white),
+                    //style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ],
