@@ -13,6 +13,7 @@ import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:lyrics2/env.dart';
 
+//TODO implement as a sliverAppBar
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
     return MaterialPage(
@@ -66,32 +67,44 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     logger.d("Building Search Screen");
+    final manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Scaffold(
       body: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: Center(
-                child: Column(children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                    //color: Colors.blue.shade200,
-                    child: buildSearchFields(context)),
-              ),
-              buildSearchButton(context),
-              Expanded(
-                flex: 8,
-                child: Consumer<AppStateManager>(
-                    builder: (context, appStateManager, child) {
-                  return Container(
-                      //color: Colors.red.shade200,
-                      child: buildList(context));
-                }),
-              )
-            ])),
-          )),
+          padding: const EdgeInsets.all(0.0),
+          child: CustomScrollView(slivers: <Widget>[
+            SliverAppBar(
+                pinned: false,
+                snap: true,
+                floating: true,
+                backgroundColor: users.themeData.backgroundColor,
+                expandedHeight: 125.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  //collapseMode: CollapseMode.pin,
+
+                  background: Column(
+                    children: [
+                      Expanded(flex: 1, child: buildSearchFields(context)),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: buildSearchButton(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            SliverList(
+                delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return SizedBox(
+                  height: 70,
+                  child: buildTile(context, index, null),
+                );
+              },
+              childCount: manager.searchResults.length,
+            ))
+          ])),
     );
   }
 
@@ -134,90 +147,93 @@ class _SearchScreenState extends State<SearchScreen> {
             flex: 5,
             child: Column(
               children: [
-                Builder(
-                  builder: (context) => ConstrainedBox(
-                    constraints:
-                        const BoxConstraints(minHeight: 30, maxHeight: 90),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
-                      //color: Colors.red,
-                      child: Center(
-                        child: MaterialButton(
-                          minWidth: 150,
-                          height: 50,
-                          color: currLyricsTheme.indicatorColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          onPressed: () async {
-                            final provider = Provider.of<AppStateManager>(
-                                context,
-                                listen: false);
-                            music = null;
-                            provider.searchAudioAuthor = "";
-                            provider.searchAudioSong = "";
-                            final session = ACRCloud.startSession();
-                            logger.d("Showing Audio panel");
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => AlertDialog(
-                                title: Text(
-                                    AppLocalizations.of(context)!.msgListening),
-                                content: StreamBuilder(
-                                  stream: session.volumeStream,
-                                  initialData: -1,
-                                  builder: (_, snapshot) =>
-                                      Text(snapshot.data.toString()),
+                Expanded(
+                  child: Builder(
+                    builder: (context) => ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(minHeight: 50, maxHeight: 90),
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
+                        //color: Colors.red,
+                        child: Center(
+                          child: MaterialButton(
+                            minWidth: 150,
+                            height: 50,
+                            color: currLyricsTheme.indicatorColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            onPressed: () async {
+                              final provider = Provider.of<AppStateManager>(
+                                  context,
+                                  listen: false);
+                              music = null;
+                              provider.searchAudioAuthor = "";
+                              provider.searchAudioSong = "";
+                              final session = ACRCloud.startSession();
+                              logger.d("Showing Audio panel");
+                              var dialog = showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => AlertDialog(
+                                  title: Text(AppLocalizations.of(context)!
+                                      .msgListening),
+                                  content: StreamBuilder(
+                                    stream: session.volumeStream,
+                                    initialData: -1,
+                                    builder: (_, snapshot) =>
+                                        Text(snapshot.data.toString()),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        logger.d("Cancel Listening");
+                                        session.cancel;
+                                      },
+                                      child: Text(AppLocalizations.of(context)!
+                                          .msgCancel),
+                                    )
+                                  ],
                                 ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      logger.d("Cancel Listening");
-                                      session.cancel;
-                                    },
-                                    child: Text(AppLocalizations.of(context)!
-                                        .msgCancel),
-                                  )
-                                ],
-                              ),
-                            );
-                            logger.d("Wait for results");
-                            final result = await session.result;
-                            // Avoid lint error "Do not use BuildContexts across async gaps"
-                            if (!mounted) return;
-                            logger.d("Hide audio dialog");
-                            // Hide dialog
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(result);
+                              ).onError((error, stackTrace) =>
+                                  logger.e("Dialog Error: $error"));
+                              logger.d("Wait for results");
+                              final result = await session.result;
+                              // Avoid lint error "Do not use BuildContexts across async gaps"
+                              if (!mounted) return;
+                              logger.d("Hide audio dialog");
+                              // Hide dialog
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop(result);
 
-                            if (result == null) {
-                              logger.d("Audio search Canceled");
-                              // Search has been cancelled.
-                              return;
-                            } else if (result.metadata == null) {
-                              logger.d(
-                                  "Error in Audio Search: ${result.status.msg}");
-                              // No results found
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(
-                                    '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}'),
-                              ));
-                              return;
-                            } else {
-                              music = result.metadata!.music.first;
-                              if (music != null) {
-                                provider.searchAudioAuthor =
-                                    music!.artists.first.name;
-                                provider.searchAudioSong = music!.title;
-                                startSearch(context);
+                              if (result == null) {
+                                logger.d("Audio search Canceled");
+                                // Search has been cancelled.
+                                return;
+                              } else if (result.metadata == null) {
+                                logger.d(
+                                    "Error in Audio Search: ${result.status.msg}");
+                                // No results found
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}'),
+                                ));
+                                return;
+                              } else {
+                                music = result.metadata!.music.first;
+                                if (music != null) {
+                                  provider.searchAudioAuthor =
+                                      music!.artists.first.name;
+                                  provider.searchAudioSong = music!.title;
+                                  startSearch(context);
+                                }
                               }
-                            }
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.msgListen,
-                            style: currTextTheme.bodyText1,
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.msgListen,
+                              style: currTextTheme.button,
+                            ),
                           ),
                         ),
                       ),
@@ -373,85 +389,22 @@ class _SearchScreenState extends State<SearchScreen> {
         height: 1,
       );
     } else {
-      return ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 30, maxHeight: 50),
-        child: MaterialButton(
-          minWidth: 150,
-          height: 50,
-          color: currLyricsTheme.indicatorColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Text(
-            AppLocalizations.of(context)!.searchText,
-            style: currTextTheme.bodyText1,
-          ),
-          onPressed: () async {
-            logger.v("Click on Search button in search screen");
-            startSearch(context);
-          },
+      return MaterialButton(
+        minWidth: 150,
+        height: 50,
+        color: currLyricsTheme.indicatorColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
         ),
+        child: Text(
+          AppLocalizations.of(context)!.searchText,
+          style: currTextTheme.button,
+        ),
+        onPressed: () async {
+          logger.v("Click on Search button in search screen");
+          startSearch(context);
+        },
       );
-    }
-  }
-
-  // List of found Lyrics
-  Widget buildList(BuildContext context) {
-    var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    logger.d("Building results list");
-    double height = MediaQuery.of(context).size.height / 2 - 31; //, 236;
-    if (manager.isSearchCompleted) {
-      List<LyricSearchResult> results = manager.searchResults;
-      List<Widget> itemTiles = List<Widget>.empty(growable: true);
-      for (LyricSearchResult lyricSearchResult in results) {
-        // Exclude invalid results
-        if (!lyricSearchResult.isEmpty && lyricSearchResult.lyricId != 0) {
-          itemTiles.add(Container(
-            decoration: const BoxDecoration(
-                border: Border(
-              bottom: BorderSide(width: 1.0, color: Colors.grey),
-            )),
-            child: InkWell(
-              child: LyricTile(
-                lyric: lyricSearchResult,
-                isFavoritePage: false,
-              ),
-              onTap: () {
-                logger.i(
-                    "Clicked on Search result. Song: ${lyricSearchResult.song}");
-                /*Provider.of<AppStateManager>(context, listen: false).viewedLyric =
-                    provider.getLyric(lyricSearchResult)!;
-                Provider.of<AppStateManager>(context, listen: false)
-                    .isViewingLyric = true;*/
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LyricDetailScreen(
-                      lyric: manager.getLyric(lyricSearchResult,
-                          users.useGenius ? GeniusProxy() : ChartLyricsProxy()),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ));
-        }
-      }
-      return SizedBox(
-          height: height,
-          //color: Colors.green,
-          child: ListView(
-            padding: const EdgeInsets.all(10.0),
-            children: itemTiles,
-          ));
-    } else {
-      // Case for isSearchComplete == false
-      return SizedBox(
-          height: height,
-          //color: Colors.green,
-          child: ListView(
-              padding: const EdgeInsets.all(10.0), children: const []));
     }
   }
 
@@ -503,5 +456,96 @@ class _SearchScreenState extends State<SearchScreen> {
         content: Text(AppLocalizations.of(context)!.noResults),
       ));
     }
+  }
+
+  // List of found Lyrics
+  Widget buildList(BuildContext context) {
+    var manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    logger.d("Building results list");
+    double height = MediaQuery.of(context).size.height / 2 - 31; //, 236;
+    if (manager.isSearchCompleted) {
+      List<LyricSearchResult> results = manager.searchResults;
+      List<Widget> itemTiles = List<Widget>.empty(growable: true);
+      for (LyricSearchResult lyricSearchResult in results) {
+        // Exclude invalid results
+        if (!lyricSearchResult.isEmpty && lyricSearchResult.lyricId != 0) {
+          itemTiles.add(buildTile(context, 0, lyricSearchResult));
+        }
+      }
+      return SizedBox(
+          height: height,
+          //color: Colors.green,
+          child: ListView(
+            padding: const EdgeInsets.all(10.0),
+            children: itemTiles,
+          ));
+    } else {
+      // Case for isSearchComplete == false
+      return SizedBox(
+          height: height,
+          //color: Colors.green,
+          child: ListView(
+              padding: const EdgeInsets.all(10.0), children: const []));
+    }
+  }
+
+  Widget buildTile(
+      BuildContext context, int? index, LyricSearchResult? lyricSearchResult) {
+    final manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    if (manager.isSearchCompleted) {
+      List<LyricSearchResult> results = manager.searchResults;
+      LyricSearchResult lsr;
+      if (lyricSearchResult == null) {
+        lsr = results[index!];
+      } else {
+        lsr = lyricSearchResult;
+      }
+      int hIndex = index! + 1;
+      return Container(
+        decoration: BoxDecoration(
+            border: Border(
+          bottom: BorderSide(width: 2.0, color: users.themeData.highlightColor),
+        )),
+        child: InkWell(
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    hIndex.toString(),
+                    textAlign: TextAlign.center,
+                    textScaleFactor: 1.8,
+                  ),
+                ),
+              ),
+              LyricTile(
+                lyric: lsr,
+                isFavoritePage: false,
+              ),
+            ],
+          ),
+          onTap: () {
+            logger.i("Clicked on Search result. Song: ${lsr.song}");
+            /*Provider.of<AppStateManager>(context, listen: false).viewedLyric =
+                    provider.getLyric(lyricSearchResult)!;
+                Provider.of<AppStateManager>(context, listen: false)
+                    .isViewingLyric = true;*/
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LyricDetailScreen(
+                  lyric: manager.getLyric(lsr,
+                      users.useGenius ? GeniusProxy() : ChartLyricsProxy()),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+    return Container();
   }
 }

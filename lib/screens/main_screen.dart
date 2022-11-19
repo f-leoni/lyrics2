@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.appName,
-                style: Theme.of(context).textTheme.headline6),
+                style: Theme.of(context).textTheme.headline1),
             actions: [
               profileButton(widget.currentTab),
             ],

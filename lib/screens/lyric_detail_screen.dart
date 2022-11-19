@@ -90,7 +90,7 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                   Lyric currLyric = snapshot.data as Lyric;
                   if (!bgImageCreated) {
                     try {
-                      bgImage = NetworkImage(currLyric.imageUrl);
+                      bgImage = getBackgroundImage(currLyric);
                     } catch (e) {
                       logger.e("Error Creating background image ${e.hashCode}");
                     }
@@ -103,6 +103,7 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                   } else {
                     try {
                       decoration = BoxDecoration(
+                        color: Colors.black87,
                         image: DecorationImage(
                           image: bgImage,
                           colorFilter: ColorFilter.mode(
@@ -176,10 +177,9 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
                                 currLyric.lyric.replaceAll("\\r\\\\n", "\r\n"),
                                 //style: LyricsTheme.darkTextTheme.bodyText1,
                                 style: GoogleFonts.roboto(
-                                  //decoration: textDecoration,
                                   fontSize: _fontSize,
                                   fontWeight: FontWeight.normal,
-                                  color: Colors.white,
+                                  color: Colors.white70,
                                 ),
                               ),
                             ),
@@ -203,6 +203,17 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
             }),
       ),
     );
+  }
+
+  ImageProvider<Object> getBackgroundImage(Lyric currLyric) {
+    var img = Image.network(
+      currLyric.imageUrl,
+      errorBuilder:
+          (BuildContext context, Object exception, StackTrace? stackTrace) =>
+              const Image(image: AssetImage("assets/lyrics_assets/logo.png")),
+    ).image;
+
+    return img;
   }
 
   Widget buildFavoriteButton(

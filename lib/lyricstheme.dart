@@ -6,42 +6,46 @@ class LyricsTheme {
     bodyText1: GoogleFonts.roboto(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black),
     headline1: GoogleFonts.roboto(
-        fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black),
+        fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),
     headline2: GoogleFonts.roboto(
         fontSize: 21.0, fontWeight: FontWeight.w700, color: Colors.black),
     headline3: GoogleFonts.roboto(
         fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
+    button: GoogleFonts.roboto(
+        fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
   );
 
   static TextTheme darkTextTheme = TextTheme(
     bodyText1: GoogleFonts.roboto(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white),
     headline1: GoogleFonts.roboto(
-        fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.white),
+        fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white70),
     headline2: GoogleFonts.roboto(
         fontSize: 21.0, fontWeight: FontWeight.w700, color: Colors.white),
     headline3: GoogleFonts.roboto(
         fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white),
+    button: GoogleFonts.roboto(
+        fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black87),
   );
 
   static ThemeData light() {
     return ThemeData(
-      primarySwatch: Colors.amber,
+      primarySwatch: Colors.orange,
       brightness: Brightness.light,
       primaryColor: Colors.white,
       /* colorScheme: //ColorScheme.fromSeed(seedColor: Colors.white),
          ColorScheme(background: Colors.white, secondary: Colors.black),*/
-      accentColor: Colors.amber.shade700,
+      accentColor: Colors.orange.shade500,
       textTheme: lightTextTheme,
     );
   }
 
   static ThemeData dark() {
     return ThemeData(
-      primarySwatch: Colors.amber,
+      primarySwatch: Colors.green,
       brightness: Brightness.dark,
-      primaryColor: Colors.grey[900],
-      accentColor: Colors.green[600],
+      primaryColor: Colors.grey[850],
+      accentColor: Colors.greenAccent,
       textTheme: darkTextTheme,
     );
   }

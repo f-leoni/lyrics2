@@ -22,7 +22,7 @@ class LyricTile extends StatelessWidget {
       builder: (context, appStateManager, child) {
         var authorRowOffset = 0.7495;
         return SizedBox(
-          height: 70.0,
+          height: 60.0,
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.85,
             //color: Colors.yellow,
