@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class LyricTile extends StatelessWidget {
   final LyricData lyric;
   final bool isFavoritePage;
+
   const LyricTile({Key? key, required this.lyric, required this.isFavoritePage})
       : super(key: key);
 

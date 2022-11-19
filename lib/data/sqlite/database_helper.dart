@@ -56,7 +56,7 @@ class DatabaseHelper {
     logger.i(
         "Database $_databaseName path is: $path. Version: $_databaseVersion");
 
-    // TODO: Remember to turn off debugging before deploying app to store(s).
+    // Remember to turn off debugging before deploying app to store(s).
     Sqflite.setDebugModeOn(false);
 
     return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
@@ -113,7 +113,7 @@ class DatabaseHelper {
   Future<int> insert(String table, Map<String, dynamic> row) async {
     final db = await instance.streamDatabase;
 
-    //TODO ensure it is ok using ConflictAlgorithm.replace
+    //Ensure it is ok using ConflictAlgorithm.replace
     return db.insert(table, row, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
