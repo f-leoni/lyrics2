@@ -451,13 +451,13 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  Widget buildTile(BuildContext context, int? index) {
+  Widget buildTile(BuildContext context, int index) {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     if (manager.isSearchCompleted) {
       List<LyricSearchResult> results = manager.searchResults;
-      LyricSearchResult lsr = results[index!];
-      int hIndex = index! + 1;
+      LyricSearchResult lsr = results[index];
+      int hIndex = index + 1;
       return Container(
         decoration: BoxDecoration(
             border: Border(

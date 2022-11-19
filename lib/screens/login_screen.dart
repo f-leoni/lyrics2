@@ -40,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     _passwordVisible = false;
+    super.initState();
   }
 
   @override
@@ -156,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             hintText: hintText,
-            hintStyle: TextStyle(height: 0.5),
+            //hintStyle: const TextStyle(height: 0.5),
             suffixIcon: IconButton(
               icon: Icon(
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
