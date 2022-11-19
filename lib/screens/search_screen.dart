@@ -12,7 +12,6 @@ import 'package:lyrics2/models/models.dart';
 import 'package:lyrics2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
 
-//TODO implement as a sliverAppBar
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
     return MaterialPage(
@@ -34,7 +33,6 @@ class _SearchScreenState extends State<SearchScreen> {
   final _searchControllerText = TextEditingController();
   final _searchControllerAuthor = TextEditingController();
   final _searchControllerSong = TextEditingController();
-  //final buttonTextStyle = const TextStyle(color: Colors.black87);
   String _searchStringText = "";
   String _searchStringAuthor = "";
   String _searchStringSong = "";
@@ -79,8 +77,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 backgroundColor: users.themeData.backgroundColor,
                 expandedHeight: 125.0,
                 flexibleSpace: FlexibleSpaceBar(
-                  //collapseMode: CollapseMode.pin,
-
                   background: Column(
                     children: [
                       Expanded(flex: 1, child: buildSearchFields(context)),
@@ -98,7 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
               (BuildContext context, int index) {
                 return SizedBox(
                   height: 70,
-                  child: buildTile(context, index, null),
+                  child: buildTile(context, index),
                 );
               },
               childCount: manager.searchResults.length,
@@ -455,50 +451,12 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  // List of found Lyrics
-  Widget buildList(BuildContext context) {
-    var manager = Provider.of<AppStateManager>(context, listen: false);
-    //var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    logger.d("Building results list");
-    double height = MediaQuery.of(context).size.height / 2 - 31; //, 236;
-    if (manager.isSearchCompleted) {
-      List<LyricSearchResult> results = manager.searchResults;
-      List<Widget> itemTiles = List<Widget>.empty(growable: true);
-      for (LyricSearchResult lyricSearchResult in results) {
-        // Exclude invalid results
-        if (!lyricSearchResult.isEmpty && lyricSearchResult.lyricId != 0) {
-          itemTiles.add(buildTile(context, 0, lyricSearchResult));
-        }
-      }
-      return SizedBox(
-          height: height,
-          //color: Colors.green,
-          child: ListView(
-            padding: const EdgeInsets.all(10.0),
-            children: itemTiles,
-          ));
-    } else {
-      // Case for isSearchComplete == false
-      return SizedBox(
-          height: height,
-          //color: Colors.green,
-          child: ListView(
-              padding: const EdgeInsets.all(10.0), children: const []));
-    }
-  }
-
-  Widget buildTile(
-      BuildContext context, int? index, LyricSearchResult? lyricSearchResult) {
+  Widget buildTile(BuildContext context, int? index) {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     if (manager.isSearchCompleted) {
       List<LyricSearchResult> results = manager.searchResults;
-      LyricSearchResult lsr;
-      if (lyricSearchResult == null) {
-        lsr = results[index!];
-      } else {
-        lsr = lyricSearchResult;
-      }
+      LyricSearchResult lsr = results[index!];
       int hIndex = index! + 1;
       return Container(
         decoration: BoxDecoration(
@@ -526,10 +484,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           onTap: () {
             logger.i("Clicked on Search result. Song: ${lsr.song}");
-            /*Provider.of<AppStateManager>(context, listen: false).viewedLyric =
-                    provider.getLyric(lyricSearchResult)!;
-                Provider.of<AppStateManager>(context, listen: false)
-                    .isViewingLyric = true;*/
             Navigator.push(
               context,
               MaterialPageRoute(

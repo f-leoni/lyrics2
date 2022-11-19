@@ -19,8 +19,8 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    late final version;
-    late final build;
+    late final String version;
+    late final String build;
     final bool isDark =
         Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
     final logoImg = isDark

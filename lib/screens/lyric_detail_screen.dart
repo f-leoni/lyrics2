@@ -1,13 +1,12 @@
-import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/firebase_favorites_repository.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
-import 'package:lyrics2/models/app_state_manager.dart';
-import 'package:provider/provider.dart';
 import 'package:lyrics2/lyricstheme.dart';
+import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class LyricDetailScreen extends StatefulWidget {
   static MaterialPage page(Future<Lyric> lyric) {
