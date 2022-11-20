@@ -30,12 +30,12 @@ class LyricsTheme {
 
   static ThemeData light() {
     return ThemeData(
-      primarySwatch: Colors.orange,
+      primarySwatch: Colors.lightGreen,
       brightness: Brightness.light,
       primaryColor: Colors.white,
       /* colorScheme: //ColorScheme.fromSeed(seedColor: Colors.white),
          ColorScheme(background: Colors.white, secondary: Colors.black),*/
-      accentColor: Colors.orange.shade500,
+      accentColor: Colors.green,
       textTheme: lightTextTheme,
     );
   }

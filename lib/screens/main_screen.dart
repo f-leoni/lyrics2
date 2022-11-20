@@ -40,7 +40,8 @@ class _MainScreenState extends State<MainScreen> {
         String pageTitle = "";
 
         if (widget.currentTab == 0) {
-          pageTitle = "${AppLocalizations.of(context)!.appName} - Favorites";
+          pageTitle =
+              "${AppLocalizations.of(context)!.appName} - ${AppLocalizations.of(context)!.msgFavorites}";
         } else {
           pageTitle = AppLocalizations.of(context)!.appName;
         }

@@ -202,5 +202,9 @@
     "msgDismissed": "dismissed",
     "@msgDismissed": {
            "description": "Message for slide/deleting a favorite"
-    }
+    },
+    "msgFavorites": "Favorites",
+    "@msgFavorites": {
+               "description": "Message Favorites page title"
+        }
 }

@@ -50,5 +50,6 @@
     "msgLogout": "Esci",
     "msgDarkMode": "Modalità scura",
     "msgUseGenius": "Usa il servizio Genius",
-    "msgDismissed": "eliminata dai preferiti"
+    "msgDismissed": "eliminata dai preferiti",
+    "favorites": "Preferiti"
 }

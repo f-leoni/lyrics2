@@ -78,12 +78,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 snap: true,
                 floating: true,
                 backgroundColor: users.themeData.primaryColor,
-                expandedHeight: 125.0,
+                expandedHeight: 160.0,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Column(
                     children: [
-                      Expanded(flex: 1, child: buildSearchFields(context)),
+                      Expanded(flex: 3, child: buildSearchFields(context)),
                       Expanded(
+                        flex: 2,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: buildSearchButton(context),
@@ -122,10 +123,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildAudioSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    var currLyricsTheme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
-    var currTextTheme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var currLyricsTheme = users.themeData;
+    var currTextTheme = users.textTheme;
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,12 +134,15 @@ class _SearchScreenState extends State<SearchScreen> {
             flex: 1,
             child: IconButton(
                 alignment: Alignment.centerLeft,
-                iconSize: 30,
+                iconSize: 50,
                 onPressed: () {
                   manager.switchSearch(context, _searchControllerText.text,
                       _searchControllerAuthor.text, _searchControllerSong.text);
                 },
-                icon: const Icon(Icons.refresh_rounded)),
+                icon: Icon(
+                  Icons.text_snippet_outlined,
+                  color: currLyricsTheme.indicatorColor,
+                )),
           ),
           Expanded(
             flex: 5,
@@ -178,18 +181,18 @@ class _SearchScreenState extends State<SearchScreen> {
                                       .msgListening),
                                   content: StreamBuilder(
                                       stream: session.volumeStream,
-                                      initialData: -1,
+                                      initialData: 1.0,
                                       builder: (_, snapshot) {
                                         double size = 60.0 *
-                                            pow(snapshot.data as double, 25);
+                                            pow(snapshot.data as double, 1);
                                         return SizedBox(
-                                            height: 60,
+                                            height: 60.0,
                                             child: Icon(
                                               Icons.radio,
                                               //FontAwesomeIcons.music,
                                               size: size,
                                               color: currLyricsTheme
-                                                  .highlightColor,
+                                                  .backgroundColor,
                                             ));
                                       }),
                                   actions: [
@@ -270,16 +273,20 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildSongAuthorSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         IconButton(
-            iconSize: 30,
+            iconSize: 50,
             onPressed: () {
               manager.switchSearch(context, _searchControllerText.text,
                   _searchControllerAuthor.text, _searchControllerSong.text);
             },
-            icon: const Icon(Icons.refresh_rounded)),
+            icon: Icon(
+              Icons.radio_outlined,
+              color: users.themeData.indicatorColor,
+            )),
         Flexible(
           flex: 2,
           child: Container(
@@ -345,6 +352,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildTextSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     //_searchControllerText.text = _searchStringText;
     return Row(
       //mainAxisSize: MainAxisSize.max,
@@ -352,12 +360,15 @@ class _SearchScreenState extends State<SearchScreen> {
       children: [
         IconButton(
             //color: Colors.red,
-            iconSize: 25,
+            iconSize: 50,
             onPressed: () {
               manager.switchSearch(context, _searchControllerText.text,
                   _searchControllerAuthor.text, _searchControllerSong.text);
             },
-            icon: const Icon(Icons.refresh_rounded)),
+            icon: Icon(
+              Icons.radio_outlined,
+              color: users.themeData.indicatorColor,
+            )),
         Expanded(
           flex: 1,
           child: TextField(
