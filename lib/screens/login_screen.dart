@@ -289,8 +289,10 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(AppLocalizations.of(context)!.msgLoginExtended,
-                    style: const TextStyle(color: Colors.white)),
+                Text(
+                  AppLocalizations.of(context)!.msgLoginExtended,
+                  //style: const TextStyle(color: Colors.white)
+                ),
                 TextButton(
                   onPressed: () {
                     setState(() {
@@ -299,7 +301,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Text(
                     AppLocalizations.of(context)!.msgLogin,
-                    style: const TextStyle(color: Colors.white),
+                    //style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ],

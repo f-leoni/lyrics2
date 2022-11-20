@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,6 +13,7 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:lyrics2/screens/lyric_detail_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -74,7 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 pinned: false,
                 snap: true,
                 floating: true,
-                backgroundColor: users.themeData.backgroundColor,
+                backgroundColor: users.themeData.primaryColor,
                 expandedHeight: 125.0,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Column(
@@ -174,11 +177,20 @@ class _SearchScreenState extends State<SearchScreen> {
                                   title: Text(AppLocalizations.of(context)!
                                       .msgListening),
                                   content: StreamBuilder(
-                                    stream: session.volumeStream,
-                                    initialData: -1,
-                                    builder: (_, snapshot) =>
-                                        Text(snapshot.data.toString()),
-                                  ),
+                                      stream: session.volumeStream,
+                                      initialData: -1,
+                                      builder: (_, snapshot) {
+                                        double size = 60.0 *
+                                            pow(snapshot.data as double, 3);
+                                        return SizedBox(
+                                            height: 60,
+                                            child: Icon(
+                                              FontAwesomeIcons.music,
+                                              size: size,
+                                              color: currLyricsTheme
+                                                  .highlightColor,
+                                            ));
+                                      }),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
