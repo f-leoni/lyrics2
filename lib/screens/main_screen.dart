@@ -37,10 +37,17 @@ class _MainScreenState extends State<MainScreen> {
     ];
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
+        String pageTitle = "";
+
+        if (widget.currentTab == 0) {
+          pageTitle = "${AppLocalizations.of(context)!.appName} - Favorites";
+        } else {
+          pageTitle = AppLocalizations.of(context)!.appName;
+        }
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.appName,
-                style: Theme.of(context).textTheme.headline1),
+            title:
+                Text(pageTitle, style: Theme.of(context).textTheme.headline1),
             actions: [
               profileButton(widget.currentTab),
             ],

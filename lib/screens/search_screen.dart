@@ -181,11 +181,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                       initialData: -1,
                                       builder: (_, snapshot) {
                                         double size = 60.0 *
-                                            pow(snapshot.data as double, 3);
+                                            pow(snapshot.data as double, 25);
                                         return SizedBox(
                                             height: 60,
                                             child: Icon(
-                                              FontAwesomeIcons.music,
+                                              Icons.radio,
+                                              //FontAwesomeIcons.music,
                                               size: size,
                                               color: currLyricsTheme
                                                   .highlightColor,
