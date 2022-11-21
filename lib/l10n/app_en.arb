@@ -140,7 +140,7 @@
            "description": "Sign up message"
     },
     "msgRegisterExtended": "Don't have an account? Click here to",
-    "@msgRegister": {
+    "@msgRegisterExtended": {
            "description": "Sign up long message"
     },
     "msgLogin": "Login",
