@@ -49,6 +49,7 @@ flutter build appbundle
 
 ## GENERATE APK
 flutter build apk
+flutter build apk --release
 
 ## CLEAN PROJECT
 flutter clean
