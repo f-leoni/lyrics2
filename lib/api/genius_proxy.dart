@@ -27,6 +27,7 @@ class GeniusProxy extends Proxy {
     return res.data!['song'];
   }
 
+  // Convert Genius result to LyricSearchResult
   Future<LyricSearchResult> _resultToLSR(result) async {
     var resValue = result['result'];
     var tempLyric = LyricSearchResult(
@@ -38,7 +39,8 @@ class GeniusProxy extends Proxy {
     return tempLyric;
   }
 
-  Future<Lyric> _resultToLyric(result) async {
+  // Convert Genius result to LyricSearchResult
+  Future<Lyric> _songToLyric(result) async {
     var tempLyric = Lyric(
       artist: result["artist_names"],
       lyricId: result["id"],
@@ -56,6 +58,7 @@ class GeniusProxy extends Proxy {
       final res = await geniusApi.getSearch(query);
       return _getResults(res.data!['hits']);
     }
+    //final res = await geniusApi.getSearch(query, options: options);
     final res = await geniusApi.getSearch(query, options: options);
     return _getResults(res.data!['hits']);
   }
@@ -116,6 +119,6 @@ class GeniusProxy extends Proxy {
     final result = await _getSong(lyric.lyricId).onError((error, stackTrace) {
       logger.e("Error: $error\n$stackTrace");
     });
-    return _resultToLyric(result);
+    return _songToLyric(result);
   }
 }
