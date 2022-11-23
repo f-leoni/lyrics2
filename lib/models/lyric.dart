@@ -112,10 +112,7 @@ class Lyric extends LyricData {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is Lyric &&
-        other.lyricId != null &&
-        lyricId != null &&
-        other.lyricId == lyricId;
+    return other is Lyric && other.lyricId == lyricId;
   }
 
   static get empty => Lyric(

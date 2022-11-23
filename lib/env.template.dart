@@ -1,4 +1,4 @@
-class rename_to_Env {
+class Env {
   // ACRCloud API
   static const String arApiHost = '<insert your API host here>';
   static const String arApiAccessKey = '<insert your API Access Key here>';

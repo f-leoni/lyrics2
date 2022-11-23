@@ -30,23 +30,21 @@ class LyricsTheme {
 
   static ThemeData light() {
     return ThemeData(
-      primarySwatch: Colors.lightGreen,
       brightness: Brightness.light,
       primaryColor: Colors.white,
-      /* colorScheme: //ColorScheme.fromSeed(seedColor: Colors.white),
-         ColorScheme(background: Colors.white, secondary: Colors.black),*/
-      accentColor: Colors.green,
       textTheme: lightTextTheme,
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen)
+          .copyWith(secondary: Colors.green),
     );
   }
 
   static ThemeData dark() {
     return ThemeData(
-      primarySwatch: Colors.green,
       brightness: Brightness.dark,
       primaryColor: Colors.grey[850],
-      accentColor: Colors.greenAccent,
       textTheme: darkTextTheme,
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
+          .copyWith(secondary: Colors.greenAccent),
     );
   }
 }

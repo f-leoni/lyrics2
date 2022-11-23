@@ -10,10 +10,11 @@ import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-Future<void> main() async {
+main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Firebase Initialization
-  runApp(const LyricsApp());
+  Firebase.initializeApp()
+      .then((value) => runApp(const LyricsApp())); // Firebase Initialization
+  //runApp(const LyricsApp());
 }
 
 class LyricsApp extends StatefulWidget {
