@@ -5,6 +5,8 @@ import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/models/models.dart';
 
+import '../components/logger.dart';
+
 class LoginScreen extends StatefulWidget {
   // LoginScreen MaterialPage Helper
   static MaterialPage page() {
@@ -198,6 +200,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     uc = await users.login(
                         _emailController.text, _passwordController.text);
                     if (uc == null) {
+                      if (!mounted) {
+                        logger.e("Login error: not mounted");
+                        return;
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                             '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}'),
@@ -266,6 +272,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     uc = await users.signup(
                         _emailController.text, _passwordController.text);
                     if (uc == null) {
+                      if (!mounted) {
+                        logger.e("Login error: not mounted 2");
+                        return;
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                             '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}'),

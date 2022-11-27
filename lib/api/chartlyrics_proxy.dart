@@ -48,18 +48,6 @@ class ChartLyricsProxy extends Proxy {
     return value.body;
   }
 
-// Search lyrics by artist and title
-  Future<String> _searchLyricDirect(String artist, String song) async {
-    http.Response value = await _getFutureResponse(
-        "${searchDirectBase}artist=$artist&song=$song");
-    if (value.statusCode != 200) {
-      logger.e(
-          "Error in _searchLyricDirect($artist, $song): ${value.body} (${value.statusCode}");
-      throw LyricException(value.statusCode, value.body);
-    }
-    return value.body;
-  }
-
 // Search lyrics by text
   Future<String> _searchLyricText(String text) async {
     http.Response value =

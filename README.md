@@ -16,7 +16,14 @@ Lyrics uses some third party libraries such as:
 * sqflite - for database management
 * flutter_acrcloud - For sound recognition
 * flutter_icons - For app icons generation
-* package_info_plus - To show build information 
+* package_info_plus - To show build information
+* sqlbrite - Local database
+* firebase_core - For Firebase usage
+* cloud_firestore - For cloud storage
+* firebase_auth - For authentication
+* genius_api_unofficial - Genius Lyrics API
+* beautiful_soup_dart - Web scraping
+* font_awesome_flutter - Icons collection
 
 # FEATURES LIST
 ## TODO:
