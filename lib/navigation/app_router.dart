@@ -44,8 +44,6 @@ class AppRouter extends RouterDelegate
             bool isOnboardingComplete =
                 settings[Setting.onboardingComplete]?.value == "true";
             bool isLoggedIn = profile.isLoggedIn();
-            logger.d(
-                "didSelectUser = ${profileManager.didSelectUser} in Navigator's build");
             return Navigator(
               key: navigatorKey,
               onPopPage: _handlePopPage,
@@ -62,9 +60,9 @@ class AppRouter extends RouterDelegate
                   MainScreen.page(appStateManager.getSelectedTab),
                 if (profileManager.didSelectUser)
                   ProfileScreen.page(profileManager.getUser!),
-                if (appStateManager.isViewingLyric)
-                  LyricDetailScreen.page(
-                      Future.value(appStateManager.viewedLyric)),
+                /*if (appStateManager.isViewingLyric)
+                  ShowLyricScreen.page(
+                      Future.value(appStateManager.viewedLyric)),*/
               ], // pages[]
             );
           } else {
@@ -113,6 +111,10 @@ class AppRouter extends RouterDelegate
     if (route.settings.name == LyricsPages.showLyricPath) {
       appStateManager.isViewingLyric = false;
       appStateManager.viewedLyric = Lyric.empty;
+      appStateManager.goToTab(LyricsTab.search);
+    }
+    if (route.settings.name == LyricsPages.infoPath) {
+      appStateManager.goToTab(LyricsTab.search);
     }
     // Handle state when user closes WebView screen
     /*if (route.settings.name == LyricsPages.raywenderlich) {

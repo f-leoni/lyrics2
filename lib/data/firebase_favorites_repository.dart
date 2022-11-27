@@ -54,7 +54,7 @@ class FirebaseFavoritesRepository extends FavoritesRepository
       for (var doc in docs) {
         Lyric currLyric = Lyric.fromSnapshot(doc, owner!);
         lyricsList.add(currLyric);
-        logger.i("Found favorite: ${currLyric.song}");
+        //logger.v("Found favorite: ${currLyric.song}");
       }
     }).onError((error, stackTrace) {
       logger.e("Error in retrieving Favorites: $error");

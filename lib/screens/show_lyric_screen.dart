@@ -8,27 +8,27 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
 
-class LyricDetailScreen extends StatefulWidget {
+class ShowLyricScreen extends StatefulWidget {
   static MaterialPage page(Future<Lyric> lyric) {
     return MaterialPage(
       name: LyricsPages.showLyricPath,
       key: ValueKey(LyricsPages.showLyricPath),
-      child: LyricDetailScreen(lyric: lyric),
+      child: ShowLyricScreen(lyric: lyric),
     );
   }
 
   final Future<Lyric>? lyric;
 
-  const LyricDetailScreen({
+  const ShowLyricScreen({
     Key? key,
     required this.lyric,
   }) : super(key: key);
 
   @override
-  State<LyricDetailScreen> createState() => _LyricDetailScreenState();
+  State<ShowLyricScreen> createState() => _ShowLyricScreenState();
 }
 
-class _LyricDetailScreenState extends State<LyricDetailScreen> {
+class _ShowLyricScreenState extends State<ShowLyricScreen> {
   double _fontSize = 15.0;
   double _baseFontSize = 15.0;
   final double _minFontSize = 11.0;
@@ -40,6 +40,7 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d("Building ShowLyric Screen");
     return Center(
       child: createLyricPage(context, widget.lyric!),
       /*FutureBuilder<Lyric>(
@@ -87,6 +88,7 @@ class _LyricDetailScreenState extends State<LyricDetailScreen> {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   Lyric currLyric = snapshot.data as Lyric;
+                  logger.d("lyric is: ${currLyric.song}");
                   if (!bgImageCreated) {
                     try {
                       bgImage = getBackgroundImage(currLyric);

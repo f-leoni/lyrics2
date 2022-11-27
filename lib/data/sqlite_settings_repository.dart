@@ -29,7 +29,6 @@ class SQLiteSettingsRepository with ChangeNotifier {
     logger.d("SQLite - Deleting setting $setting");
     dbHelper.deleteSetting(setting);
     notifyListeners();
-
     return Future.value(null);
   }
 }

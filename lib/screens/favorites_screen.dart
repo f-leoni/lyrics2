@@ -6,7 +6,7 @@ import 'package:lyrics2/data/firebase_favorites_repository.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
-import 'package:lyrics2/screens/lyric_detail_screen.dart';
+import 'package:lyrics2/screens/show_lyric_screen.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -52,14 +52,13 @@ class FavoritesScreen extends StatelessWidget {
   }
 
   Widget buildScreen(BuildContext context, List<Lyric> favorites) {
-    logger.d("Building Favorites Screen");
     List<Widget> itemTiles = List<Widget>.empty(growable: true);
     for (Lyric lyric in favorites) {
       itemTiles.add(Dismissible(
         key: Key(lyric.lyricId.toString()),
         direction: DismissDirection.endToStart,
         background: Container(
-            color: Colors.red,
+            color: Colors.red.shade200,
             alignment: Alignment.centerRight,
             child: const Icon(Icons.delete_forever,
                 color: Colors.white, size: 25.0)),
@@ -85,7 +84,7 @@ class FavoritesScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LyricDetailScreen(
+                  builder: (context) => ShowLyricScreen(
                     lyric: Future.value(lyric),
                   ),
                 ),
@@ -136,7 +135,8 @@ class FavoritesScreen extends StatelessWidget {
               ),
               color: Colors.green,
               onPressed: () {
-                Provider.of<AppStateManager>(context, listen: false).goToTab(1);
+                Provider.of<AppStateManager>(context, listen: false)
+                    .goToTab(LyricsTab.search);
               },
               child: Text(AppLocalizations.of(context)!.lblSearch),
             ),

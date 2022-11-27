@@ -11,7 +11,7 @@ import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/env.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
-import 'package:lyrics2/screens/lyric_detail_screen.dart';
+import 'package:lyrics2/screens/show_lyric_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -511,7 +511,7 @@ class _SearchScreenState extends State<SearchScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LyricDetailScreen(
+                builder: (context) => ShowLyricScreen(
                   lyric: manager.getLyric(lsr,
                       users.useGenius ? GeniusProxy() : ChartLyricsProxy()),
                 ),

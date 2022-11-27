@@ -193,10 +193,10 @@ class AppStateManager extends ChangeNotifier {
     return onBoardingSavedStatus.value == "true";
   }
 
-  void completeOnboarding(BuildContext context) {
+  Future<void> completeOnboarding(BuildContext context) async {
     final sqlRepository =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
-    sqlRepository.insertSetting(
+    await sqlRepository.insertSetting(
         Setting(setting: Setting.onboardingComplete, value: "true"));
     notifyListeners();
   }
