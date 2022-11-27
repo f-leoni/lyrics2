@@ -69,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
             },
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: const Icon(Icons.favorite),
+                icon: const Icon(Icons.star),
                 label: AppLocalizations.of(context)!.lblFavs,
               ),
               BottomNavigationBarItem(

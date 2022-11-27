@@ -22,6 +22,7 @@ class SearchType {
 }
 
 class AppStateManager extends ChangeNotifier {
+  //Private
   bool _initialized = false;
   bool _loggedIn = false;
   int _selectedTab = LyricsTab.search;
@@ -35,6 +36,9 @@ class AppStateManager extends ChangeNotifier {
   int _searchType = SearchType.text;
   String _version = "";
   String _buildNr = "";
+  final bool _showSnackBar = false;
+
+  //Public
   String favoritesFilter = "";
   String searchAudioAuthor = "";
   String searchAudioSong = "";
@@ -143,10 +147,12 @@ class AppStateManager extends ChangeNotifier {
     } else if (currSearchType == SearchType.audio) {
       msg = switchAudio2Text(context);
     }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg),
-      duration: const Duration(milliseconds: 500),
-    ));
+    if (_showSnackBar) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(msg),
+        duration: const Duration(milliseconds: 500),
+      ));
+    }
     notifyListeners();
   }
 
@@ -206,10 +212,10 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void goToLyrics() {
+  /*void goToLyrics() {
     _selectedTab = LyricsTab.search;
     notifyListeners();
-  }
+  }*/
 
   void logout(BuildContext context) {
     logger.d("Executing user logout");

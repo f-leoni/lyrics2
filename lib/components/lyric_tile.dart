@@ -99,7 +99,7 @@ class LyricTile extends StatelessWidget {
     if (isFavoritePage) {
       return const Center(
         child: Icon(
-          Icons.favorite,
+          Icons.star,
           color: Colors.red,
         ),
       );
@@ -115,7 +115,7 @@ class LyricTile extends StatelessWidget {
             if (snapshot.hasData && snapshot.data as bool) {
               currIcon = const Center(
                 child: Icon(
-                  Icons.favorite,
+                  Icons.star,
                   color: Colors.red,
                 ),
               );

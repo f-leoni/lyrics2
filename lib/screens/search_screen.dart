@@ -13,7 +13,7 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:lyrics2/screens/show_lyric_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -141,7 +141,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 },
                 icon: Icon(
                   Icons.text_snippet_outlined,
-                  color: currLyricsTheme.indicatorColor,
+                  color: currLyricsTheme.colorScheme.secondary,
                 )),
           ),
           Expanded(
@@ -160,7 +160,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: MaterialButton(
                             minWidth: 150,
                             height: 50,
-                            color: currLyricsTheme.indicatorColor,
+                            color: currLyricsTheme.colorScheme.secondary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
@@ -192,7 +192,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                               //FontAwesomeIcons.music,
                                               size: size,
                                               color: currLyricsTheme
-                                                  .backgroundColor,
+                                                  .colorScheme.secondary,
                                             ));
                                       }),
                                   actions: [
@@ -285,7 +285,7 @@ class _SearchScreenState extends State<SearchScreen> {
             },
             icon: Icon(
               Icons.radio_outlined,
-              color: users.themeData.indicatorColor,
+              color: users.themeData.colorScheme.secondary,
             )),
         Flexible(
           flex: 2,
@@ -367,7 +367,7 @@ class _SearchScreenState extends State<SearchScreen> {
             },
             icon: Icon(
               Icons.radio_outlined,
-              color: users.themeData.indicatorColor,
+              color: users.themeData.colorScheme.secondary,
             )),
         Expanded(
           flex: 1,
@@ -409,7 +409,7 @@ class _SearchScreenState extends State<SearchScreen> {
       return MaterialButton(
         minWidth: 150,
         height: 50,
-        color: currLyricsTheme.indicatorColor,
+        color: currLyricsTheme.colorScheme.secondary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),

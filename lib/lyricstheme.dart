@@ -34,7 +34,7 @@ class LyricsTheme {
       primaryColor: Colors.white,
       textTheme: lightTextTheme,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen)
-          .copyWith(secondary: Colors.green),
+          .copyWith(secondary: Colors.green, brightness: Brightness.light),
     );
   }
 
@@ -44,7 +44,7 @@ class LyricsTheme {
       primaryColor: Colors.grey[850],
       textTheme: darkTextTheme,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
-          .copyWith(secondary: Colors.greenAccent),
+          .copyWith(secondary: Colors.greenAccent, brightness: Brightness.dark),
     );
   }
 }

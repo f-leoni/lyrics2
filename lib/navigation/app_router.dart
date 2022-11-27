@@ -29,6 +29,7 @@ class AppRouter extends RouterDelegate
 
   @override
   Widget build(BuildContext context) {
+    logger.d("Building AppRouter");
     _context = context;
     final repository = Provider.of<SQLiteSettingsRepository>(context);
     final profile = Provider.of<FirebaseUserRepository>(context);
@@ -49,11 +50,8 @@ class AppRouter extends RouterDelegate
               onPopPage: _handlePopPage,
               pages: [
                 if (!appStateManager.isInitialized) SplashScreen.page(),
-                if (appStateManager.isInitialized &&
-                    //!appStateManager.isLoggedIn)
-                    !isLoggedIn)
+                if (appStateManager.isInitialized && !isLoggedIn)
                   LoginScreen.page(),
-                //if (appStateManager.isLoggedIn && !isOnboardingComplete)
                 if (isLoggedIn && !isOnboardingComplete)
                   OnboardingScreen.page(),
                 if (isOnboardingComplete)

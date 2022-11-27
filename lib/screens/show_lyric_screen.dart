@@ -231,10 +231,10 @@ class _ShowLyricScreenState extends State<ShowLyricScreen> {
                       .primaryColor,
             );
           } else if (isFavorite == true) {
-            tempIcon = const Icon(Icons.favorite, size: 30, color: Colors.red);
+            tempIcon = const Icon(Icons.star, size: 30, color: Colors.red);
           } else {
             tempIcon =
-                const Icon(Icons.favorite_outline, size: 30, color: Colors.red);
+                const Icon(Icons.star_outline, size: 30, color: Colors.red);
           }
           Widget currIcon = tempIcon;
           if (snapshot.connectionState == ConnectionState.done) {
@@ -244,8 +244,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen> {
               isFavorite = true;
             }
             if (isFavorite!) {
-              currIcon =
-                  const Icon(Icons.favorite, size: 30, color: Colors.red);
+              currIcon = const Icon(Icons.star, size: 30, color: Colors.red);
             }
           }
           return IconButton(
