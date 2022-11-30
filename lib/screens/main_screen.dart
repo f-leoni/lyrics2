@@ -36,7 +36,9 @@ class _MainScreenState extends State<MainScreen> {
       const InfoScreen(),
     ];
     return Consumer<AppStateManager>(
-      builder: (context, appStateManager, child) {
+      builder: (context, manager, child) {
+        final users =
+            Provider.of<FirebaseUserRepository>(context, listen: false);
         String pageTitle = "";
 
         if (widget.currentTab == 0) {
@@ -56,7 +58,8 @@ class _MainScreenState extends State<MainScreen> {
           // Select which tab is to be shown
           body: pages[widget.currentTab],
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Theme.of(context).indicatorColor,
+            selectedItemColor: users.themeData.colorScheme.secondary,
+            unselectedItemColor: users.themeData.colorScheme.background,
             currentIndex: widget.currentTab,
             onTap: (index) {
               //only redraw if we are not already in that tab
@@ -69,7 +72,8 @@ class _MainScreenState extends State<MainScreen> {
             },
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: const Icon(Icons.star),
+                icon: Icon(Provider.of<AppStateManager>(context, listen: false)
+                    .icnFavorite),
                 label: AppLocalizations.of(context)!.lblFavs,
               ),
               BottomNavigationBarItem(

@@ -13,6 +13,7 @@ class Lyric extends LyricData {
   int? rank;
   String? correctUrl;
   bool isFavorite = false;
+  String provider;
 
   String? owner;
   DocumentReference? reference;
@@ -25,13 +26,15 @@ class Lyric extends LyricData {
     required this.lyric,
     required this.imageUrl,
     required this.checksum,
+    required this.provider,
     //required this.isFavorite,
     this.reference,
     this.owner,
   });
 
 // Create from json object
-  factory Lyric.fromJson(Map<String, dynamic> json, String owner) {
+  factory Lyric.fromJson(
+      Map<String, dynamic> json, String owner, String provider) {
     String lyric = "";
     //String owner = "fraleoni@gmail.com";
     try {
@@ -49,6 +52,7 @@ class Lyric extends LyricData {
       imageUrl: json['LyricCovertArtUrl'] as String,
       checksum: json['LyricChecksum'] as String,
       owner: owner,
+      provider: provider,
     );
   }
 
@@ -62,11 +66,12 @@ class Lyric extends LyricData {
         'LyricChecksum': checksum,
         'lyric': lyric,
         'owner': owner,
+        'provider': provider,
       };
 
   factory Lyric.fromSnapshot(DocumentSnapshot snapshot, String owner) {
-    final lyric =
-        Lyric.fromJson(snapshot.data() as Map<String, dynamic>, owner);
+    final map = snapshot.data() as Map<String, dynamic>;
+    final lyric = Lyric.fromJson(map, owner, map["provider"] ?? "N/A");
     lyric.reference = snapshot.reference;
     return lyric;
   }
@@ -78,14 +83,16 @@ class Lyric extends LyricData {
       String? pTitle,
       String? pImageUrl,
       String? pLyric,
-      String? pChecksum}) {
+      String? pChecksum,
+      String? pProvider}) {
     return Lyric(
         lyricId: pId ?? lyricId,
         artist: pAuthor ?? artist,
         song: pTitle ?? song,
         imageUrl: pImageUrl ?? imageUrl,
         lyric: pLyric ?? lyric,
-        checksum: pChecksum ?? checksum);
+        checksum: pChecksum ?? checksum,
+        provider: pProvider ?? "");
   }
 
   // LyricData implementation
@@ -116,11 +123,16 @@ class Lyric extends LyricData {
   }
 
   static get empty => Lyric(
-        lyricId: -1,
-        artist: "error",
-        song: "error",
-        lyric: "error",
-        checksum: "error",
-        imageUrl: "",
-      );
+      lyricId: -1,
+      artist: "******* *******",
+      song: "******* *******",
+      lyric: "....",
+      checksum: "error",
+      imageUrl: "",
+      provider: "");
+
+  @override
+  String getProxy() {
+    return provider;
+  }
 }

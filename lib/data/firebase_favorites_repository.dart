@@ -24,17 +24,18 @@ class FirebaseFavoritesRepository extends FavoritesRepository
 
   @override
   Future<void> deleteLyricFromFavs(Lyric lyric) async {
-    logger.i("Deleting [${lyric.lyricId}]...");
+    logger.d("Deleting form Firebase ${lyric.song}[${lyric.lyricId}]...");
     await collection
         .where('LyricId', isEqualTo: lyric.lyricId)
         .get()
         .then((value) {
-      logger.i("Found [${lyric.lyricId}]...");
+      logger.d("  Found [${lyric.lyricId}]...");
       for (var element in value.docs) {
         collection.doc(element.id).delete().then((value) {
-          logger.i("Success!");
+          logger.d("  Delete completed!");
         }).catchError((error) {
-          logger.i("Couldn't delete Lyric [${lyric.song}]. Error: $error");
+          logger.i(
+              "Couldn't delete Lyric ${lyric.song}[${lyric.lyricId}]. Error: $error");
         });
       }
     });

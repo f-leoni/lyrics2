@@ -58,6 +58,9 @@ class AppRouter extends RouterDelegate
                   MainScreen.page(appStateManager.getSelectedTab),
                 if (profileManager.didSelectUser)
                   ProfileScreen.page(profileManager.getUser!),
+                if (appStateManager.isViewingLyric)
+                  ShowLyricScreen.page(
+                      Future.value(appStateManager.viewedLyric)),
                 /*if (appStateManager.isViewingLyric)
                   ShowLyricScreen.page(
                       Future.value(appStateManager.viewedLyric)),*/
@@ -122,7 +125,8 @@ class AppRouter extends RouterDelegate
   }
 
   @override
-  Future<void> setNewRoutePath(configuration) async => {};
+  Future<void> setNewRoutePath(configuration) async =>
+      {logger.d("setNewRoutePath called!")};
 
   @override
   void dispose() {

@@ -28,7 +28,8 @@ class ShowLyricScreen extends StatefulWidget {
   State<ShowLyricScreen> createState() => _ShowLyricScreenState();
 }
 
-class _ShowLyricScreenState extends State<ShowLyricScreen> {
+class _ShowLyricScreenState extends State<ShowLyricScreen>
+    with TickerProviderStateMixin {
   double _fontSize = 15.0;
   double _baseFontSize = 15.0;
   final double _minFontSize = 11.0;
@@ -37,25 +38,29 @@ class _ShowLyricScreenState extends State<ShowLyricScreen> {
   ImageProvider<Object> bgImage =
       const AssetImage("assets/lyrics_assets/logo.png");
   bool bgImageCreated = false;
+  late AnimationController _animationController;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+    super.initState();
+  }
+
+  void _runAnimation() async {
+    for (int i = 0; i < 1; i++) {
+      await _animationController.forward();
+      await _animationController.reverse();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     logger.d("Building ShowLyric Screen");
+    _runAnimation();
     return Center(
       child: createLyricPage(context, widget.lyric!),
-      /*FutureBuilder<Lyric>(
-          future: widget.lyric,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                return createLyricPage(context, snapshot.data!);
-              } else {
-                return createLyricPage(context, Lyric.empty);
-              }
-            } else {
-              return createSpinner(context);
-            }
-          }),*/
     );
   }
 
@@ -87,121 +92,134 @@ class _ShowLyricScreenState extends State<ShowLyricScreen> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
-                  Lyric currLyric = snapshot.data as Lyric;
-                  logger.d("lyric is: ${currLyric.song}");
-                  if (!bgImageCreated) {
-                    try {
-                      bgImage = getBackgroundImage(currLyric);
-                    } catch (e) {
-                      logger.e("Error Creating background image ${e.hashCode}");
-                    }
-                    bgImageCreated = true;
-                  }
-                  manager.viewedLyric = currLyric;
-                  manager.isViewingLyric = true;
-                  if (currLyric.imageUrl == "") {
-                    logger.w("lyric.imageUrl is void!");
-                  } else {
-                    try {
-                      decoration = BoxDecoration(
-                        color: Colors.black87,
-                        image: DecorationImage(
-                          image: bgImage,
-                          colorFilter: ColorFilter.mode(
-                              Colors.black.withAlpha(alpha), blend),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
-                      );
-                    } on Exception catch (e) {
-                      logger.w(
-                          "Image at ${currLyric.imageUrl} cannot be retrieved! ${e.toString()}");
-                    }
-                  }
-                  return Container(
-                    height: MediaQuery.of(context).size.height,
-                    padding: const EdgeInsets.all(16),
-                    decoration: decoration,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.arrow_back),
-                              alignment: Alignment.centerLeft,
-                              iconSize: 22,
-                              color: Colors.white,
-                              onPressed: () {
-                                final manager = Provider.of<AppStateManager>(
-                                    context,
-                                    listen: false);
-                                manager.isViewingLyric = false;
-                                manager.viewedLyric = Lyric.empty;
-                                Navigator.pop(context);
-                              },
-                            ),
-                            buildArtist(currLyric),
-                            buildFavoriteButton(favorites, currLyric),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 60,
-                          child: Text(
-                            currLyric.song,
-                            softWrap: true,
-                            overflow: TextOverflow.fade,
-                            style: LyricsTheme.darkTextTheme.headline2,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: GestureDetector(
-                            onScaleStart: (details) {
-                              _baseFontSize = _fontSize;
-                            },
-                            onScaleUpdate: (details) {
-                              setState(() {
-                                _fontSize = _baseFontSize * details.scale;
-                                if (_fontSize > _maxFontSize) {
-                                  _fontSize = _maxFontSize;
-                                }
-                                if (_fontSize < _minFontSize) {
-                                  _fontSize = _minFontSize;
-                                }
-                              });
-                            },
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical, //.horizontal
-                              child: Text(
-                                currLyric.lyric.replaceAll("\\r\\\\n", "\r\n"),
-                                //style: LyricsTheme.darkTextTheme.bodyText1,
-                                style: GoogleFonts.roboto(
-                                  fontSize: _fontSize,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                  Lyric currLiric = snapshot.data as Lyric;
+                  return buildPage(currLiric, manager, decoration, alpha, blend,
+                      context, favorites);
                 } else {
                   //container hasn't data
+                  /*return buildPage(Lyric.empty, manager, decoration, alpha,
+                      blend, context, favorites);*/
                   return const Center(
                       child: CircularProgressIndicator(color: Colors.blue));
                 }
               } else {
                 // Snapshot  State is not done
+                /*return buildPage(Lyric.empty, manager, decoration, alpha, blend,
+                    context, favorites);*/
                 return const Center(
                     child: CircularProgressIndicator(
                   color: Colors.red,
                 ));
               }
             }),
+      ),
+    );
+  }
+
+  Container buildPage(
+      Lyric currLyric,
+      AppStateManager manager,
+      BoxDecoration decoration,
+      int alpha,
+      BlendMode blend,
+      BuildContext context,
+      FirebaseFavoritesRepository favorites) {
+    logger.d("lyric is: ${currLyric.song}");
+    if (!bgImageCreated) {
+      try {
+        bgImage = getBackgroundImage(currLyric);
+      } catch (e) {
+        logger.e("Error Creating background image ${e.hashCode}");
+      }
+      bgImageCreated = true;
+    }
+    manager.viewedLyric = currLyric;
+    manager.isViewingLyric = true;
+    if (currLyric.imageUrl == "") {
+      logger.w("lyric.imageUrl is void!");
+    } else {
+      try {
+        decoration = BoxDecoration(
+          color: Colors.black87,
+          image: DecorationImage(
+            image: bgImage,
+            colorFilter: ColorFilter.mode(Colors.black.withAlpha(alpha), blend),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+        );
+      } on Exception catch (e) {
+        logger.w(
+            "Image at ${currLyric.imageUrl} cannot be retrieved! ${e.toString()}");
+      }
+    }
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      padding: const EdgeInsets.all(16),
+      decoration: decoration,
+      child: Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back),
+                alignment: Alignment.centerLeft,
+                iconSize: 22,
+                color: Colors.white,
+                onPressed: () {
+                  final manager =
+                      Provider.of<AppStateManager>(context, listen: false);
+                  manager.isViewingLyric = false;
+                  manager.viewedLyric = Lyric.empty;
+                  Navigator.pop(context);
+                },
+              ),
+              buildArtist(currLyric),
+              buildFavoriteButton(favorites, currLyric),
+            ],
+          ),
+          SizedBox(
+            height: 60,
+            child: Text(
+              currLyric.song,
+              softWrap: true,
+              overflow: TextOverflow.fade,
+              style: LyricsTheme.darkTextTheme.headline2,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: GestureDetector(
+              onScaleStart: (details) {
+                _baseFontSize = _fontSize;
+              },
+              onScaleUpdate: (details) {
+                setState(() {
+                  _fontSize = _baseFontSize * details.scale;
+                  if (_fontSize > _maxFontSize) {
+                    _fontSize = _maxFontSize;
+                  }
+                  if (_fontSize < _minFontSize) {
+                    _fontSize = _minFontSize;
+                  }
+                });
+              },
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical, //.horizontal
+                child: Text(
+                  currLyric.lyric.replaceAll("\\r\\\\n", "\r\n"),
+                  //style: LyricsTheme.darkTextTheme.bodyText1,
+                  style: GoogleFonts.roboto(
+                    fontSize: _fontSize,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white70,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -231,10 +249,17 @@ class _ShowLyricScreenState extends State<ShowLyricScreen> {
                       .primaryColor,
             );
           } else if (isFavorite == true) {
-            tempIcon = const Icon(Icons.star, size: 30, color: Colors.red);
+            tempIcon = Icon(
+                Provider.of<AppStateManager>(context, listen: false)
+                    .icnFavorite,
+                size: 40,
+                color: Colors.red);
           } else {
-            tempIcon =
-                const Icon(Icons.star_outline, size: 30, color: Colors.red);
+            tempIcon = Icon(
+                Provider.of<AppStateManager>(context, listen: false)
+                    .icnNoFavorite,
+                size: 40,
+                color: Colors.red);
           }
           Widget currIcon = tempIcon;
           if (snapshot.connectionState == ConnectionState.done) {
@@ -244,17 +269,25 @@ class _ShowLyricScreenState extends State<ShowLyricScreen> {
               isFavorite = true;
             }
             if (isFavorite!) {
-              currIcon = const Icon(Icons.star, size: 30, color: Colors.red);
+              currIcon = Icon(
+                  Provider.of<AppStateManager>(context, listen: false)
+                      .icnFavorite,
+                  size: 40,
+                  color: Colors.red);
             }
           }
           return IconButton(
-            icon: currIcon,
+            icon: RotationTransition(
+                turns: Tween(begin: 0.0, end: -.1)
+                    .chain(CurveTween(curve: Curves.elasticIn))
+                    .animate(_animationController),
+                child: currIcon),
             alignment: Alignment.centerRight,
             iconSize: 22,
             color: Colors.white,
             onPressed: () {
               logger.i(
-                  "Changing favorite state of ${lyric.song} to ${(!isFavorite!).toString()}");
+                  "Changing favorite state of '${lyric.song}' to '${(!isFavorite!).toString()}'");
               if (isFavorite!) {
                 favorites.deleteLyricFromFavs(lyric);
                 setState(() {
@@ -292,12 +325,18 @@ class _ShowLyricScreenState extends State<ShowLyricScreen> {
         height: 24,
         //width: 261,
         child: Text(
-          currLyric.artist,
+          "${currLyric.artist}",
           softWrap: false,
           overflow: TextOverflow.ellipsis,
           style: LyricsTheme.darkTextTheme.bodyLarge,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

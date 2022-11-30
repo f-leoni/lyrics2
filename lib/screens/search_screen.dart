@@ -5,6 +5,7 @@ import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/api/chartlyrics_proxy.dart';
 import 'package:lyrics2/api/genius_proxy.dart';
+import 'package:lyrics2/api/proxies.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
@@ -32,7 +33,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   ACRCloudResponseMusicItem? music;
-  final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
+  //final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
   final _searchControllerText = TextEditingController();
   final _searchControllerAuthor = TextEditingController();
   final _searchControllerSong = TextEditingController();
@@ -359,7 +360,6 @@ class _SearchScreenState extends State<SearchScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         IconButton(
-            //color: Colors.red,
             iconSize: 50,
             onPressed: () {
               manager.switchSearch(context, _searchControllerText.text,
@@ -507,13 +507,16 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
           onTap: () {
-            logger.i("Clicked on Search result. Song: ${lsr.song}");
+            logger.d("Clicked on Search result tile. Song: ${lsr.song}");
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ShowLyricScreen(
-                  lyric: manager.getLyric(lsr,
-                      users.useGenius ? GeniusProxy() : ChartLyricsProxy()),
+                  lyric: manager.getLyric(
+                      lsr,
+                      lsr.provider == Proxies.genius
+                          ? GeniusProxy()
+                          : ChartLyricsProxy()),
                 ),
               ),
             );

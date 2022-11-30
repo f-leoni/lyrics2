@@ -83,7 +83,7 @@ class DatabaseHelper {
   List<Lyric> parseLyrics(List<Map<String, dynamic>> lyricsList) {
     final lyrics = <Lyric>[];
     for (var lyricsMap in lyricsList) {
-      final lyric = Lyric.fromJson(lyricsMap, "");
+      final lyric = Lyric.fromJson(lyricsMap, "", lyricsMap["provider"]);
       lyrics.add(lyric);
     }
     return lyrics;
@@ -100,7 +100,7 @@ class DatabaseHelper {
     final db = await instance.streamDatabase;
     yield* db
         .createQuery(lyricsTable)
-        .mapToList((row) => Lyric.fromJson(row, ""));
+        .mapToList((row) => Lyric.fromJson(row, "", row["provider"]));
   }
 
   Future<Lyric> findLyricById(int id) async {

@@ -37,6 +37,8 @@ class AppStateManager extends ChangeNotifier {
   String _version = "";
   String _buildNr = "";
   final bool _showSnackBar = false;
+  final icnFavorite = Icons.star;
+  final icnNoFavorite = Icons.star_border;
 
   //Public
   String favoritesFilter = "";
@@ -186,7 +188,7 @@ class AppStateManager extends ChangeNotifier {
       logger.e("An exception occurred: ${e.message} (${e.code})...");
       _status = e.code;
       _errorMessage = e.message;
-      return _lyric;
+      return Lyric.empty;
     }
   }
 

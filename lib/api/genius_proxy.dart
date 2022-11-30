@@ -6,6 +6,7 @@ import 'package:lyrics2/models/lyric.dart';
 import 'package:lyrics2/models/lyric_exception.dart';
 import 'package:lyrics2/models/lyric_search_result.dart';
 import 'package:lyrics2/components/logger.dart';
+import 'package:lyrics2/api/proxies.dart';
 import 'package:genius_api_unofficial/genius_api_unofficial.dart';
 import 'package:lyrics2/env.dart';
 import 'package:http/http.dart' as http;
@@ -35,6 +36,7 @@ class GeniusProxy extends Proxy {
       lyricId: resValue["id"],
       song: resValue["title"],
       lyricChecksum: resValue["url"],
+      provider: Proxies.genius,
     );
     return tempLyric;
   }
@@ -48,6 +50,7 @@ class GeniusProxy extends Proxy {
       checksum: result["url"],
       imageUrl: result["header_image_url"],
       owner: "",
+      provider: Proxies.genius,
       lyric: await _scrape(result["url"]),
     );
     return Future.value(tempLyric);

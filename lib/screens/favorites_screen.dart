@@ -80,7 +80,7 @@ class FavoritesScreen extends StatelessWidget {
               isFavoritePage: true,
             ),
             onTap: () {
-              logger.i("Clicked on Search result. Song: ${lyric.song}");
+              logger.d("Clicked on Search result Screen. Song: ${lyric.song}");
               Navigator.push(
                 context,
                 MaterialPageRoute(

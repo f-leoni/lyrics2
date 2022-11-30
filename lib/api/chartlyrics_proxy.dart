@@ -2,6 +2,7 @@ library lyrics_library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lyrics2/api/proxies.dart';
 import 'package:lyrics2/api/proxy.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:xml2json/xml2json.dart';
@@ -71,7 +72,8 @@ class ChartLyricsProxy extends Proxy {
       throw LyricException(value.statusCode, value.body);
     }
     Map<String, dynamic> jsonResults = _convertToJson(value.body);
-    Lyric out = Lyric.fromJson(jsonResults[_lyricGetResult], "");
+    Lyric out =
+        Lyric.fromJson(jsonResults[_lyricGetResult], "", Proxies.chartLyrics);
     return out;
   }
 
@@ -91,7 +93,7 @@ class ChartLyricsProxy extends Proxy {
       if (item.keys.contains(_lyricTitle) && item[_lyricTitle] != null) {
         logger.v(
             "simpleSearchText found Lyric - title: ${item[_lyricTitle]} - Author: ${item[_lyricAuthor]} (Id: ${item[_lyricID]})");
-        result.add(LyricSearchResult.fromJson(item));
+        result.add(LyricSearchResult.fromJson(item, Proxies.chartLyrics));
       }
     }
     return Future.value(result);
@@ -113,7 +115,7 @@ class ChartLyricsProxy extends Proxy {
       if (item.keys.contains(_lyricTitle) && item[_lyricTitle] != null) {
         logger.v(
             "simpleSearch found Lyric - title: ${item[_lyricTitle]} - Author: ${item[_lyricAuthor]} (Id: ${item[_lyricID]})");
-        result.add(LyricSearchResult.fromJson(item));
+        result.add(LyricSearchResult.fromJson(item, Proxies.chartLyrics));
       }
     }
     return Future.value(result);

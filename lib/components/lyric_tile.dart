@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lyrics2/api/proxies.dart';
+import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/firebase_favorites_repository.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
@@ -56,14 +58,6 @@ class LyricTile extends StatelessWidget {
                             const SizedBox(height: 4.0),
                             buildAuthor(context),
                             const SizedBox(height: 4.0),
-                            /*Center(
-                              child: Container(
-                                color: Colors.amber,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                height: 3,
-                              ),
-                            )*/
-                            //buildImportance(),
                           ],
                         ),
                       ),
@@ -80,16 +74,41 @@ class LyricTile extends StatelessWidget {
   }
 
   Widget buildAuthor(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.7185,
-      child: Text(
-        lyric.getArtist(),
-        softWrap: true,
-        overflow: TextOverflow.ellipsis,
-        /*style: GoogleFonts.roboto(
-          //decoration: textDecoration,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold),*/
+    AssetImage providerImg =
+        const AssetImage('assets/lyrics_assets/chartlyrics_logo.png');
+    double height = 30;
+    if (lyric.getProxy() == Proxies.genius) {
+      providerImg = const AssetImage('assets/lyrics_assets/genius_logo.png');
+      double height = 40;
+    }
+    logger.i("*** ${lyric.getProxy()}");
+    return Expanded(
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.7185,
+              child: Text(
+                lyric.getArtist(),
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                /*style: GoogleFonts.roboto(
+                  //decoration: textDecoration,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),*/
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Image(
+              image: providerImg,
+              height: height,
+              alignment: Alignment.center,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -97,9 +116,9 @@ class LyricTile extends StatelessWidget {
   Widget buildFavoriteIcon(BuildContext context,
       FirebaseFavoritesRepository repository, LyricData pLyric) {
     if (isFavoritePage) {
-      return const Center(
+      return Center(
         child: Icon(
-          Icons.star,
+          Provider.of<AppStateManager>(context, listen: false).icnFavorite,
           color: Colors.red,
         ),
       );
@@ -113,14 +132,15 @@ class LyricTile extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData && snapshot.data as bool) {
-              currIcon = const Center(
+              currIcon = Center(
                 child: Icon(
-                  Icons.star,
+                  Provider.of<AppStateManager>(context, listen: false)
+                      .icnFavorite,
                   color: Colors.red,
                 ),
               );
             } else {
-              currIcon = const SizedBox(width: 1);
+              currIcon = const SizedBox(width: 25);
             }
           } else {
             currIcon = SizedBox(
