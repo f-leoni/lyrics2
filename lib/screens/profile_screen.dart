@@ -125,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           imageRadius: 60.0,
         ),
         const SizedBox(height: 8.0),
-        Text(widget.user.email!, style: users.themeData.textTheme.headline2),
+        Text(widget.user.email!, style: users.themeData.textTheme.headline1),
         Text(
             "Registration date: ${formatter.format(widget.user.metadata.creationTime!)}"), //role
       ],

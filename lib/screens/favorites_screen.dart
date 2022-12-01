@@ -52,6 +52,8 @@ class FavoritesScreen extends StatelessWidget {
   }
 
   Widget buildScreen(BuildContext context, List<Lyric> favorites) {
+    var theme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
     List<Widget> itemTiles = List<Widget>.empty(growable: true);
     for (Lyric lyric in favorites) {
       itemTiles.add(Dismissible(
@@ -71,7 +73,8 @@ class FavoritesScreen extends StatelessWidget {
               .deleteLyricFromFavs(lyric);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                  '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}')));
+                  '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}',
+                  style: theme.bodyText2)));
         },
         child: InkWell(
           child: LyricTile(
@@ -125,7 +128,7 @@ class FavoritesScreen extends StatelessWidget {
               AppLocalizations.of(context)!.nothingHere,
               style: Provider.of<FirebaseUserRepository>(context, listen: false)
                   .textTheme
-                  .headline2,
+                  .headline1,
             ),
             const SizedBox(height: 16.0),
             Text(

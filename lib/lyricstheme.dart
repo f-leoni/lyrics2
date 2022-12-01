@@ -6,26 +6,34 @@ class LyricsTheme {
     bodyText1: GoogleFonts.roboto(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black),
     headline1: GoogleFonts.roboto(
-        fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),
-    headline2: GoogleFonts.roboto(
-        fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.black),
-    headline3: GoogleFonts.roboto(
-        fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
-    button: GoogleFonts.roboto(
-        fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
-  );
-
-  static TextTheme darkTextTheme = TextTheme(
-    bodyText1: GoogleFonts.roboto(
-        fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white),
-    headline1: GoogleFonts.roboto(
         fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.black87),
     headline2: GoogleFonts.roboto(
         fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.white),
     headline3: GoogleFonts.roboto(
-        fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white),
+        fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black87),
     button: GoogleFonts.roboto(
         fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
+    bodyText2: GoogleFonts.roboto(
+        fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black87),
+    headline4: GoogleFonts.roboto(
+        fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black87),
+  );
+
+  static TextTheme darkTextTheme = TextTheme(
+    bodyText1: GoogleFonts.roboto(
+        fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
+    headline1: GoogleFonts.roboto(
+        fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white70),
+    headline2: GoogleFonts.roboto(
+        fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.white70),
+    headline3: GoogleFonts.roboto(
+        fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white70),
+    button: GoogleFonts.roboto(
+        fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
+    bodyText2: GoogleFonts.roboto(
+        fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
+    headline4: GoogleFonts.roboto(
+        fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white70),
   );
 
   static ThemeData light() {
@@ -36,8 +44,9 @@ class LyricsTheme {
       highlightColor: Colors.white70,
       backgroundColor: Colors.green.shade50,
       indicatorColor: Colors.green,
+      primaryColorDark: Colors.black87,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen)
-          .copyWith(secondary: Colors.green, brightness: Brightness.light),
+          .copyWith(secondary: Colors.lightGreen, brightness: Brightness.light),
     );
   }
 
@@ -47,8 +56,9 @@ class LyricsTheme {
       primaryColor: Colors.grey.shade700,
       textTheme: darkTextTheme,
       highlightColor: Colors.white70,
-      backgroundColor: Colors.grey.shade700,
+      backgroundColor: Colors.grey.shade800,
       indicatorColor: Colors.green.shade500,
+      primaryColorDark: Colors.white70,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
           .copyWith(secondary: Colors.greenAccent, brightness: Brightness.dark),
     );

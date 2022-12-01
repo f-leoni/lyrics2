@@ -34,14 +34,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         title: Text(AppLocalizations.of(context)!.gettingStarted,
             style: Provider.of<FirebaseUserRepository>(context, listen: false)
                 .textTheme
-                .headline2),
+                .headline1),
         leading: GestureDetector(
           child: Icon(
             Icons.chevron_left,
             size: 35,
             color: Provider.of<FirebaseUserRepository>(context, listen: false)
                 .themeData
-                .highlightColor,
+                .primaryColorDark,
           ),
           onTap: () {
             Navigator.pop(context, true);

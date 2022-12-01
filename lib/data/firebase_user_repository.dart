@@ -41,7 +41,8 @@ class FirebaseUserRepository with ChangeNotifier {
   var _useGenius = false;
 
   ImageProvider<Object> get userImage {
-    if ((auth.currentUser != null) & (auth.currentUser!.photoURL == null)) {
+    if (auth.currentUser == null) return const AssetImage('assets/icon.png');
+    if (auth.currentUser!.photoURL == null) {
       return const AssetImage('assets/icon.png');
     } else {
       return NetworkImage(auth.currentUser!.photoURL!);

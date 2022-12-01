@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lyrics2/api/proxies.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/firebase_favorites_repository.dart';
@@ -12,7 +11,6 @@ class LyricTile extends StatelessWidget {
   final LyricData lyric;
   final bool isFavoritePage;
   final double iconSize = 40;
-
   const LyricTile({Key? key, required this.lyric, required this.isFavoritePage})
       : super(key: key);
 
@@ -21,12 +19,11 @@ class LyricTile extends StatelessWidget {
     logger.v("building tile");
     FirebaseFavoritesRepository repository =
         Provider.of<FirebaseFavoritesRepository>(context);
+    var users = Provider.of<FirebaseUserRepository>(context);
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
-        ThemeData theme =
-            Provider.of<FirebaseUserRepository>(context, listen: false)
-                .themeData;
+        ThemeData theme = users.themeData;
         return Padding(
           padding: const EdgeInsets.all(4.0),
           child: Container(
@@ -40,8 +37,6 @@ class LyricTile extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: SizedBox(
                 height: 90.0,
-                //width: MediaQuery.of(context).size.width * 0.94,
-                //color: Colors.yellow,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -53,7 +48,7 @@ class LyricTile extends StatelessWidget {
                         children: [
                           Expanded(
                             flex: 1,
-                            child: buildTitle(lyric),
+                            child: buildTitle(context, lyric),
                           ),
                           Expanded(flex: 1, child: buildAuthor(context)),
                         ],
@@ -81,14 +76,6 @@ class LyricTile extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget buildAuthor(BuildContext context) {
-    return Text(
-      lyric.getArtist(),
-      softWrap: true,
-      overflow: TextOverflow.ellipsis,
     );
   }
 
@@ -152,15 +139,19 @@ class LyricTile extends StatelessWidget {
     );
   }
 
-  buildTitle(LyricData lyric) {
-    return Text(
-      lyric.getSong(),
-      softWrap: true,
-      overflow: TextOverflow.ellipsis,
-      style: GoogleFonts.roboto(
-          //decoration: textDecoration,
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold),
-    );
+  Widget buildAuthor(BuildContext context) {
+    var users = Provider.of<FirebaseUserRepository>(context);
+    return Text(lyric.getArtist(),
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+        style: users.textTheme.headline3);
+  }
+
+  buildTitle(BuildContext context, LyricData lyric) {
+    var users = Provider.of<FirebaseUserRepository>(context);
+    return Text(lyric.getSong(),
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+        style: users.textTheme.headline1);
   }
 }

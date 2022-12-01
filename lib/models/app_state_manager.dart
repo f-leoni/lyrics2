@@ -151,7 +151,10 @@ class AppStateManager extends ChangeNotifier {
     }
     if (_showSnackBar) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(msg),
+        content: Text(msg,
+            style: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .textTheme
+                .bodyText1),
         duration: const Duration(milliseconds: 500),
       ));
     }
