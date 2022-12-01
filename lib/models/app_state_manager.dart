@@ -37,8 +37,8 @@ class AppStateManager extends ChangeNotifier {
   String _version = "";
   String _buildNr = "";
   final bool _showSnackBar = false;
-  final icnFavorite = Icons.star;
-  final icnNoFavorite = Icons.star_border;
+  final icnFavorite = Icons.favorite;
+  final icnNoFavorite = Icons.favorite_border;
 
   //Public
   String favoritesFilter = "";

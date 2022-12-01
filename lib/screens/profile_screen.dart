@@ -30,27 +30,34 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: users.themeData.colorScheme.primaryContainer,
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: Icon(Icons.close,
+              size: 30, color: users.themeData.backgroundColor),
           onPressed: () {
             // Close Profile Screen
-            Provider.of<FirebaseUserRepository>(context, listen: false)
-                .tapOnProfile(false);
+            users.tapOnProfile(false);
           },
         ),
+        title: Text(AppLocalizations.of(context)!.ttlProfile,
+            style: users.themeData.textTheme.headline1),
       ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 16.0),
-            buildProfile(),
-            Expanded(
-              child: buildMenu(),
-            )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 16.0),
+              buildProfile(),
+              Expanded(
+                child: buildMenu(),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -70,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),*/
         ListTile(
-          title: Text(AppLocalizations.of(context)!.msgLogout),
+          title: Center(child: Text(AppLocalizations.of(context)!.msgLogout)),
           onTap: () {
             // Logout user
             Provider.of<FirebaseUserRepository>(context, listen: false)
@@ -97,6 +104,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Provider.of<FirebaseUserRepository>(context, listen: false)
                   .darkMode = value;
             },
+            activeColor:
+                Provider.of<FirebaseUserRepository>(context, listen: false)
+                    .themeData
+                    .indicatorColor,
           )
         ],
       ),
@@ -145,6 +156,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Provider.of<FirebaseUserRepository>(context, listen: false)
                   .useGenius = value;
             },
+            activeColor:
+                Provider.of<FirebaseUserRepository>(context, listen: false)
+                    .themeData
+                    .indicatorColor,
           )
         ],
       ),

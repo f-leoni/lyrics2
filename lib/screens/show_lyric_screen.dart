@@ -100,16 +100,14 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                   /*return buildPage(Lyric.empty, manager, decoration, alpha,
                       blend, context, favorites);*/
                   return const Center(
-                      child: CircularProgressIndicator(color: Colors.blue));
+                      child: CircularProgressIndicator.adaptive());
                 }
               } else {
                 // Snapshot  State is not done
                 /*return buildPage(Lyric.empty, manager, decoration, alpha, blend,
                     context, favorites);*/
                 return const Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.red,
-                ));
+                    child: CircularProgressIndicator.adaptive());
               }
             }),
       ),
@@ -325,7 +323,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
         height: 24,
         //width: 261,
         child: Text(
-          "${currLyric.artist}",
+          currLyric.artist,
           softWrap: false,
           overflow: TextOverflow.ellipsis,
           style: LyricsTheme.darkTextTheme.bodyLarge,

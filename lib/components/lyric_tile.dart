@@ -17,55 +17,67 @@ class LyricTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logger.v("building tile");
     FirebaseFavoritesRepository repository =
         Provider.of<FirebaseFavoritesRepository>(context);
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
-        var authorRowOffset = 0.7495;
-        return SizedBox(
-          height: 60.0,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.85,
-            //color: Colors.yellow,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16.0),
-                      Expanded(
+        ThemeData theme =
+            Provider.of<FirebaseUserRepository>(context, listen: false)
+                .themeData;
+        return Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Container(
+            decoration: BoxDecoration(
+                color: theme.backgroundColor,
+                border: Border.all(color: theme.focusColor),
+                borderRadius: const BorderRadius.all(Radius.circular(15))),
+            //color: Colors.red[50],
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: SizedBox(
+                height: 90.0,
+                //width: MediaQuery.of(context).size.width * 0.94,
+                //color: Colors.yellow,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: buildTitle(lyric),
+                          ),
+                          Expanded(flex: 1, child: buildAuthor(context)),
+                        ],
+                      ),
+                    ),
+                    Expanded(
                         flex: 1,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width *
-                                  authorRowOffset,
-                              child: Text(
-                                lyric.getSong(),
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.roboto(
-                                    //decoration: textDecoration,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            const SizedBox(height: 4.0),
-                            buildAuthor(context),
-                            const SizedBox(height: 4.0),
+                            Expanded(
+                                flex: 2,
+                                child: Container(
+                                  //color: Colors.blue,
+                                  child: buildFavoriteIcon(
+                                      context, repository, lyric),
+                                )),
+                            Expanded(
+                                flex: 1, child: buildProxyIcon(context, lyric)),
                           ],
-                        ),
-                      ),
-                      buildFavoriteIcon(context, repository, lyric),
-                    ],
-                  ),
+                        )),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         );
@@ -74,42 +86,10 @@ class LyricTile extends StatelessWidget {
   }
 
   Widget buildAuthor(BuildContext context) {
-    AssetImage providerImg =
-        const AssetImage('assets/lyrics_assets/chartlyrics_logo.png');
-    double height = 30;
-    if (lyric.getProxy() == Proxies.genius) {
-      providerImg = const AssetImage('assets/lyrics_assets/genius_logo.png');
-      double height = 40;
-    }
-    logger.i("*** ${lyric.getProxy()}");
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7185,
-              child: Text(
-                lyric.getArtist(),
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                /*style: GoogleFonts.roboto(
-                  //decoration: textDecoration,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),*/
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Image(
-              image: providerImg,
-              height: height,
-              alignment: Alignment.center,
-            ),
-          ),
-        ],
-      ),
+    return Text(
+      lyric.getArtist(),
+      softWrap: true,
+      overflow: TextOverflow.ellipsis,
     );
   }
 
@@ -146,11 +126,40 @@ class LyricTile extends StatelessWidget {
             currIcon = SizedBox(
                 width: 20,
                 height: 20,
-                child: LinearProgressIndicator(
+                child: CircularProgressIndicator.adaptive(
                   backgroundColor: profileManager.themeData.primaryColor,
                 ));
           }
           return currIcon;
         });
+  }
+
+  buildProxyIcon(BuildContext context, LyricData lyric) {
+    AssetImage providerImg =
+        const AssetImage('assets/lyrics_assets/chartlyrics_logo.png');
+    double height = 30;
+    if (lyric.getProxy() == Proxies.genius) {
+      providerImg = const AssetImage('assets/lyrics_assets/genius_logo.png');
+      height = 30;
+    }
+    return Center(
+      child: Image(
+        image: providerImg,
+        height: height,
+        alignment: Alignment.center,
+      ),
+    );
+  }
+
+  buildTitle(LyricData lyric) {
+    return Text(
+      lyric.getSong(),
+      softWrap: true,
+      overflow: TextOverflow.ellipsis,
+      style: GoogleFonts.roboto(
+          //decoration: textDecoration,
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold),
+    );
   }
 }

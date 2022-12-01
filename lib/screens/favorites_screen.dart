@@ -44,9 +44,9 @@ class FavoritesScreen extends StatelessWidget {
             }
           } else {
             return Center(
-                child: CircularProgressIndicator(
-                    backgroundColor: profile.themeData.backgroundColor,
-                    color: Colors.blue));
+                child: CircularProgressIndicator.adaptive(
+              backgroundColor: profile.themeData.backgroundColor,
+            ));
           }
         });
   }
@@ -70,10 +70,10 @@ class FavoritesScreen extends StatelessWidget {
                   '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}')));
         },
         child: Container(
-          decoration: const BoxDecoration(
+          /*decoration: const BoxDecoration(
               border: Border(
             bottom: BorderSide(width: 1.0, color: Colors.grey),
-          )),
+          )),*/
           child: InkWell(
             child: LyricTile(
               lyric: lyric,

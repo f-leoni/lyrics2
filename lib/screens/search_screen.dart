@@ -97,10 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
             SliverList(
                 delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return SizedBox(
-                  height: 70,
-                  child: buildTile(context, index),
-                );
+                return buildTile(context, index);
               },
               childCount: manager.searchResults.length,
             ))
@@ -477,34 +474,19 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildTile(BuildContext context, int index) {
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     if (manager.isSearchCompleted) {
       List<LyricSearchResult> results = manager.searchResults;
       LyricSearchResult lsr = results[index];
-      int hIndex = index + 1;
+      //int hIndex = index + 1;
       return Container(
-        decoration: BoxDecoration(
+        /*decoration: BoxDecoration(
             border: Border(
           bottom: BorderSide(width: 2.0, color: users.themeData.highlightColor),
-        )),
+        )),*/
         child: InkWell(
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Text(
-                    hIndex.toString(),
-                    textAlign: TextAlign.center,
-                    textScaleFactor: 1.8,
-                  ),
-                ),
-              ),
-              LyricTile(
-                lyric: lsr,
-                isFavoritePage: false,
-              ),
-            ],
+          child: LyricTile(
+            lyric: lsr,
+            isFavoritePage: false,
           ),
           onTap: () {
             logger.d("Clicked on Search result tile. Song: ${lsr.song}");

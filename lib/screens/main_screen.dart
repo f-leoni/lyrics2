@@ -49,6 +49,7 @@ class _MainScreenState extends State<MainScreen> {
         }
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: users.themeData.colorScheme.primaryContainer,
             title:
                 Text(pageTitle, style: Theme.of(context).textTheme.headline1),
             actions: [

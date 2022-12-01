@@ -33,6 +33,8 @@ class LyricsTheme {
       brightness: Brightness.light,
       primaryColor: Colors.white,
       textTheme: lightTextTheme,
+      backgroundColor: Colors.green.shade50,
+      indicatorColor: Colors.green,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen)
           .copyWith(secondary: Colors.green, brightness: Brightness.light),
     );
@@ -41,8 +43,10 @@ class LyricsTheme {
   static ThemeData dark() {
     return ThemeData(
       brightness: Brightness.dark,
-      primaryColor: Colors.grey[850],
+      primaryColor: Colors.grey.shade700,
       textTheme: darkTextTheme,
+      backgroundColor: Colors.grey.shade900,
+      indicatorColor: Colors.green.shade500,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
           .copyWith(secondary: Colors.greenAccent, brightness: Brightness.dark),
     );

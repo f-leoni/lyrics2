@@ -206,5 +206,9 @@
     "msgFavorites": "Favorites",
     "@msgFavorites": {
                "description": "Message Favorites page title"
-        }
+        },
+    "ttlProfile": "Profile",
+    "@ttlProfile": {
+        "description": "Title of profile screen"
+    }
 }
