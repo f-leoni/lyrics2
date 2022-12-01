@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 class LyricTile extends StatelessWidget {
   final LyricData lyric;
   final bool isFavoritePage;
+  final double iconSize = 40;
 
   const LyricTile({Key? key, required this.lyric, required this.isFavoritePage})
       : super(key: key);
@@ -32,7 +33,7 @@ class LyricTile extends StatelessWidget {
             decoration: BoxDecoration(
                 color: theme.backgroundColor,
                 border: Border.all(color: theme.focusColor),
-                borderRadius: const BorderRadius.all(Radius.circular(15))),
+                borderRadius: const BorderRadius.all(Radius.circular(15.0))),
             //color: Colors.red[50],
             child: Padding(
               padding:
@@ -64,13 +65,11 @@ class LyricTile extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Expanded(
-                                flex: 2,
-                                child: Container(
-                                  //color: Colors.blue,
-                                  child: buildFavoriteIcon(
-                                      context, repository, lyric),
-                                )),
+                            Container(
+                              //color: Colors.blue,
+                              child:
+                                  buildFavoriteIcon(context, repository, lyric),
+                            ),
                             Expanded(
                                 flex: 1, child: buildProxyIcon(context, lyric)),
                           ],
@@ -100,6 +99,7 @@ class LyricTile extends StatelessWidget {
         child: Icon(
           Provider.of<AppStateManager>(context, listen: false).icnFavorite,
           color: Colors.red,
+          size: iconSize,
         ),
       );
     }
@@ -117,15 +117,16 @@ class LyricTile extends StatelessWidget {
                   Provider.of<AppStateManager>(context, listen: false)
                       .icnFavorite,
                   color: Colors.red,
+                  size: iconSize,
                 ),
               );
             } else {
-              currIcon = const SizedBox(width: 25);
+              currIcon = SizedBox(width: iconSize);
             }
           } else {
             currIcon = SizedBox(
-                width: 20,
-                height: 20,
+                width: iconSize,
+                height: iconSize,
                 child: CircularProgressIndicator.adaptive(
                   backgroundColor: profileManager.themeData.primaryColor,
                 ));

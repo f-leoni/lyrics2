@@ -79,7 +79,7 @@
     "@splashInit": {
         "description": "Splash Screen  Msg"
     },
-    "info": "Lyrics 2 was created by Zitzusoft.\nIt is an open source app and uses some code from RayWenderlicht's very good course 'Flutter Apprentice'.\n\nAlso, Lyrics 2 use some third party libraries. In appearance order:\n- provider\n- smooth_page_indicator\n- xml2json\n- logger.\n\nFinally, Lyrics 2 leverages APIs from ChartLyrics but is not related in any way with ChartLyrics\n\nThanks all!\nF. of Zitzusoft",
+    "info": "Lyrics 2 was created by Zitzusoft.\nIt is an open source app and uses some code from RayWenderlicht's very good course 'Flutter Apprentice'.\n\nAlso, Lyrics 2 uses some third party libraries. In appearance order:\n- provider\n- smooth_page_indicator\n- xml2json\n- logger\n- flutter_acrcloud\n- sqflite\n- package_info_plus\n- firebase_core + cloud + auth\n- genius_api_unofficial\n- beautiful_soup_dart\n\nFinally, Lyrics 2 leverages APIs from ChartLyrics but is not related in any way with ChartLyrics\n\nThanks all!\nF. of Zitzusoft",
     "@info": {
         "description": "Info text"
     },
@@ -139,7 +139,7 @@
     "@msgRegister": {
            "description": "Sign up message"
     },
-    "msgRegisterExtended": "Don't have an account? Click here to",
+    "msgRegisterExtended": "Don't have an account?\nClick here to",
     "@msgRegisterExtended": {
            "description": "Sign up long message"
     },
@@ -147,7 +147,7 @@
     "@msgLogin": {
            "description": "Sign in message"
     },
-    "msgLoginExtended": "Already have an account? Click here to",
+    "msgLoginExtended": "Already have an account?\nClick here to",
     "@msgLoginExtended": {
            "description": "Sign in long message"
     },
@@ -210,5 +210,9 @@
     "ttlProfile": "Profile",
     "@ttlProfile": {
         "description": "Title of profile screen"
+    },
+    "msgRegistrationDate": "Registration date: ",
+    "@msgRegistrationDate": {
+        "description": "Registration date message for profile screen"
     }
 }

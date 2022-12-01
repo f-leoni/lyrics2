@@ -33,7 +33,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   ACRCloudResponseMusicItem? music;
-  //final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
   final _searchControllerText = TextEditingController();
   final _searchControllerAuthor = TextEditingController();
   final _searchControllerSong = TextEditingController();
@@ -71,6 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Scaffold(
+      backgroundColor: users.themeData.primaryColor,
       body: Padding(
           padding: const EdgeInsets.all(0.0),
           child: CustomScrollView(slivers: <Widget>[
@@ -138,8 +138,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       _searchControllerAuthor.text, _searchControllerSong.text);
                 },
                 icon: Icon(
-                  Icons.text_snippet_outlined,
-                  color: currLyricsTheme.colorScheme.secondary,
+                  Icons.text_snippet,
+                  color: currLyricsTheme.indicatorColor,
                 )),
           ),
           Expanded(
@@ -158,7 +158,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: MaterialButton(
                             minWidth: 150,
                             height: 50,
-                            color: currLyricsTheme.colorScheme.secondary,
+                            color: currLyricsTheme.indicatorColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
@@ -257,11 +257,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Text(
                       '${AppLocalizations.of(context)!.msgTrack}: ${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
                       overflow: TextOverflow.fade,
-                      style: const TextStyle(
-                          //color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                          wordSpacing: 5)),
+                      style: currTextTheme.bodyText1),
                 ],
               ],
             ),
@@ -306,7 +302,6 @@ class _SearchScreenState extends State<SearchScreen> {
                         },
                       ),
                       hintText: AppLocalizations.of(context)!.searchAuthorHint,
-                      //hintStyle: const TextStyle(fontSize: 8),
                       border: const OutlineInputBorder(),
                       filled: true,
                       fillColor: Theme.of(context)
@@ -330,7 +325,6 @@ class _SearchScreenState extends State<SearchScreen> {
                         },
                       ),
                       hintText: AppLocalizations.of(context)!.searchSongHint,
-                      //hintStyle: const TextStyle(fontSize: 8),
                       border: const OutlineInputBorder(),
                       filled: true,
                       fillColor: Theme.of(context)
@@ -351,7 +345,6 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget buildTextSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    //_searchControllerText.text = _searchStringText;
     return Row(
       //mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -363,8 +356,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   _searchControllerAuthor.text, _searchControllerSong.text);
             },
             icon: Icon(
-              Icons.radio_outlined,
-              color: users.themeData.colorScheme.secondary,
+              Icons.radio,
+              color: users.themeData.indicatorColor,
             )),
         Expanded(
           flex: 1,
@@ -406,7 +399,7 @@ class _SearchScreenState extends State<SearchScreen> {
       return MaterialButton(
         minWidth: 150,
         height: 50,
-        color: currLyricsTheme.colorScheme.secondary,
+        color: currLyricsTheme.indicatorColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
@@ -478,32 +471,27 @@ class _SearchScreenState extends State<SearchScreen> {
       List<LyricSearchResult> results = manager.searchResults;
       LyricSearchResult lsr = results[index];
       //int hIndex = index + 1;
-      return Container(
-        /*decoration: BoxDecoration(
-            border: Border(
-          bottom: BorderSide(width: 2.0, color: users.themeData.highlightColor),
-        )),*/
-        child: InkWell(
-          child: LyricTile(
-            lyric: lsr,
-            isFavoritePage: false,
-          ),
-          onTap: () {
-            logger.d("Clicked on Search result tile. Song: ${lsr.song}");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ShowLyricScreen(
-                  lyric: manager.getLyric(
-                      lsr,
-                      lsr.provider == Proxies.genius
-                          ? GeniusProxy()
-                          : ChartLyricsProxy()),
-                ),
-              ),
-            );
-          },
+
+      return InkWell(
+        child: LyricTile(
+          lyric: lsr,
+          isFavoritePage: false,
         ),
+        onTap: () {
+          logger.d("Clicked on Search result tile. Song: ${lsr.song}");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ShowLyricScreen(
+                lyric: manager.getLyric(
+                    lsr,
+                    lsr.provider == Proxies.genius
+                        ? GeniusProxy()
+                        : ChartLyricsProxy()),
+              ),
+            ),
+          );
+        },
       );
     }
     return Container();

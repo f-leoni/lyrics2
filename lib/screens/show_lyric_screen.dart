@@ -74,7 +74,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
   }
 
   Widget createLyricPage(BuildContext context, Future<Lyric> lyric) {
-    int alpha = 180;
+    int alpha = 230;
     BlendMode blend = BlendMode.darken;
     BoxDecoration decoration = BoxDecoration(
         image: DecorationImage(
@@ -84,6 +84,8 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     ));
     final favorites = Provider.of<FirebaseFavoritesRepository>(context);
     final manager = Provider.of<AppStateManager>(context, listen: false);
+    final theme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
     //isFavorite ??= await checkIfFavorite(favorites, await lyric);
     return SafeArea(
       child: Scaffold(
@@ -92,22 +94,26 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
-                  Lyric currLiric = snapshot.data as Lyric;
-                  return buildPage(currLiric, manager, decoration, alpha, blend,
+                  Lyric currLyric = snapshot.data as Lyric;
+                  return buildPage(currLyric, manager, decoration, alpha, blend,
                       context, favorites);
                 } else {
                   //container hasn't data
                   /*return buildPage(Lyric.empty, manager, decoration, alpha,
                       blend, context, favorites);*/
-                  return const Center(
-                      child: CircularProgressIndicator.adaptive());
+                  return Center(
+                      child: CircularProgressIndicator.adaptive(
+                    backgroundColor: theme.primaryColor,
+                  ));
                 }
               } else {
                 // Snapshot  State is not done
                 /*return buildPage(Lyric.empty, manager, decoration, alpha, blend,
                     context, favorites);*/
-                return const Center(
-                    child: CircularProgressIndicator.adaptive());
+                return Center(
+                    child: CircularProgressIndicator.adaptive(
+                  backgroundColor: theme.primaryColor,
+                ));
               }
             }),
       ),
@@ -144,7 +150,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
             colorFilter: ColorFilter.mode(Colors.black.withAlpha(alpha), blend),
             fit: BoxFit.cover,
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         );
       } on Exception catch (e) {
         logger.w(
@@ -164,7 +170,10 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 icon: const Icon(Icons.arrow_back),
                 alignment: Alignment.centerLeft,
                 iconSize: 22,
-                color: Colors.white,
+                color:
+                    Provider.of<FirebaseUserRepository>(context, listen: false)
+                        .themeData
+                        .primaryColor,
                 onPressed: () {
                   final manager =
                       Provider.of<AppStateManager>(context, listen: false);
@@ -211,7 +220,10 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                   style: GoogleFonts.roboto(
                     fontSize: _fontSize,
                     fontWeight: FontWeight.normal,
-                    color: Colors.white70,
+                    color: Provider.of<FirebaseUserRepository>(context,
+                            listen: false)
+                        .themeData
+                        .highlightColor,
                   ),
                 ),
               ),
@@ -282,7 +294,9 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 child: currIcon),
             alignment: Alignment.centerRight,
             iconSize: 22,
-            color: Colors.white,
+            color: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .themeData
+                .primaryColor,
             onPressed: () {
               logger.i(
                   "Changing favorite state of '${lyric.song}' to '${(!isFavorite!).toString()}'");

@@ -29,10 +29,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final Color rwColor = const Color.fromRGBO(64, 143, 77, 1);
-  final Color rwColorRegistration = const Color.fromRGBO(143, 64, 77, 1);
-  final TextStyle focusedStyle = const TextStyle(color: Colors.green);
-  final TextStyle unfocusedStyle = const TextStyle(color: Colors.grey);
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -55,14 +51,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 16.0),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 260,
+                height: 220,
                 child: Image(image: logoImg),
               ),
               const SizedBox(height: 16),
@@ -94,10 +90,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildEmailField(
       BuildContext context, String hintText, TextInputType keyboardType) {
-    //final userDao = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final theme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
 
     return TextFormField(
-      cursorColor: rwColor,
+      cursorColor: theme.primaryColor,
       controller: _emailController,
       keyboardType: keyboardType,
       textCapitalization: TextCapitalization.none,
@@ -121,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         hintText: hintText,
-        hintStyle: const TextStyle(height: 0.5),
+        hintStyle: theme.textTheme.bodySmall,
       ),
     );
   }
@@ -129,8 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget buildPasswordField(
       BuildContext context, String hintText, TextInputType keyboardType) {
     final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var theme = users.themeData;
     return TextFormField(
-        cursorColor: rwColor,
+        cursorColor: theme.primaryColor,
         controller: _passwordController,
         keyboardType: keyboardType,
         obscureText: !_passwordVisible,
@@ -147,19 +145,18 @@ class _LoginScreenState extends State<LoginScreen> {
           return null;
         },
         decoration: InputDecoration(
-            border: const UnderlineInputBorder(
+            border: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.green,
+                color: theme.primaryColor,
                 width: 1.0,
               ),
             ),
-            focusedBorder: const UnderlineInputBorder(
+            focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.green,
+                color: theme.primaryColor,
               ),
             ),
             hintText: hintText,
-            //hintStyle: const TextStyle(height: 0.5),
             suffixIcon: IconButton(
               icon: Icon(
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
@@ -174,6 +171,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget buildButtons(BuildContext context) {
+    var theme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
     if (!_isRegistering) {
       return SizedBox(
         height: 100,
@@ -182,13 +181,13 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             MaterialButton(
-              color: rwColor,
+              color: theme.indicatorColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
                 AppLocalizations.of(context)!.msgLogin,
-                style: const TextStyle(color: Colors.white),
+                style: theme.textTheme.button,
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
@@ -229,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.msgRegisterExtended,
-                  //style: const TextStyle(color: Colors.white),
+                  style: theme.textTheme.bodyText2,
                 ),
                 TextButton(
                   onPressed: () {
@@ -239,7 +238,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Text(
                     AppLocalizations.of(context)!.msgRegister,
-                    //style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ],
@@ -254,13 +252,13 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MaterialButton(
-              color: rwColorRegistration,
+              color: theme.errorColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
                 AppLocalizations.of(context)!.msgRegister,
-                style: const TextStyle(color: Colors.white),
+                style: theme.textTheme.button,
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
@@ -301,7 +299,6 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.msgLoginExtended,
-                  //style: const TextStyle(color: Colors.white)
                 ),
                 TextButton(
                   onPressed: () {
@@ -311,7 +308,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Text(
                     AppLocalizations.of(context)!.msgLogin,
-                    //style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ],

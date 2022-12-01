@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
@@ -36,27 +37,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: users.themeData.colorScheme.primaryContainer,
         leading: IconButton(
           icon: Icon(Icons.close,
-              size: 30, color: users.themeData.backgroundColor),
+              size: 30, color: users.themeData.highlightColor),
           onPressed: () {
             // Close Profile Screen
             users.tapOnProfile(false);
           },
         ),
         title: Text(AppLocalizations.of(context)!.ttlProfile,
-            style: users.themeData.textTheme.headline1),
+            style: users.themeData.textTheme.headline2),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 16.0),
-              buildProfile(),
-              Expanded(
-                child: buildMenu(),
-              )
-            ],
+      body: Container(
+        color: users.themeData.primaryColor,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 16.0),
+                buildProfile(),
+                Expanded(
+                  child: buildMenu(),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -91,23 +95,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildDarkModeRow() {
+    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(AppLocalizations.of(context)!.msgDarkMode),
+          Text(AppLocalizations.of(context)!.msgDarkMode,
+              style: users.themeData.textTheme.bodyText2),
           Switch(
-            value: Provider.of<FirebaseUserRepository>(context, listen: false)
-                .darkMode, //widget.user.darkMode,
+            value: users.darkMode, //widget.user.darkMode,
             onChanged: (value) {
-              Provider.of<FirebaseUserRepository>(context, listen: false)
-                  .darkMode = value;
+              users.darkMode = value;
             },
-            activeColor:
-                Provider.of<FirebaseUserRepository>(context, listen: false)
-                    .themeData
-                    .indicatorColor,
+            activeColor: users.themeData.indicatorColor,
           )
         ],
       ),
@@ -115,51 +116,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildProfile() {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Column(
       children: [
         CircleImage(
-          imageProvider:
-              Provider.of<FirebaseUserRepository>(context, listen: false)
-                  .userImage,
+          imageProvider: users.userImage,
           imageRadius: 60.0,
         ),
-        const SizedBox(height: 16.0),
+        const SizedBox(height: 8.0),
+        Text(widget.user.email!, style: users.themeData.textTheme.headline2),
         Text(
-          widget.user.email!,
-          style: const TextStyle(
-            fontSize: 21,
-          ),
-        ),
-        Text(widget.user.metadata.creationTime.toString()), //role
-        /*Text(
-          'Username: ${widget.user.email}',
-          style: const TextStyle(
-            fontSize: 30,
-            color: Colors.green,
-          ),
-        ),*/
+            "Registration date: ${formatter.format(widget.user.metadata.creationTime!)}"), //role
       ],
     );
   }
 
   buildProxyRow() {
+    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(AppLocalizations.of(context)!.msgUseGenius),
+          Text(AppLocalizations.of(context)!.msgUseGenius,
+              style: users.themeData.textTheme.bodyText2),
           Switch(
-            value: Provider.of<FirebaseUserRepository>(context, listen: false)
-                .useGenius, //widget.user.darkMode,
+            value: users.useGenius, //widget.user.darkMode,
             onChanged: (value) {
-              Provider.of<FirebaseUserRepository>(context, listen: false)
-                  .useGenius = value;
+              users.useGenius = value;
             },
-            activeColor:
-                Provider.of<FirebaseUserRepository>(context, listen: false)
-                    .themeData
-                    .indicatorColor,
+            activeColor: users.themeData.indicatorColor,
           )
         ],
       ),

@@ -20,21 +20,23 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final manager = Provider.of<AppStateManager>(context, listen: false);
+    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
     late final String version;
     late final String build;
-    final bool isDark =
-        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+    final bool isDark = users.darkMode;
+    final theme = users.themeData;
     final logoImg = isDark
         ? const AssetImage('assets/lyrics_assets/logo_dark.png')
         : const AssetImage('assets/lyrics_assets/logo.png');
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Container(
-            //MediaQuery.of(context).size.width
-            constraints: const BoxConstraints.expand(width: 350, height: 550),
+      child: Center(
+        child: Container(
+          color: theme.primaryColor,
+          //MediaQuery.of(context).size.width
+          constraints: const BoxConstraints.expand(width: 400, height: 650),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -58,10 +60,7 @@ class InfoScreen extends StatelessWidget {
                           Image(height: 80, image: logoImg),
                           //AssetImage("assets/lyrics_assets/logo.png")),
                           Text(AppLocalizations.of(context)!.infoTitle,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              )),
+                              style: theme.textTheme.headline2),
                         ],
                       ),
                     ),
@@ -80,10 +79,7 @@ class InfoScreen extends StatelessWidget {
                         return Column(
                           children: [
                             Text(AppLocalizations.of(context)!.info,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 14,
-                                    wordSpacing: 5)),
+                                style: theme.textTheme.headline4),
                             const SizedBox(height: 30),
                             FutureBuilder(
                               future: Provider.of<AppStateManager>(context,
@@ -98,10 +94,7 @@ class InfoScreen extends StatelessWidget {
                                     build = result[1];
                                     return Text(
                                       "Version: $version - Build: $build\n",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          wordSpacing: 5),
+                                      style: theme.textTheme.headline3,
                                     );
                                   } else {
                                     return Container(); //Text("Retrieving version info....");

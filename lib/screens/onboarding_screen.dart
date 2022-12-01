@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:provider/provider.dart';
@@ -30,11 +31,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Text(AppLocalizations.of(context)!.gettingStarted),
+        title: Text(AppLocalizations.of(context)!.gettingStarted,
+            style: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .textTheme
+                .headline2),
         leading: GestureDetector(
-          child: const Icon(
+          child: Icon(
             Icons.chevron_left,
             size: 35,
+            color: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .themeData
+                .highlightColor,
           ),
           onTap: () {
             Navigator.pop(context, true);
@@ -105,7 +112,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 16),
           Text(
             text,
-            style: const TextStyle(fontSize: 20),
+            style: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .textTheme
+                .headline1,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),

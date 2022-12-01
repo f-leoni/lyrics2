@@ -45,7 +45,7 @@ class FavoritesScreen extends StatelessWidget {
           } else {
             return Center(
                 child: CircularProgressIndicator.adaptive(
-              backgroundColor: profile.themeData.backgroundColor,
+              backgroundColor: profile.themeData.primaryColor,
             ));
           }
         });
@@ -60,8 +60,12 @@ class FavoritesScreen extends StatelessWidget {
         background: Container(
             color: Colors.red.shade200,
             alignment: Alignment.centerRight,
-            child: const Icon(Icons.delete_forever,
-                color: Colors.white, size: 25.0)),
+            child: Icon(Icons.delete_forever,
+                color:
+                    Provider.of<FirebaseUserRepository>(context, listen: false)
+                        .themeData
+                        .backgroundColor,
+                size: 25.0)),
         onDismissed: (direction) {
           Provider.of<FirebaseFavoritesRepository>(context, listen: false)
               .deleteLyricFromFavs(lyric);
@@ -69,28 +73,22 @@ class FavoritesScreen extends StatelessWidget {
               content: Text(
                   '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}')));
         },
-        child: Container(
-          /*decoration: const BoxDecoration(
-              border: Border(
-            bottom: BorderSide(width: 1.0, color: Colors.grey),
-          )),*/
-          child: InkWell(
-            child: LyricTile(
-              lyric: lyric,
-              isFavoritePage: true,
-            ),
-            onTap: () {
-              logger.d("Clicked on Search result Screen. Song: ${lyric.song}");
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ShowLyricScreen(
-                    lyric: Future.value(lyric),
-                  ),
-                ),
-              );
-            },
+        child: InkWell(
+          child: LyricTile(
+            lyric: lyric,
+            isFavoritePage: true,
           ),
+          onTap: () {
+            logger.d("Clicked on Search result Screen. Song: ${lyric.song}");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShowLyricScreen(
+                  lyric: Future.value(lyric),
+                ),
+              ),
+            );
+          },
         ),
       ));
     }
@@ -99,9 +97,14 @@ class FavoritesScreen extends StatelessWidget {
     return SizedBox(
         height: height,
         //color: Colors.green,
-        child: ListView(
-          padding: const EdgeInsets.all(10.0),
-          children: itemTiles,
+        child: Container(
+          color: Provider.of<FirebaseUserRepository>(context, listen: false)
+              .themeData
+              .primaryColor,
+          child: ListView(
+            padding: const EdgeInsets.all(10.0),
+            children: itemTiles,
+          ),
         ));
   }
 
@@ -120,7 +123,9 @@ class FavoritesScreen extends StatelessWidget {
             const SizedBox(height: 8.0),
             Text(
               AppLocalizations.of(context)!.nothingHere,
-              style: const TextStyle(fontSize: 21.0),
+              style: Provider.of<FirebaseUserRepository>(context, listen: false)
+                  .textTheme
+                  .headline2,
             ),
             const SizedBox(height: 16.0),
             Text(
@@ -129,11 +134,16 @@ class FavoritesScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             MaterialButton(
-              textColor: Colors.white,
+              textColor:
+                  Provider.of<FirebaseUserRepository>(context, listen: false)
+                      .themeData
+                      .highlightColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              color: Colors.green,
+              color: Provider.of<FirebaseUserRepository>(context, listen: false)
+                  .themeData
+                  .indicatorColor,
               onPressed: () {
                 Provider.of<AppStateManager>(context, listen: false)
                     .goToTab(LyricsTab.search);

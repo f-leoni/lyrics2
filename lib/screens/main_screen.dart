@@ -44,6 +44,8 @@ class _MainScreenState extends State<MainScreen> {
         if (widget.currentTab == 0) {
           pageTitle =
               "${AppLocalizations.of(context)!.appName} - ${AppLocalizations.of(context)!.msgFavorites}";
+        } else if (widget.currentTab == 2) {
+          pageTitle = "${AppLocalizations.of(context)!.appName} - Info";
         } else {
           pageTitle = AppLocalizations.of(context)!.appName;
         }
@@ -51,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
           appBar: AppBar(
             backgroundColor: users.themeData.colorScheme.primaryContainer,
             title:
-                Text(pageTitle, style: Theme.of(context).textTheme.headline1),
+                Text(pageTitle, style: Theme.of(context).textTheme.headline2),
             actions: [
               profileButton(widget.currentTab),
             ],
