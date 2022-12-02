@@ -37,6 +37,7 @@ class FirebaseUserRepository with ChangeNotifier {
 
   User? get getUser => auth.currentUser;
   var _didSelectUser = false;
+  //TODO Change here for initial dark mode state
   var _darkMode = false;
   var _useGenius = false;
 

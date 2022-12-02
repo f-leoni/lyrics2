@@ -60,7 +60,7 @@ class InfoScreen extends StatelessWidget {
                           Image(height: 80, image: logoImg),
                           //AssetImage("assets/lyrics_assets/logo.png")),
                           Text(AppLocalizations.of(context)!.infoTitle,
-                              style: theme.textTheme.headline2),
+                              style: theme.textTheme.headline1),
                         ],
                       ),
                     ),

@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
           // Select which tab is to be shown
           body: pages[widget.currentTab],
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: users.themeData.colorScheme.secondary,
+            selectedItemColor: users.themeData.colorScheme.primaryContainer,
             unselectedItemColor: users.themeData.colorScheme.background,
             currentIndex: widget.currentTab,
             onTap: (index) {

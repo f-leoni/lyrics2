@@ -122,8 +122,8 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget buildAudioSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    var currLyricsTheme = users.themeData;
-    var currTextTheme = users.textTheme;
+    var theme = users.themeData;
+    var textTheme = users.textTheme;
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 },
                 icon: Icon(
                   Icons.text_snippet,
-                  color: currLyricsTheme.indicatorColor,
+                  color: theme.indicatorColor,
                 )),
           ),
           Expanded(
@@ -158,7 +158,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: MaterialButton(
                             minWidth: 150,
                             height: 50,
-                            color: currLyricsTheme.indicatorColor,
+                            color: theme.indicatorColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
@@ -189,8 +189,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                               Icons.radio,
                                               //FontAwesomeIcons.music,
                                               size: size,
-                                              color: currLyricsTheme
-                                                  .colorScheme.secondary,
+                                              color:
+                                                  theme.colorScheme.secondary,
                                             ));
                                       }),
                                   actions: [
@@ -226,7 +226,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: Text(
-                                      '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}'),
+                                    '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}',
+                                    style: textTheme.button,
+                                  ),
                                 ));
                                 return;
                               } else {
@@ -241,7 +243,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             },
                             child: Text(
                               AppLocalizations.of(context)!.msgListen,
-                              style: currTextTheme.button,
+                              style: textTheme.button,
                             ),
                           ),
                         ),
@@ -257,7 +259,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Text(
                       '${AppLocalizations.of(context)!.msgTrack}: ${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
                       overflow: TextOverflow.fade,
-                      style: currTextTheme.bodyText1),
+                      style: textTheme.bodyText1),
                 ],
               ],
             ),
@@ -386,9 +388,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildSearchButton(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    var currLyricsTheme =
+    var theme =
         Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
-    var currTextTheme =
+    var textTheme =
         Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
     int searchType = manager.searchType;
     if (searchType == SearchType.audio) {
@@ -399,13 +401,13 @@ class _SearchScreenState extends State<SearchScreen> {
       return MaterialButton(
         minWidth: 150,
         height: 50,
-        color: currLyricsTheme.indicatorColor,
+        color: theme.indicatorColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Text(
           AppLocalizations.of(context)!.searchText,
-          style: currTextTheme.button,
+          style: textTheme.button,
         ),
         onPressed: () async {
           logger.v("Click on Search button in search screen");
@@ -418,6 +420,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<void> startSearch(BuildContext context) async {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var theme = users.themeData;
     var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
     manager.lastTextSearch = _searchControllerText.text;
     manager.lastAuthorSearch = _searchControllerAuthor.text;
@@ -430,7 +433,10 @@ class _SearchScreenState extends State<SearchScreen> {
             (_searchStringSong.length < minSearchLen ||
                 _searchStringAuthor.length < minSearchLen)) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.searchTextTooShort),
+        content: Text(
+          AppLocalizations.of(context)!.searchTextTooShort,
+          style: theme.textTheme.button,
+        ),
       ));
       return;
     }
@@ -460,7 +466,10 @@ class _SearchScreenState extends State<SearchScreen> {
   void showNoResultsMsg(List<LyricSearchResult> results) {
     if (results.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.noResults),
+        content: Text(AppLocalizations.of(context)!.noResults,
+            style: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .textTheme
+                .button),
       ));
     }
   }

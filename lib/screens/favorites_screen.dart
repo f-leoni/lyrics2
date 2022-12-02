@@ -74,7 +74,7 @@ class FavoritesScreen extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                   '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}',
-                  style: theme.bodyText2)));
+                  style: theme.button)));
         },
         child: InkWell(
           child: LyricTile(

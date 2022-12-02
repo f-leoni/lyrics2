@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 220,
+                height: 180,
                 child: Image(image: logoImg),
               ),
               const SizedBox(height: 16),
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
 
     return TextFormField(
-      cursorColor: theme.primaryColor,
+      cursorColor: theme.colorScheme.secondary,
       controller: _emailController,
       keyboardType: keyboardType,
       textCapitalization: TextCapitalization.none,
@@ -106,15 +106,15 @@ class _LoginScreenState extends State<LoginScreen> {
         return null;
       },
       decoration: InputDecoration(
-        border: const UnderlineInputBorder(
+        border: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.green,
+            color: theme.primaryColorDark,
             width: 1.0,
           ),
         ),
-        focusedBorder: const UnderlineInputBorder(
+        focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.green,
+            color: theme.colorScheme.secondary,
           ),
         ),
         hintText: hintText,
@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final users = Provider.of<FirebaseUserRepository>(context, listen: false);
     var theme = users.themeData;
     return TextFormField(
-        cursorColor: theme.primaryColor,
+        cursorColor: theme.colorScheme.secondary,
         controller: _passwordController,
         keyboardType: keyboardType,
         obscureText: !_passwordVisible,
@@ -147,13 +147,13 @@ class _LoginScreenState extends State<LoginScreen> {
         decoration: InputDecoration(
             border: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: theme.primaryColor,
+                color: theme.primaryColorDark,
                 width: 1.0,
               ),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: theme.primaryColor,
+                color: theme.colorScheme.secondary,
               ),
             ),
             hintText: hintText,
@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
             suffixIcon: IconButton(
               icon: Icon(
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: users.themeData.highlightColor),
+                  color: users.themeData.primaryColorDark),
               onPressed: () {
                 // Update the state i.e. toogle the state of passwordVisible variable
                 setState(() {
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
     var locale = AppLocalizations.of(context)!;
     if (!_isRegistering) {
       return SizedBox(
-        height: 100,
+        height: 145,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -208,24 +208,30 @@ class _LoginScreenState extends State<LoginScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                             '${locale.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}',
-                            style: theme.textTheme.bodyText1),
+                            style: theme.textTheme.button),
                       ));
                     }
                   } on FirebaseAuthException catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          '${locale.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, e.code)}'),
-                    ));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            '${locale.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, e.code)}',
+                            style: theme.textTheme.button),
+                      ),
+                    );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('${locale.msgError}: ${e.toString()}'),
+                      content: Text(
+                        '${locale.msgError}: ${e.toString()}',
+                        style: theme.textTheme.button,
+                      ),
                     ));
                   }
                 }
               },
             ),
             const SizedBox(width: 20),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -250,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } else {
       return SizedBox(
-        height: 100,
+        height: 130,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -279,25 +285,34 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                            '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}'),
+                          '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}',
+                          style: theme.textTheme.button,
+                        ),
                       ));
                     }
                   } on FirebaseAuthException catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
-                          '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, e.code)}'),
+                        '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(
+                          AppLocalizations.of(context)!,
+                          e.code,
+                        )}',
+                        style: theme.textTheme.button,
+                      ),
                     ));
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
-                          '${AppLocalizations.of(context)!.msgError}: ${e.toString()}'),
+                        '${AppLocalizations.of(context)!.msgError}: ${e.toString()}',
+                        style: theme.textTheme.button,
+                      ),
                     ));
                   }
                 }
               },
             ),
             const SizedBox(width: 20),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
