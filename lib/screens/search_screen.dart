@@ -12,9 +12,7 @@ import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/env.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
-import 'package:lyrics2/screens/show_lyric_screen.dart';
 import 'package:provider/provider.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -486,9 +484,16 @@ class _SearchScreenState extends State<SearchScreen> {
           lyric: lsr,
           isFavoritePage: false,
         ),
-        onTap: () {
+        onTap: () async {
           logger.d("Clicked on Search result tile. Song: ${lsr.song}");
-          Navigator.push(
+          var lyric = await manager.getLyric(
+              lsr,
+              lsr.provider == Proxies.genius
+                  ? GeniusProxy()
+                  : ChartLyricsProxy())!;
+          manager.viewLyric(lyric);
+
+          /*Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ShowLyricScreen(
@@ -499,7 +504,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         : ChartLyricsProxy()),
               ),
             ),
-          );
+          );*/
         },
       );
     }

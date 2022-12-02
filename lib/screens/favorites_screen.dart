@@ -6,7 +6,6 @@ import 'package:lyrics2/data/firebase_favorites_repository.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
-import 'package:lyrics2/screens/show_lyric_screen.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -52,6 +51,7 @@ class FavoritesScreen extends StatelessWidget {
   }
 
   Widget buildScreen(BuildContext context, List<Lyric> favorites) {
+    var manager = Provider.of<AppStateManager>(context, listen: false);
     var theme =
         Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
     List<Widget> itemTiles = List<Widget>.empty(growable: true);
@@ -82,15 +82,16 @@ class FavoritesScreen extends StatelessWidget {
             isFavoritePage: true,
           ),
           onTap: () {
-            logger.d("Clicked on Search result Screen. Song: ${lyric.song}");
-            Navigator.push(
+            logger.d("Clicked on Favorites result Screen. Song: ${lyric.song}");
+            manager.viewLyric(lyric);
+            /*Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ShowLyricScreen(
                   lyric: Future.value(lyric),
                 ),
               ),
-            );
+            );*/
           },
         ),
       ));

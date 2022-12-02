@@ -244,4 +244,10 @@ class AppStateManager extends ChangeNotifier {
     initializeApp();
     notifyListeners();
   }
+
+  void viewLyric(Lyric lyric) {
+    viewedLyric = lyric;
+    isViewingLyric = true;
+    notifyListeners();
+  }
 }
