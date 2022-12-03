@@ -202,7 +202,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     TextButton(
                                       onPressed: () {
                                         logger.d("Cancel Listening");
-                                        session.cancel;
+                                        session.cancel();
                                       },
                                       child: Text(AppLocalizations.of(context)!
                                           .msgCancel),
@@ -517,19 +517,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   ? GeniusProxy()
                   : ChartLyricsProxy())!;
           manager.viewLyric(lyric);
-
-          /*Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ShowLyricScreen(
-                  lyric: manager.getLyric(
-                      lsr,
-                      lsr.provider == Proxies.genius
-                          ? GeniusProxy()
-                          : ChartLyricsProxy()),
-                ),
-              ),
-            );*/
         },
       );
     }
