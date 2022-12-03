@@ -135,17 +135,24 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           Expanded(
             flex: 1,
-            child: IconButton(
-                alignment: Alignment.centerLeft,
-                iconSize: 50,
-                onPressed: () {
-                  manager.switchSearch(context, _searchControllerText.text,
-                      _searchControllerAuthor.text, _searchControllerSong.text);
-                },
-                icon: Icon(
-                  Icons.text_snippet,
-                  color: theme.indicatorColor,
-                )),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
+              child: IconButton(
+                  alignment: Alignment.centerLeft,
+                  iconSize: 50,
+                  onPressed: () {
+                    manager.switchSearch(
+                        context,
+                        _searchControllerText.text,
+                        _searchControllerAuthor.text,
+                        _searchControllerSong.text);
+                  },
+                  icon: Icon(
+                    Icons.text_snippet,
+                    color: theme.indicatorColor,
+                  )),
+            ),
           ),
           Expanded(
             flex: 5,
@@ -356,35 +363,43 @@ class _SearchScreenState extends State<SearchScreen> {
       //mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        IconButton(
-            iconSize: 50,
-            onPressed: () {
-              manager.switchSearch(context, _searchControllerText.text,
-                  _searchControllerAuthor.text, _searchControllerSong.text);
-            },
-            icon: Icon(
-              Icons.radio,
-              color: users.themeData.indicatorColor,
-            )),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
+          child: IconButton(
+              iconSize: 50,
+              onPressed: () {
+                manager.switchSearch(context, _searchControllerText.text,
+                    _searchControllerAuthor.text, _searchControllerSong.text);
+              },
+              icon: Icon(
+                Icons.radio,
+                color: users.themeData.indicatorColor,
+              )),
+        ),
         Expanded(
           flex: 1,
-          child: TextField(
-            controller: _searchControllerText,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  // Clear the search field
-                  _searchControllerText.text = "";
-                },
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
+            child: TextField(
+              controller: _searchControllerText,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    // Clear the search field
+                    _searchControllerText.text = "";
+                  },
+                ),
+                hintText: AppLocalizations.of(context)!.searchHint,
+                border: const UnderlineInputBorder(), //OutlineInputBorder(),
+                filled: false,
+                fillColor:
+                    Theme.of(context).backgroundColor, //Colors.yellow[50],
               ),
-              hintText: AppLocalizations.of(context)!.searchHint,
-              border: const UnderlineInputBorder(), //OutlineInputBorder(),
-              filled: false,
-              fillColor: Theme.of(context).backgroundColor, //Colors.yellow[50],
+              onEditingComplete: () => startSearch(context),
             ),
-            onEditingComplete: () => startSearch(context),
           ),
         ),
       ],

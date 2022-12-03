@@ -108,7 +108,15 @@ class LyricTile extends StatelessWidget {
                 ),
               );
             } else {
-              currIcon = SizedBox(width: iconSize);
+              currIcon = /*Center(
+                child: Icon(
+                  Provider.of<AppStateManager>(context, listen: false)
+                      .icnNoFavorite,
+                  color: Colors.red,
+                  size: iconSize,
+                ),
+              );*/
+                  Center(child: SizedBox(width: iconSize, height: iconSize));
             }
           } else {
             currIcon = SizedBox(

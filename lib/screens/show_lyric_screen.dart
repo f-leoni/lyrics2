@@ -173,7 +173,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 color:
                     Provider.of<FirebaseUserRepository>(context, listen: false)
                         .themeData
-                        .primaryColor,
+                        .highlightColor,
                 onPressed: () {
                   final manager =
                       Provider.of<AppStateManager>(context, listen: false);
