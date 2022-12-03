@@ -74,7 +74,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
   }
 
   Widget createLyricPage(BuildContext context, Future<Lyric> lyric) {
-    int alpha = 230;
+    int alpha = 180;
     BlendMode blend = BlendMode.darken;
     BoxDecoration decoration = BoxDecoration(
         image: DecorationImage(

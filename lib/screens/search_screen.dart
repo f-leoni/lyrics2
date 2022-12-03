@@ -38,6 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
   String _searchStringAuthor = "";
   String _searchStringSong = "";
   int minSearchLen = 3;
+  Widget spinner = Container();
 
   @override
   void initState() {
@@ -69,37 +70,43 @@ class _SearchScreenState extends State<SearchScreen> {
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Scaffold(
       backgroundColor: users.themeData.primaryColor,
-      body: Padding(
-          padding: const EdgeInsets.all(0.0),
-          child: CustomScrollView(slivers: <Widget>[
-            SliverAppBar(
-                pinned: false,
-                snap: true,
-                floating: true,
-                backgroundColor: users.themeData.primaryColor,
-                expandedHeight: 160.0,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Column(
-                    children: [
-                      Expanded(flex: 3, child: buildSearchFields(context)),
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: buildSearchButton(context),
-                        ),
+      body: Stack(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: CustomScrollView(slivers: <Widget>[
+                SliverAppBar(
+                    pinned: false,
+                    snap: true,
+                    floating: true,
+                    backgroundColor: users.themeData.primaryColor,
+                    expandedHeight: 160.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Column(
+                        children: [
+                          Expanded(flex: 3, child: buildSearchFields(context)),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: buildSearchButton(context),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )),
-            SliverList(
-                delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return buildTile(context, index);
-              },
-              childCount: manager.searchResults.length,
-            ))
-          ])),
+                    )),
+                SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return buildTile(context, index);
+                  },
+                  childCount: manager.searchResults.length,
+                ))
+              ])),
+          spinner
+        ],
+      ),
     );
   }
 
@@ -474,11 +481,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildTile(BuildContext context, int index) {
     final manager = Provider.of<AppStateManager>(context, listen: false);
+    final theme =
+        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
     if (manager.isSearchCompleted) {
       List<LyricSearchResult> results = manager.searchResults;
       LyricSearchResult lsr = results[index];
       //int hIndex = index + 1;
-
       return InkWell(
         child: LyricTile(
           lyric: lsr,
@@ -486,6 +494,23 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         onTap: () async {
           logger.d("Clicked on Search result tile. Song: ${lsr.song}");
+          setState(() {
+            spinner = Center(
+                child: SizedBox(
+                    height: 115,
+                    width: 115,
+                    child: Container(
+                      color: Colors.white12,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: CircularProgressIndicator(
+                          color: theme.indicatorColor,
+                          backgroundColor: theme.primaryColor,
+                          strokeWidth: 8,
+                        ),
+                      ),
+                    )));
+          });
           var lyric = await manager.getLyric(
               lsr,
               lsr.provider == Proxies.genius
@@ -494,17 +519,17 @@ class _SearchScreenState extends State<SearchScreen> {
           manager.viewLyric(lyric);
 
           /*Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ShowLyricScreen(
-                lyric: manager.getLyric(
-                    lsr,
-                    lsr.provider == Proxies.genius
-                        ? GeniusProxy()
-                        : ChartLyricsProxy()),
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShowLyricScreen(
+                  lyric: manager.getLyric(
+                      lsr,
+                      lsr.provider == Proxies.genius
+                          ? GeniusProxy()
+                          : ChartLyricsProxy()),
+                ),
               ),
-            ),
-          );*/
+            );*/
         },
       );
     }
