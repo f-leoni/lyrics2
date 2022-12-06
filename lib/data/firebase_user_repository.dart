@@ -39,7 +39,7 @@ class FirebaseUserRepository with ChangeNotifier {
   var _didSelectUser = false;
   //TODO Change here for initial dark mode state
   var _darkMode = false;
-  var _useGenius = false;
+  var _useGenius = true;
 
   ImageProvider<Object> get userImage {
     if (auth.currentUser == null) return const AssetImage('assets/icon.png');

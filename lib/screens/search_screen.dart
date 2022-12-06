@@ -39,6 +39,9 @@ class _SearchScreenState extends State<SearchScreen> {
   String _searchStringSong = "";
   int minSearchLen = 3;
   Widget spinner = Container();
+  //int searchType = SearchType.text;
+  late List<DropdownMenuItem<int>> _dropdownItems = List.empty();
+  List<DropdownMenuItem<int>> get dropdownItems => _dropdownItems;
 
   @override
   void initState() {
@@ -68,6 +71,7 @@ class _SearchScreenState extends State<SearchScreen> {
     logger.d("Building Search Screen");
     final manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    _dropdownItems = buildDropdownItems(context);
     return Scaffold(
       backgroundColor: users.themeData.primaryColor,
       body: Stack(
@@ -110,6 +114,43 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  List<DropdownMenuItem<int>> buildDropdownItems(BuildContext context) {
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    List<DropdownMenuItem<int>> menuItems = [
+      DropdownMenuItem(
+          value: SearchType.audio,
+          child: Row(
+            children: [
+              Icon(
+                Icons.radio,
+                color: users.themeData.indicatorColor,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                AppLocalizations.of(context)!.msgAudioSearch,
+                style: users.textTheme.bodySmall,
+              ),
+            ],
+          )),
+      DropdownMenuItem(
+          value: SearchType.text,
+          child: Row(
+            children: [
+              Icon(
+                Icons.text_snippet,
+                color: users.themeData.indicatorColor,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                AppLocalizations.of(context)!.msgTextSearch,
+                style: users.textTheme.bodySmall,
+              ),
+            ],
+          )),
+    ];
+    return menuItems;
+  }
+
   Widget buildSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     int searchType = manager.searchType;
@@ -129,33 +170,43 @@ class _SearchScreenState extends State<SearchScreen> {
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     var theme = users.themeData;
     var textTheme = users.textTheme;
+    int searchType = manager.searchType;
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            flex: 1,
-            child: Padding(
+          Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
-              child: IconButton(
-                  alignment: Alignment.centerLeft,
-                  iconSize: 50,
-                  onPressed: () {
-                    manager.switchSearch(
-                        context,
-                        _searchControllerText.text,
-                        _searchControllerAuthor.text,
-                        _searchControllerSong.text);
+              child: DropdownButton(
+                  value: searchType,
+                  onChanged: (int? newValue) {
+                    if (newValue != searchType) {
+                      manager.switchSearch(
+                          context,
+                          _searchControllerText.text,
+                          _searchControllerAuthor.text,
+                          _searchControllerSong.text);
+                    }
                   },
-                  icon: Icon(
-                    Icons.text_snippet,
-                    color: theme.indicatorColor,
-                  )),
-            ),
-          ),
+                  items: dropdownItems)
+              /*IconButton(
+                alignment: Alignment.centerLeft,
+                iconSize: 50,
+                onPressed: () {
+                  manager.switchSearch(
+                      context,
+                      _searchControllerText.text,
+                      _searchControllerAuthor.text,
+                      _searchControllerSong.text);
+                },
+                icon: Icon(
+                  Icons.text_snippet,
+                  color: theme.indicatorColor,
+                )),*/
+              ),
           Expanded(
-            flex: 5,
+            flex: 2,
             child: Column(
               children: [
                 Expanded(
@@ -164,7 +215,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       constraints:
                           const BoxConstraints(minHeight: 50, maxHeight: 90),
                       child: Container(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
                         //color: Colors.red,
                         child: Center(
                           child: MaterialButton(
@@ -358,14 +409,28 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildTextSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    //var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    int searchType = manager.searchType;
     return Row(
       //mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
-          child: IconButton(
+            padding:
+                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
+            child: DropdownButton(
+                value: searchType,
+                onChanged: (int? newValue) {
+                  if (newValue != searchType) {
+                    manager.switchSearch(
+                        context,
+                        _searchControllerText.text,
+                        _searchControllerAuthor.text,
+                        _searchControllerSong.text);
+                  }
+                },
+                items: dropdownItems)
+            /*IconButton(
               iconSize: 50,
               onPressed: () {
                 manager.switchSearch(context, _searchControllerText.text,
@@ -374,8 +439,8 @@ class _SearchScreenState extends State<SearchScreen> {
               icon: Icon(
                 Icons.radio,
                 color: users.themeData.indicatorColor,
-              )),
-        ),
+              )),*/
+            ),
         Expanded(
           flex: 1,
           child: Padding(

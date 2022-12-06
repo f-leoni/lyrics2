@@ -136,18 +136,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(AppLocalizations.of(context)!.msgUseGenius,
-              style: users.themeData.textTheme.bodyText2),
-          Switch(
-            value: users.useGenius, //widget.user.darkMode,
-            onChanged: (value) {
-              users.useGenius = value;
-            },
-            activeColor: users.themeData.indicatorColor,
-          )
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(AppLocalizations.of(context)!.msgUseGenius,
+                  style: users.themeData.textTheme.bodyText2),
+              Switch(
+                value: users.useGenius, //widget.user.darkMode,
+                onChanged: (value) {
+                  users.useGenius = value;
+                },
+                activeColor: users.themeData.indicatorColor,
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(AppLocalizations.of(context)!.msgUseCL,
+                  style: users.themeData.textTheme.bodyText2),
+              Switch(
+                value: !users.useGenius, //widget.user.darkMode,
+                onChanged: (value) {
+                  users.useGenius = !value;
+                },
+                activeColor: users.themeData.indicatorColor,
+              )
+            ],
+          ),
         ],
       ),
     );

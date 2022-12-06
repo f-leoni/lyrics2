@@ -50,8 +50,11 @@
     "msgLogout": "Esci",
     "msgDarkMode": "Modalità scura",
     "msgUseGenius": "Usa il servizio Genius",
+    "msgUseCL": "Usa il servizio ChartLyrics",
     "msgDismissed": "eliminata dai preferiti",
     "msgFavorites": "Preferiti",
     "ttlProfile": "Profilo",
-    "msgRegistrationDate": "Data di registrazione: "
+    "msgRegistrationDate": "Data di registrazione: ",
+    "msgAudioSearch": "Audio",
+    "msgTextSearch": "Testuale"
 }

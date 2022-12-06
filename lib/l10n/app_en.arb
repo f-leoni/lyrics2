@@ -199,6 +199,10 @@
     "@msgUseGenius": {
            "description": "Message for Genius Service switch"
     },
+    "msgUseCL": "Use ChartLyrics Service",
+    "@msgUseCL": {
+        "description": "Message for ChartLyrics Service switch"
+    },
     "msgDismissed": "dismissed",
     "@msgDismissed": {
            "description": "Message for slide/deleting a favorite"
@@ -214,5 +218,13 @@
     "msgRegistrationDate": "Registration date: ",
     "@msgRegistrationDate": {
         "description": "Registration date message for profile screen"
+    },
+    "msgAudioSearch": "Audio",
+    "@msgAudioSearch": {
+        "description": "Dropdown text for audio search"
+    },
+    "msgTextSearch": "Text",
+    "@msgTextSearch": {
+        "description": "Dropdown text for text search"
     }
 }
