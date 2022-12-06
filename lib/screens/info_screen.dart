@@ -104,6 +104,11 @@ class InfoScreen extends StatelessWidget {
                                 }
                               },
                             ),
+                            // Crashlytics test
+                            /*TextButton(
+                              onPressed: () => throw Exception(),
+                              child: const Text("Throw Test Exception"),
+                            ),*/
                           ],
                         );
                       }),

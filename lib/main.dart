@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,11 +13,20 @@ import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-main() {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp()
-      .then((value) => runApp(const LyricsApp())); // Firebase Initialization
-  //runApp(const LyricsApp());
+  await Firebase.initializeApp().then((value) {
+    FlutterError.onError = (errorDetails) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    };
+    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+
+    runApp(const LyricsApp());
+  }); // Firebase Initialization
 }
 
 class LyricsApp extends StatefulWidget {
