@@ -27,6 +27,7 @@ class FirebaseFavoritesRepository extends FavoritesRepository
     logger.d("Deleting form Firebase ${lyric.song}[${lyric.lyricId}]...");
     await collection
         .where('LyricId', isEqualTo: lyric.lyricId)
+        .where('owner', isEqualTo: lyric.owner)
         .get()
         .then((value) {
       logger.d("  Found [${lyric.lyricId}]...");

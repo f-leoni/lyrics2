@@ -84,8 +84,8 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     ));
     final favorites = Provider.of<FirebaseFavoritesRepository>(context);
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    final theme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final theme = users.themeData;
     //isFavorite ??= await checkIfFavorite(favorites, await lyric);
     return SafeArea(
       child: Scaffold(
@@ -95,6 +95,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   Lyric currLyric = snapshot.data as Lyric;
+                  currLyric.owner = users.getUser!.email;
                   return buildPage(currLyric, manager, decoration, alpha, blend,
                       context, favorites);
                 } else {
@@ -128,6 +129,8 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       BlendMode blend,
       BuildContext context,
       FirebaseFavoritesRepository favorites) {
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    currLyric.owner = users.getUser!.email;
     logger.d("lyric is: ${currLyric.song}");
     if (!bgImageCreated) {
       try {
