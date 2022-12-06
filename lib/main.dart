@@ -13,9 +13,9 @@ import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-main() async {
+main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) {
+  Firebase.initializeApp().then((value) {
     FlutterError.onError = (errorDetails) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
     };

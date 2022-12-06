@@ -8,7 +8,7 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
 
-class FavoritesScreen extends StatelessWidget {
+class FavoritesScreen extends StatefulWidget {
   static MaterialPage page() {
     return MaterialPage(
       name: LyricsPages.favoritesPath,
@@ -20,34 +20,96 @@ class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({Key? key}) : super(key: key);
 
   @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  String filter = "";
+  final _filterController = TextEditingController();
+  FocusNode myFocusNode = FocusNode();
+  final Key _filterKey = const ValueKey(0);
+
+  @override
+  void initState() {
+    _filterController.addListener(() {
+      filter = _filterController.text;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     logger.d("Building favorites screen");
     final favoritesRepository =
         Provider.of<FirebaseFavoritesRepository>(context);
-    final profile = Provider.of<FirebaseUserRepository>(context);
+    final profile = Provider.of<FirebaseUserRepository>(context, listen: false);
 
     Future<List<Lyric>> favorites =
         favoritesRepository.findAllFavsLyrics(profile.getUser!.email);
-    return FutureBuilder(
-        future: favorites,
-        builder: (context, snapshot) {
-          List<Lyric> favoritesData = List<Lyric>.empty();
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              favoritesData = snapshot.data as List<Lyric>;
-            }
-            if (favoritesData.isEmpty) {
-              return buildEmptyScreen(context);
-            } else {
-              return buildScreen(context, favoritesData);
-            }
-          } else {
-            return Center(
-                child: CircularProgressIndicator.adaptive(
-              backgroundColor: profile.themeData.primaryColor,
-            ));
-          }
-        });
+    return Column(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            color: profile.themeData.primaryColor,
+            child: TextField(
+              key: _filterKey,
+              focusNode: myFocusNode,
+              controller: _filterController,
+              decoration: InputDecoration(
+                prefixIcon: IconButton(
+                    icon: const Icon(Icons.filter_alt),
+                    onPressed: () =>
+                        setState(() => filter = _filterController.text)),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    // Clear the search field
+                    setState(() => _filterController.text = "");
+                  },
+                ),
+                hintText: AppLocalizations.of(context)!.filterHint,
+                //border: const UnderlineInputBorder(), //OutlineInputBorder(),
+                filled: false,
+                fillColor:
+                    Theme.of(context).backgroundColor, //Colors.yellow[50],
+              ),
+              onEditingComplete: () => setState(() {
+                filter = _filterController.text;
+              }),
+              onChanged: (text) {
+                setState(() {
+                  filter = text;
+                  FocusScope.of(context).requestFocus(myFocusNode);
+                });
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 8,
+          child: FutureBuilder(
+              future: favorites,
+              builder: (context, snapshot) {
+                List<Lyric> favoritesData = List<Lyric>.empty();
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    favoritesData = snapshot.data as List<Lyric>;
+                  }
+                  if (favoritesData.isEmpty) {
+                    return buildEmptyScreen(context);
+                  } else {
+                    return buildScreen(context, favoritesData);
+                  }
+                } else {
+                  return Center(
+                      child: CircularProgressIndicator.adaptive(
+                    backgroundColor: profile.themeData.primaryColor,
+                  ));
+                }
+              }),
+        ),
+      ],
+    );
   }
 
   Widget buildScreen(BuildContext context, List<Lyric> favorites) {
@@ -56,35 +118,38 @@ class FavoritesScreen extends StatelessWidget {
         Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
     List<Widget> itemTiles = List<Widget>.empty(growable: true);
     for (Lyric lyric in favorites) {
-      itemTiles.add(Dismissible(
-        key: Key(lyric.lyricId.toString()),
-        direction: DismissDirection.endToStart,
-        background: Container(
-            color: Colors.red.shade200,
-            alignment: Alignment.centerRight,
-            child: Icon(Icons.delete_forever,
-                color:
-                    Provider.of<FirebaseUserRepository>(context, listen: false)
-                        .themeData
-                        .backgroundColor,
-                size: 25.0)),
-        onDismissed: (direction) {
-          Provider.of<FirebaseFavoritesRepository>(context, listen: false)
-              .deleteLyricFromFavs(lyric);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                  '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}',
-                  style: theme.button)));
-        },
-        child: InkWell(
-          child: LyricTile(
-            lyric: lyric,
-            isFavoritePage: true,
-          ),
-          onTap: () {
-            logger.d("Clicked on Favorites result Screen. Song: ${lyric.song}");
-            manager.viewLyric(lyric);
-            /*Navigator.push(
+      if (lyric.song.toLowerCase().contains(filter.toLowerCase()) |
+          lyric.artist.toLowerCase().contains(filter.toLowerCase())) {
+        itemTiles.add(Dismissible(
+          key: Key(lyric.lyricId.toString()),
+          direction: DismissDirection.endToStart,
+          background: Container(
+              color: Colors.red.shade200,
+              alignment: Alignment.centerRight,
+              child: Icon(Icons.delete_forever,
+                  color: Provider.of<FirebaseUserRepository>(context,
+                          listen: false)
+                      .themeData
+                      .backgroundColor,
+                  size: 25.0)),
+          onDismissed: (direction) {
+            Provider.of<FirebaseFavoritesRepository>(context, listen: false)
+                .deleteLyricFromFavs(lyric);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}',
+                    style: theme.button)));
+          },
+          child: InkWell(
+            child: LyricTile(
+              lyric: lyric,
+              isFavoritePage: true,
+            ),
+            onTap: () {
+              logger
+                  .d("Clicked on Favorites result Screen. Song: ${lyric.song}");
+              manager.viewLyric(lyric);
+              /*Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ShowLyricScreen(
@@ -92,9 +157,12 @@ class FavoritesScreen extends StatelessWidget {
                 ),
               ),
             );*/
-          },
-        ),
-      ));
+            },
+          ),
+        ));
+      } else {
+        continue;
+      }
     }
     double height = MediaQuery.of(context).size.height;
 

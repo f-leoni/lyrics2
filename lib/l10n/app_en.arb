@@ -226,5 +226,13 @@
     "msgTextSearch": "Text",
     "@msgTextSearch": {
         "description": "Dropdown text for text search"
+    },
+    "filterHint": "Filter by title and author...",
+    "@filterHint": {
+        "description": "Hint for favorites filter textfield"
+    },
+    "msgSearchMode": "Search mode",
+    "@msgSearchMode": {
+        "description": "Dropdown title in search screen"
     }
 }

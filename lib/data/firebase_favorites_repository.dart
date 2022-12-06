@@ -24,7 +24,7 @@ class FirebaseFavoritesRepository extends FavoritesRepository
 
   @override
   Future<void> deleteLyricFromFavs(Lyric lyric) async {
-    logger.d("Deleting form Firebase ${lyric.song}[${lyric.lyricId}]...");
+    logger.d("Deleting from Firebase ${lyric.song}[${lyric.lyricId}]...");
     await collection
         .where('LyricId', isEqualTo: lyric.lyricId)
         .where('owner', isEqualTo: lyric.owner)

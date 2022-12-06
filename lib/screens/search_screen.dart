@@ -178,18 +178,31 @@ class _SearchScreenState extends State<SearchScreen> {
           Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
-              child: DropdownButton(
-                  value: searchType,
-                  onChanged: (int? newValue) {
-                    if (newValue != searchType) {
-                      manager.switchSearch(
-                          context,
-                          _searchControllerText.text,
-                          _searchControllerAuthor.text,
-                          _searchControllerSong.text);
-                    }
-                  },
-                  items: dropdownItems)
+              child: Column(
+                children: [
+                  Expanded(
+                      flex: 1,
+                      child: Center(
+                          child: Text(
+                              AppLocalizations.of(context)!.msgSearchMode))),
+                  Expanded(
+                    flex: 2,
+                    child: DropdownButton(
+                        value: searchType,
+                        isDense: true,
+                        onChanged: (int? newValue) {
+                          if (newValue != searchType) {
+                            manager.switchSearch(
+                                context,
+                                _searchControllerText.text,
+                                _searchControllerAuthor.text,
+                                _searchControllerSong.text);
+                          }
+                        },
+                        items: dropdownItems),
+                  ),
+                ],
+              )
               /*IconButton(
                 alignment: Alignment.centerLeft,
                 iconSize: 50,
@@ -418,18 +431,31 @@ class _SearchScreenState extends State<SearchScreen> {
         Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
-            child: DropdownButton(
-                value: searchType,
-                onChanged: (int? newValue) {
-                  if (newValue != searchType) {
-                    manager.switchSearch(
-                        context,
-                        _searchControllerText.text,
-                        _searchControllerAuthor.text,
-                        _searchControllerSong.text);
-                  }
-                },
-                items: dropdownItems)
+            child: Column(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Center(
+                        child:
+                            Text(AppLocalizations.of(context)!.msgSearchMode))),
+                Expanded(
+                  flex: 2,
+                  child: DropdownButton(
+                      isDense: true,
+                      value: searchType,
+                      onChanged: (int? newValue) {
+                        if (newValue != searchType) {
+                          manager.switchSearch(
+                              context,
+                              _searchControllerText.text,
+                              _searchControllerAuthor.text,
+                              _searchControllerSong.text);
+                        }
+                      },
+                      items: dropdownItems),
+                ),
+              ],
+            )
             /*IconButton(
               iconSize: 50,
               onPressed: () {
