@@ -112,7 +112,7 @@ class AppRouter extends RouterDelegate
     if (route.settings.name == LyricsPages.showLyricPath) {
       appStateManager.isViewingLyric = false;
       appStateManager.viewedLyric = Lyric.empty;
-      appStateManager.goToTab(LyricsTab.search);
+      appStateManager.goToTab(appStateManager.getSelectedTab);
     }
     if (route.settings.name == LyricsPages.infoPath) {
       appStateManager.goToTab(LyricsTab.search);
