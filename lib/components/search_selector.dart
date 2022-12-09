@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+//import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -79,8 +79,8 @@ class _SearchSelectorState extends State<SearchSelector> {
               width: 4.0,
             ),
           ),
-          const SizedBox(height: 8),
-          Text(AppLocalizations.of(context)!.msgSearchMode),
+          //const SizedBox(height: 8),
+          //Text(AppLocalizations.of(context)!.msgSearchMode),
         ],
       ),
     );

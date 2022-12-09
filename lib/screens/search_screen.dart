@@ -86,15 +86,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     flexibleSpace: FlexibleSpaceBar(
                       background: Row(
                         children: [
-                          Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: buildSearchSelector(
-                                  searchType,
-                                  _searchControllerText,
-                                  _searchControllerAuthor,
-                                  _searchControllerSong)),
                           Expanded(
-                            flex: 4,
+                            flex: 3,
                             child: Column(
                               children: [
                                 Expanded(
@@ -110,6 +103,13 @@ class _SearchScreenState extends State<SearchScreen> {
                               ],
                             ),
                           ),
+                          Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 8.0, 0),
+                              child: buildSearchSelector(
+                                  searchType,
+                                  _searchControllerText,
+                                  _searchControllerAuthor,
+                                  _searchControllerSong)),
                         ],
                       ),
                     )),
@@ -256,15 +256,35 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
               ),
+              /*Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Expanded(
+                  child: SizedBox(
+                    width: 265,
+                    child: Text(
+                        '${AppLocalizations.of(context)!.msgTrack}: Another Brick in the wall Pat II (ft: Patty Pravo) - Pink Floyd',
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.bodyText1),
+                  ),
+                ),
+              ),*/
               // Spread operator to extend a Column widget children collection
               if (music != null ||
                   (manager.searchAudioAuthor != "" &&
                       manager.searchAudioSong != "")) ...[
                 SizedBox.fromSize(size: const Size(1, 9)),
-                Text(
-                    '${AppLocalizations.of(context)!.msgTrack}: ${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
-                    overflow: TextOverflow.fade,
-                    style: textTheme.bodyText1),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Expanded(
+                    child: SizedBox(
+                      width: 230,
+                      child: Text(
+                          '${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.bodyText1),
+                    ),
+                  ),
+                ),
               ],
             ],
           ),

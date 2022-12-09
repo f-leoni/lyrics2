@@ -61,9 +61,6 @@ class AppRouter extends RouterDelegate
                 if (appStateManager.isViewingLyric)
                   ShowLyricScreen.page(
                       Future.value(appStateManager.viewedLyric)),
-                /*if (appStateManager.isViewingLyric)
-                  ShowLyricScreen.page(
-                      Future.value(appStateManager.viewedLyric)),*/
               ], // pages[]
             );
           } else {
