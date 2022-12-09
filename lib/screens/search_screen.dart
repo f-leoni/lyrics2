@@ -8,6 +8,7 @@ import 'package:lyrics2/api/genius_proxy.dart';
 import 'package:lyrics2/api/proxies.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
+import 'package:lyrics2/components/search_selector.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/env.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
@@ -39,9 +40,6 @@ class _SearchScreenState extends State<SearchScreen> {
   String _searchStringSong = "";
   int minSearchLen = 3;
   Widget spinner = Container();
-  //int searchType = SearchType.text;
-  late List<DropdownMenuItem<int>> _dropdownItems = List.empty();
-  List<DropdownMenuItem<int>> get dropdownItems => _dropdownItems;
 
   @override
   void initState() {
@@ -71,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
     logger.d("Building Search Screen");
     final manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    _dropdownItems = buildDropdownItems(context);
+    int searchType = manager.searchType;
     return Scaffold(
       backgroundColor: users.themeData.primaryColor,
       body: Stack(
@@ -84,17 +82,32 @@ class _SearchScreenState extends State<SearchScreen> {
                     snap: true,
                     floating: true,
                     backgroundColor: users.themeData.primaryColor,
-                    expandedHeight: 160.0,
+                    expandedHeight: 100.0,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Column(
+                      background: Row(
                         children: [
-                          Expanded(flex: 3, child: buildSearchFields(context)),
+                          Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: buildSearchSelector(
+                                  searchType,
+                                  _searchControllerText,
+                                  _searchControllerAuthor,
+                                  _searchControllerSong)),
                           Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: buildSearchButton(context),
+                            flex: 4,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                    flex: 3, child: buildSearchFields(context)),
+                                /*Expanded(
+                                  flex: 2,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: buildSearchButton(context),
+                                  ),
+                                ),*/
+                              ],
                             ),
                           ),
                         ],
@@ -112,43 +125,6 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       ),
     );
-  }
-
-  List<DropdownMenuItem<int>> buildDropdownItems(BuildContext context) {
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    List<DropdownMenuItem<int>> menuItems = [
-      DropdownMenuItem(
-          value: SearchType.audio,
-          child: Row(
-            children: [
-              Icon(
-                Icons.radio,
-                color: users.themeData.indicatorColor,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                AppLocalizations.of(context)!.msgAudioSearch,
-                style: users.textTheme.bodySmall,
-              ),
-            ],
-          )),
-      DropdownMenuItem(
-          value: SearchType.text,
-          child: Row(
-            children: [
-              Icon(
-                Icons.text_snippet,
-                color: users.themeData.indicatorColor,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                AppLocalizations.of(context)!.msgTextSearch,
-                style: users.textTheme.bodySmall,
-              ),
-            ],
-          )),
-    ];
-    return menuItems;
   }
 
   Widget buildSearchFields(BuildContext context) {
@@ -170,175 +146,127 @@ class _SearchScreenState extends State<SearchScreen> {
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     var theme = users.themeData;
     var textTheme = users.textTheme;
-    int searchType = manager.searchType;
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
-              child: Column(
-                children: [
-                  Expanded(
-                      flex: 1,
+          Column(
+            children: [
+              Expanded(
+                child: Builder(
+                  builder: (context) => ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(minHeight: 50, maxHeight: 90),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 00, 0),
+                      //color: Colors.red,
                       child: Center(
-                          child: Text(
-                              AppLocalizations.of(context)!.msgSearchMode))),
-                  Expanded(
-                    flex: 2,
-                    child: DropdownButton(
-                        value: searchType,
-                        isDense: true,
-                        onChanged: (int? newValue) {
-                          if (newValue != searchType) {
-                            manager.switchSearch(
+                        child: MaterialButton(
+                          minWidth: 150,
+                          height: 50,
+                          color: theme.indicatorColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          onPressed: () async {
+                            final provider = Provider.of<AppStateManager>(
                                 context,
-                                _searchControllerText.text,
-                                _searchControllerAuthor.text,
-                                _searchControllerSong.text);
-                          }
-                        },
-                        items: dropdownItems),
-                  ),
-                ],
-              )
-              /*IconButton(
-                alignment: Alignment.centerLeft,
-                iconSize: 50,
-                onPressed: () {
-                  manager.switchSearch(
-                      context,
-                      _searchControllerText.text,
-                      _searchControllerAuthor.text,
-                      _searchControllerSong.text);
-                },
-                icon: Icon(
-                  Icons.text_snippet,
-                  color: theme.indicatorColor,
-                )),*/
-              ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Builder(
-                    builder: (context) => ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(minHeight: 50, maxHeight: 90),
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
-                        //color: Colors.red,
-                        child: Center(
-                          child: MaterialButton(
-                            minWidth: 150,
-                            height: 50,
-                            color: theme.indicatorColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            onPressed: () async {
-                              final provider = Provider.of<AppStateManager>(
-                                  context,
-                                  listen: false);
-                              music = null;
-                              provider.searchAudioAuthor = "";
-                              provider.searchAudioSong = "";
-                              final session = ACRCloud.startSession();
-                              logger.d("Showing Audio panel");
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) => AlertDialog(
-                                  title: Text(AppLocalizations.of(context)!
-                                      .msgListening),
-                                  content: StreamBuilder(
-                                      stream: session.volumeStream,
-                                      initialData: 1.0,
-                                      builder: (_, snapshot) {
-                                        double size = 60.0 *
-                                            pow(snapshot.data as double, 1);
-                                        return SizedBox(
-                                            height: 60.0,
-                                            child: Icon(
-                                              Icons.radio,
-                                              //FontAwesomeIcons.music,
-                                              size: size,
-                                              color:
-                                                  theme.colorScheme.secondary,
-                                            ));
-                                      }),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        logger.d("Cancel Listening");
-                                        session.cancel();
-                                      },
-                                      child: Text(AppLocalizations.of(context)!
-                                          .msgCancel),
-                                    )
-                                  ],
-                                ),
-                              ).onError((error, stackTrace) =>
-                                  logger.e("Dialog Error: $error"));
-                              logger.d("Wait for results");
-                              final result = await session.result;
-                              // Avoid lint error "Do not use BuildContexts across async gaps"
-                              if (!mounted) return;
-                              logger.d("Hide audio dialog");
-                              // Hide dialog
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop(result);
+                                listen: false);
+                            music = null;
+                            provider.searchAudioAuthor = "";
+                            provider.searchAudioSong = "";
+                            final session = ACRCloud.startSession();
+                            logger.d("Showing Audio panel");
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                    AppLocalizations.of(context)!.msgListening),
+                                content: StreamBuilder(
+                                    stream: session.volumeStream,
+                                    initialData: 1.0,
+                                    builder: (_, snapshot) {
+                                      double size = 60.0 *
+                                          pow(snapshot.data as double, 1);
+                                      return SizedBox(
+                                          height: 60.0,
+                                          child: Icon(
+                                            Icons.radio,
+                                            //FontAwesomeIcons.music,
+                                            size: size,
+                                            color: theme.colorScheme.secondary,
+                                          ));
+                                    }),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      logger.d("Cancel Listening");
+                                      session.cancel();
+                                    },
+                                    child: Text(AppLocalizations.of(context)!
+                                        .msgCancel),
+                                  )
+                                ],
+                              ),
+                            ).onError((error, stackTrace) =>
+                                logger.e("Dialog Error: $error"));
+                            logger.d("Wait for results");
+                            final result = await session.result;
+                            // Avoid lint error "Do not use BuildContexts across async gaps"
+                            if (!mounted) return;
+                            logger.d("Hide audio dialog");
+                            // Hide dialog
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(result);
 
-                              if (result == null) {
-                                logger.d("Audio search Canceled");
-                                // Search has been cancelled.
-                                return;
-                              } else if (result.metadata == null) {
-                                logger.d(
-                                    "Error in Audio Search: ${result.status.msg}");
-                                // No results found
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(
-                                    '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}',
-                                    style: textTheme.button,
-                                  ),
-                                ));
-                                return;
-                              } else {
-                                music = result.metadata!.music.first;
-                                if (music != null) {
-                                  provider.searchAudioAuthor =
-                                      music!.artists.first.name;
-                                  provider.searchAudioSong = music!.title;
-                                  startSearch(context);
-                                }
+                            if (result == null) {
+                              logger.d("Audio search Canceled");
+                              // Search has been cancelled.
+                              return;
+                            } else if (result.metadata == null) {
+                              logger.d(
+                                  "Error in Audio Search: ${result.status.msg}");
+                              // No results found
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                  '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}',
+                                  style: textTheme.button,
+                                ),
+                              ));
+                              return;
+                            } else {
+                              music = result.metadata!.music.first;
+                              if (music != null) {
+                                provider.searchAudioAuthor =
+                                    music!.artists.first.name;
+                                provider.searchAudioSong = music!.title;
+                                startSearch(context);
                               }
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)!.msgListen,
-                              style: textTheme.button,
-                            ),
+                            }
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.msgListen,
+                            style: textTheme.button,
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                // Spread operator to extend a Column widget children collection
-                if (music != null ||
-                    (manager.searchAudioAuthor != "" &&
-                        manager.searchAudioSong != "")) ...[
-                  SizedBox.fromSize(size: const Size(1, 9)),
-                  Text(
-                      '${AppLocalizations.of(context)!.msgTrack}: ${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
-                      overflow: TextOverflow.fade,
-                      style: textTheme.bodyText1),
-                ],
+              ),
+              // Spread operator to extend a Column widget children collection
+              if (music != null ||
+                  (manager.searchAudioAuthor != "" &&
+                      manager.searchAudioSong != "")) ...[
+                SizedBox.fromSize(size: const Size(1, 9)),
+                Text(
+                    '${AppLocalizations.of(context)!.msgTrack}: ${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
+                    overflow: TextOverflow.fade,
+                    style: textTheme.bodyText1),
               ],
-            ),
+            ],
           ),
         ]);
   }
@@ -421,52 +349,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget buildTextSearchFields(BuildContext context) {
-    var manager = Provider.of<AppStateManager>(context, listen: false);
-    //var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    int searchType = manager.searchType;
     return Row(
       //mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
-            child: Column(
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: Center(
-                        child:
-                            Text(AppLocalizations.of(context)!.msgSearchMode))),
-                Expanded(
-                  flex: 2,
-                  child: DropdownButton(
-                      isDense: true,
-                      value: searchType,
-                      onChanged: (int? newValue) {
-                        if (newValue != searchType) {
-                          manager.switchSearch(
-                              context,
-                              _searchControllerText.text,
-                              _searchControllerAuthor.text,
-                              _searchControllerSong.text);
-                        }
-                      },
-                      items: dropdownItems),
-                ),
-              ],
-            )
-            /*IconButton(
-              iconSize: 50,
-              onPressed: () {
-                manager.switchSearch(context, _searchControllerText.text,
-                    _searchControllerAuthor.text, _searchControllerSong.text);
-              },
-              icon: Icon(
-                Icons.radio,
-                color: users.themeData.indicatorColor,
-              )),*/
-            ),
         Expanded(
           flex: 1,
           child: Padding(
@@ -474,8 +360,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
             child: TextField(
               controller: _searchControllerText,
+              onSubmitted: (value) => startSearch(context),
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () => startSearch(context)),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
                   onPressed: () {
@@ -528,63 +417,6 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  Future<void> startSearch(BuildContext context) async {
-    final manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    var theme = users.themeData;
-    var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
-    manager.lastTextSearch = _searchControllerText.text;
-    manager.lastAuthorSearch = _searchControllerAuthor.text;
-    manager.lastSongSearch = _searchControllerSong.text;
-    var searchType = manager.searchType;
-
-    if (searchType == SearchType.text &&
-            _searchStringText.length < minSearchLen ||
-        searchType == SearchType.songAuthor &&
-            (_searchStringSong.length < minSearchLen ||
-                _searchStringAuthor.length < minSearchLen)) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.of(context)!.searchTextTooShort,
-          style: theme.textTheme.button,
-        ),
-      ));
-      return;
-    }
-    //Hide virtual keyboard
-    FocusManager.instance.primaryFocus?.unfocus();
-    if (searchType == SearchType.text) {
-      await manager.startSearchText(_searchStringText, currProxy);
-    } else if (searchType == SearchType.songAuthor) {
-      await manager.startSearchSongAuthor(
-          _searchStringAuthor, _searchStringSong, currProxy);
-    } else if (searchType == SearchType.audio) {
-      await manager.startSearchSongAuthor(
-          manager.searchAudioAuthor, manager.searchAudioSong, currProxy);
-    }
-    showNoResultsMsg(manager.searchResults);
-  }
-
-  @override
-  void dispose() {
-    logger.d("Disposing of Search Screen");
-    _searchControllerText.dispose();
-    _searchControllerAuthor.dispose();
-    _searchControllerSong.dispose();
-    super.dispose();
-  }
-
-  void showNoResultsMsg(List<LyricSearchResult> results) {
-    if (results.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.noResults,
-            style: Provider.of<FirebaseUserRepository>(context, listen: false)
-                .textTheme
-                .button),
-      ));
-    }
-  }
-
   Widget buildTile(BuildContext context, int index) {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     final theme =
@@ -627,5 +459,75 @@ class _SearchScreenState extends State<SearchScreen> {
       );
     }
     return Container();
+  }
+
+  Future<void> startSearch(BuildContext context) async {
+    final manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var theme = users.themeData;
+    var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
+    manager.lastTextSearch = _searchControllerText.text;
+    manager.lastAuthorSearch = _searchControllerAuthor.text;
+    manager.lastSongSearch = _searchControllerSong.text;
+    var searchType = manager.searchType;
+
+    if (searchType == SearchType.text &&
+            _searchStringText.length < minSearchLen ||
+        searchType == SearchType.songAuthor &&
+            (_searchStringSong.length < minSearchLen ||
+                _searchStringAuthor.length < minSearchLen)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.of(context)!.searchTextTooShort,
+          style: theme.textTheme.button,
+        ),
+      ));
+      return;
+    }
+    //Hide virtual keyboard
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (searchType == SearchType.text) {
+      await manager.startSearchText(_searchStringText, currProxy);
+    } else if (searchType == SearchType.songAuthor) {
+      await manager.startSearchSongAuthor(
+          _searchStringAuthor, _searchStringSong, currProxy);
+    } else if (searchType == SearchType.audio) {
+      await manager.startSearchSongAuthor(
+          manager.searchAudioAuthor, manager.searchAudioSong, currProxy);
+    }
+    showNoResultsMsg(manager.searchResults);
+  }
+
+  void showNoResultsMsg(List<LyricSearchResult> results) {
+    if (results.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context)!.noResults,
+            style: Provider.of<FirebaseUserRepository>(context, listen: false)
+                .textTheme
+                .button),
+      ));
+    }
+  }
+
+  @override
+  void dispose() {
+    logger.d("Disposing of Search Screen");
+    _searchControllerText.dispose();
+    _searchControllerAuthor.dispose();
+    _searchControllerSong.dispose();
+    super.dispose();
+  }
+
+  buildSearchSelector(
+    int searchType,
+    TextEditingController searchControllerText,
+    TextEditingController searchControllerAuthor,
+    TextEditingController searchControllerSong,
+  ) {
+    return SearchSelector(
+        searchType: searchType,
+        searchControllerText: _searchControllerText,
+        searchControllerAuthor: _searchControllerAuthor,
+        searchControllerSong: _searchControllerSong);
   }
 }

@@ -42,11 +42,11 @@ class LyricsTheme {
       primaryColor: Colors.grey.shade100,
       textTheme: lightTextTheme,
       highlightColor: Colors.white70,
-      backgroundColor: Colors.green.shade50,
-      indicatorColor: Colors.green,
+      backgroundColor: Colors.blue.shade50,
+      indicatorColor: Colors.blue,
       primaryColorDark: Colors.black87,
-      colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen)
-          .copyWith(secondary: Colors.lightGreen, brightness: Brightness.light),
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightBlue)
+          .copyWith(secondary: Colors.lightBlue, brightness: Brightness.light),
     );
   }
 

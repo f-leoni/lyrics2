@@ -37,8 +37,6 @@ class LyricsApp extends StatefulWidget {
 }
 
 class _LyricsAppState extends State<LyricsApp> {
-  // This widget is the root of your application.
-  //final _favoritesManager = FavoritesManager();
   final _profileManager = FirebaseUserRepository(); //ProfileManager();
   final _appStateManager = AppStateManager();
   final _favoritesManager = FirebaseFavoritesRepository();
