@@ -25,13 +25,13 @@ class LyricTile extends StatelessWidget {
       builder: (context, appStateManager, child) {
         ThemeData theme = users.themeData;
         return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Container(
-            decoration: BoxDecoration(
-                color: theme.backgroundColor,
-                border: Border.all(color: theme.focusColor),
-                borderRadius: const BorderRadius.all(Radius.circular(15.0))),
-            //color: Colors.red[50],
+          padding: const EdgeInsets.all(2.0),
+          child: Card(
+            color: theme.backgroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+              side: BorderSide(color: theme.focusColor),
+            ),
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

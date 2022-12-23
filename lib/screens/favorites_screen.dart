@@ -34,6 +34,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     _filterController.addListener(() {
       filter = _filterController.text;
     });
+    super.initState();
   }
 
   @override

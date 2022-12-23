@@ -6,12 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 class SearchSelector extends StatefulWidget {
-  int searchType;
+  final int searchType;
   final TextEditingController searchControllerText;
   final TextEditingController searchControllerAuthor;
   final TextEditingController searchControllerSong;
 
-  SearchSelector({
+  const SearchSelector({
     Key? key,
     required this.searchType,
     required this.searchControllerText,
@@ -24,8 +24,11 @@ class SearchSelector extends StatefulWidget {
 }
 
 class _SearchSelectorState extends State<SearchSelector> {
+  int searchType = 0;
+
   @override
   Widget build(BuildContext context) {
+    searchType = widget.searchType;
     final manager = Provider.of<AppStateManager>(context, listen: false);
     final users = Provider.of<FirebaseUserRepository>(context, listen: false);
     final value = widget.searchType == SearchType.text ? true : false;
@@ -42,7 +45,7 @@ class _SearchSelectorState extends State<SearchSelector> {
             onToggle: (bool newSearchType) {
               //if changed. True = text, false = audio
               if (newSearchType && widget.searchType == SearchType.audio) {
-                widget.searchType = SearchType.text;
+                searchType = SearchType.text;
                 manager.switchSearch(
                     context,
                     widget.searchControllerText.text,
@@ -50,7 +53,7 @@ class _SearchSelectorState extends State<SearchSelector> {
                     widget.searchControllerSong.text);
               } else if (!newSearchType &&
                   widget.searchType == SearchType.text) {
-                widget.searchType = SearchType.audio;
+                searchType = SearchType.audio;
                 manager.switchSearch(
                     context,
                     widget.searchControllerText.text,

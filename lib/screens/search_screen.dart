@@ -158,7 +158,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     constraints:
                         const BoxConstraints(minHeight: 50, maxHeight: 90),
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 00, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       //color: Colors.red,
                       child: Center(
                         child: MaterialButton(
