@@ -9,7 +9,7 @@ import 'package:lyrics2/api/proxies.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:lyrics2/components/search_selector.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/env.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
@@ -68,7 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     logger.d("Building Search Screen");
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     int searchType = manager.searchType;
     return Scaffold(
       backgroundColor: users.themeData.primaryColor,
@@ -143,7 +143,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildAudioSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     var theme = users.themeData;
     var textTheme = users.textTheme;
     return Row(
@@ -293,7 +293,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildSongAuthorSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -409,9 +409,9 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget buildSearchButton(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     var theme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).themeData;
     var textTheme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).textTheme;
     int searchType = manager.searchType;
     if (searchType == SearchType.audio) {
       return const SizedBox(
@@ -440,7 +440,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget buildTile(BuildContext context, int index) {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     final theme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).themeData;
     if (manager.isSearchCompleted) {
       List<LyricSearchResult> results = manager.searchResults;
       LyricSearchResult lsr = results[index];
@@ -483,7 +483,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> startSearch(BuildContext context) async {
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     var theme = users.themeData;
     var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
     manager.lastTextSearch = _searchControllerText.text;
@@ -522,7 +522,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if (results.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.noResults,
-            style: Provider.of<FirebaseUserRepository>(context, listen: false)
+            style: Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .textTheme
                 .button),
       ));

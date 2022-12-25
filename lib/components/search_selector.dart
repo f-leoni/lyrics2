@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 //import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +30,7 @@ class _SearchSelectorState extends State<SearchSelector> {
   Widget build(BuildContext context) {
     searchType = widget.searchType;
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     final value = widget.searchType == SearchType.text ? true : false;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),

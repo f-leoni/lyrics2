@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyrics2/models/lyric_data.dart';
 
 class Lyric extends LyricData {
@@ -16,7 +15,6 @@ class Lyric extends LyricData {
   String provider;
 
   String? owner;
-  DocumentReference? reference;
 
 // Constructor
   Lyric({
@@ -27,8 +25,6 @@ class Lyric extends LyricData {
     required this.imageUrl,
     required this.checksum,
     required this.provider,
-    //required this.isFavorite,
-    this.reference,
     this.owner,
   });
 
@@ -68,13 +64,6 @@ class Lyric extends LyricData {
         'owner': owner,
         'provider': provider,
       };
-
-  factory Lyric.fromSnapshot(DocumentSnapshot snapshot, String owner) {
-    final map = snapshot.data() as Map<String, dynamic>;
-    final lyric = Lyric.fromJson(map, owner, map["provider"] ?? "N/A");
-    lyric.reference = snapshot.reference;
-    return lyric;
-  }
 
 // Copy
   Lyric copyWith(

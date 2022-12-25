@@ -1,21 +1,16 @@
-import 'dart:ui';
-
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lyrics2/data/firebase_favorites_repository.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_favorites_repository.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp().then((value) {
+  /*Firebase.initializeApp().then((value) {
     FlutterError.onError = (errorDetails) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
     };
@@ -26,7 +21,8 @@ main() {
     };
 
     runApp(const LyricsApp());
-  }); // Firebase Initialization
+  });*/ // Firebase Initialization
+  runApp(const LyricsApp());
 }
 
 class LyricsApp extends StatefulWidget {
@@ -37,9 +33,9 @@ class LyricsApp extends StatefulWidget {
 }
 
 class _LyricsAppState extends State<LyricsApp> {
-  final _profileManager = FirebaseUserRepository(); //ProfileManager();
+  //final _profileManager = SQLiteSettingsRepository(); //ProfileManager();
   final _appStateManager = AppStateManager();
-  final _favoritesManager = FirebaseFavoritesRepository();
+  final _favoritesManager = SQLiteFavoritesRepository();
   final _settingsManager = SQLiteSettingsRepository();
   late AppRouter _appRouter;
 
@@ -49,7 +45,7 @@ class _LyricsAppState extends State<LyricsApp> {
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
       favoritesManager: _favoritesManager,
-      profileManager: _profileManager,
+      settingsRepository: _settingsManager,
     );
   }
 
@@ -58,7 +54,7 @@ class _LyricsAppState extends State<LyricsApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => _profileManager,
+          create: (context) => _settingsManager,
         ),
         ChangeNotifierProvider(
           create: (context) => _appStateManager,
@@ -72,7 +68,7 @@ class _LyricsAppState extends State<LyricsApp> {
           create: (_) => _settingsManager,
         )
       ],
-      child: Consumer<FirebaseUserRepository>(
+      child: Consumer<SQLiteSettingsRepository>(
         builder: (context, profileManager, child) {
           ThemeData theme;
           if (profileManager.darkMode) {

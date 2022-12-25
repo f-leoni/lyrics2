@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lyrics2/api/proxies.dart';
 import 'package:lyrics2/components/logger.dart';
-import 'package:lyrics2/data/firebase_favorites_repository.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_favorites_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/lyric_data.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +17,9 @@ class LyricTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     logger.v("building tile");
-    FirebaseFavoritesRepository repository =
-        Provider.of<FirebaseFavoritesRepository>(context);
-    var users = Provider.of<FirebaseUserRepository>(context);
+    SQLiteFavoritesRepository repository =
+        Provider.of<SQLiteFavoritesRepository>(context);
+    var users = Provider.of<SQLiteSettingsRepository>(context);
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
@@ -80,7 +80,7 @@ class LyricTile extends StatelessWidget {
   }
 
   Widget buildFavoriteIcon(BuildContext context,
-      FirebaseFavoritesRepository repository, LyricData pLyric) {
+      SQLiteFavoritesRepository repository, LyricData pLyric) {
     if (isFavoritePage) {
       return Center(
         child: Icon(
@@ -90,12 +90,11 @@ class LyricTile extends StatelessWidget {
         ),
       );
     }
-    FirebaseUserRepository profileManager =
-        Provider.of<FirebaseUserRepository>(context, listen: false);
+    SQLiteSettingsRepository profileManager =
+        Provider.of<SQLiteSettingsRepository>(context, listen: false);
     Widget currIcon = Container();
     return FutureBuilder(
-        future: repository.isLyricFavoriteById(
-            pLyric.getId(), profileManager.getUser!.email),
+        future: repository.isLyricFavoriteById(pLyric.getId(), ""),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData && snapshot.data as bool) {
@@ -148,7 +147,7 @@ class LyricTile extends StatelessWidget {
   }
 
   Widget buildAuthor(BuildContext context) {
-    var users = Provider.of<FirebaseUserRepository>(context);
+    var users = Provider.of<SQLiteSettingsRepository>(context);
     return Text(lyric.getArtist(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,
@@ -156,7 +155,7 @@ class LyricTile extends StatelessWidget {
   }
 
   buildTitle(BuildContext context, LyricData lyric) {
-    var users = Provider.of<FirebaseUserRepository>(context);
+    var users = Provider.of<SQLiteSettingsRepository>(context);
     return Text(lyric.getSong(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,

@@ -33,6 +33,8 @@ class DatabaseHelper {
       [lyric] TEXT  NOT NULL,
       [LyricCovertArtUrl] VARCHAR(255) NOT NULL,
       [LyricChecksum] VARCHAR(32)  UNIQUE NOT NULL,
+      [owner] VARCHAR(50), 
+      [provider] VARCHAR(50), 
       [album] VARCHAR(150) NULL,
       [lyric_url] VARCHAR(255) NULL,
       [rank] INTEGER  NULL,

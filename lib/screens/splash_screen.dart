@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     bool isDark =
-        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).darkMode;
     final logoImg = isDark
         ? const AssetImage('assets/lyrics_assets/splash_dark.png')
         : const AssetImage('assets/lyrics_assets/splash.png');

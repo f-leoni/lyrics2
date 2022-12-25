@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
-import 'package:lyrics2/data/firebase_favorites_repository.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_favorites_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
@@ -40,12 +40,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     logger.d("Building favorites screen");
-    final favoritesRepository =
-        Provider.of<FirebaseFavoritesRepository>(context);
-    final profile = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final favoritesRepository = Provider.of<SQLiteFavoritesRepository>(context);
+    final profile =
+        Provider.of<SQLiteSettingsRepository>(context, listen: false);
 
-    Future<List<Lyric>> favorites =
-        favoritesRepository.findAllFavsLyrics(profile.getUser!.email);
+    Future<List<Lyric>> favorites = favoritesRepository.findAllFavsLyrics("");
     return Column(
       children: [
         Expanded(
@@ -116,7 +115,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget buildScreen(BuildContext context, List<Lyric> favorites) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     var theme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).textTheme;
     List<Widget> itemTiles = List<Widget>.empty(growable: true);
     for (Lyric lyric in favorites) {
       if (lyric.song.toLowerCase().contains(filter.toLowerCase()) |
@@ -128,13 +127,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               color: Colors.red.shade200,
               alignment: Alignment.centerRight,
               child: Icon(Icons.delete_forever,
-                  color: Provider.of<FirebaseUserRepository>(context,
+                  color: Provider.of<SQLiteSettingsRepository>(context,
                           listen: false)
                       .themeData
                       .backgroundColor,
                   size: 25.0)),
           onDismissed: (direction) {
-            Provider.of<FirebaseFavoritesRepository>(context, listen: false)
+            Provider.of<SQLiteFavoritesRepository>(context, listen: false)
                 .deleteLyricFromFavs(lyric);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
@@ -171,7 +170,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         height: height,
         //color: Colors.green,
         child: Container(
-          color: Provider.of<FirebaseUserRepository>(context, listen: false)
+          color: Provider.of<SQLiteSettingsRepository>(context, listen: false)
               .themeData
               .primaryColor,
           child: ListView(
@@ -196,9 +195,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             const SizedBox(height: 8.0),
             Text(
               AppLocalizations.of(context)!.nothingHere,
-              style: Provider.of<FirebaseUserRepository>(context, listen: false)
-                  .textTheme
-                  .headline1,
+              style:
+                  Provider.of<SQLiteSettingsRepository>(context, listen: false)
+                      .textTheme
+                      .headline1,
             ),
             const SizedBox(height: 16.0),
             Text(
@@ -208,15 +208,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             ),
             MaterialButton(
               textColor:
-                  Provider.of<FirebaseUserRepository>(context, listen: false)
+                  Provider.of<SQLiteSettingsRepository>(context, listen: false)
                       .themeData
                       .highlightColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              color: Provider.of<FirebaseUserRepository>(context, listen: false)
-                  .themeData
-                  .indicatorColor,
+              color:
+                  Provider.of<SQLiteSettingsRepository>(context, listen: false)
+                      .themeData
+                      .indicatorColor,
               onPressed: () {
                 Provider.of<AppStateManager>(context, listen: false)
                     .goToTab(LyricsTab.search);

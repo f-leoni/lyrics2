@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final manager = Provider.of<AppStateManager>(context, listen: false);
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     late final String version;
     late final String build;
     final bool isDark = users.darkMode;

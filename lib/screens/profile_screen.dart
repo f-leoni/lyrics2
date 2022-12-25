@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
-import 'package:lyrics2/models/app_state_manager.dart';
+//import 'package:intl/intl.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
+//import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/components/circle_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,18 +9,16 @@ import 'package:lyrics2/models/models.dart';
 
 class ProfileScreen extends StatefulWidget {
   // ProfileScreen MaterialPage Helper
-  static MaterialPage page(User user) {
+  static MaterialPage page() {
     return MaterialPage(
       name: LyricsPages.profilePath,
       key: ValueKey(LyricsPages.profilePath),
-      child: ProfileScreen(user: user),
+      child: const ProfileScreen(),
     );
   }
 
-  final User user;
   const ProfileScreen({
     Key? key,
-    required this.user,
   }) : super(key: key);
 
   @override
@@ -31,7 +28,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: users.themeData.colorScheme.primaryContainer,
@@ -80,22 +77,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 .tapOnRaywenderlich(true);
           },
         ),*/
-        ListTile(
+        /*ListTile(
           title: Center(child: Text(AppLocalizations.of(context)!.msgLogout)),
           onTap: () {
             // Logout user
-            Provider.of<FirebaseUserRepository>(context, listen: false)
+            Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .tapOnProfile(false);
             Provider.of<AppStateManager>(context, listen: false)
                 .logout(context);
           },
-        )
+        )*/
       ],
     );
   }
 
   Widget buildDarkModeRow() {
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -116,24 +113,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildProfile() {
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    //final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     return Column(
       children: [
-        CircleImage(
-          imageProvider: users.userImage,
+        const CircleImage(
+          imageProvider: AssetImage('assets/lyrics_assets/logo.png'),
           imageRadius: 60.0,
         ),
         const SizedBox(height: 8.0),
-        Text(widget.user.email!, style: users.themeData.textTheme.headline1),
-        Text(
-            "Registration date: ${formatter.format(widget.user.metadata.creationTime!)}"), //role
+        Text("Local User", style: users.themeData.textTheme.headline1),
+        const Text(""), //role
       ],
     );
   }
 
   buildProxyRow() {
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(

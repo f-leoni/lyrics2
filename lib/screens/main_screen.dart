@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/components/circle_image.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/screens/info_screen.dart';
 import 'package:lyrics2/screens/screens.dart';
@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
     return Consumer<AppStateManager>(
       builder: (context, manager, child) {
         final users =
-            Provider.of<FirebaseUserRepository>(context, listen: false);
+            Provider.of<SQLiteSettingsRepository>(context, listen: false);
         String pageTitle = "";
 
         if (widget.currentTab == 0) {
@@ -96,14 +96,12 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget profileButton(int currentTab) {
     //var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.only(right: 16.0),
       child: GestureDetector(
-        child: CircleImage(
-          imageProvider:
-              Provider.of<FirebaseUserRepository>(context, listen: false)
-                  .userImage,
+        child: const CircleImage(
+          imageProvider: AssetImage('assets/lyrics_assets/logo.png'),
         ),
         onTap: () {
           users.tapOnProfile(true);

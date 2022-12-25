@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:lyrics2/components/logger.dart';
-import 'package:lyrics2/data/firebase_favorites_repository.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_favorites_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/lyricstheme.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
@@ -67,7 +67,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
   Widget createSpinner(BuildContext context) {
     return CircularProgressIndicator.adaptive(
       backgroundColor:
-          Provider.of<FirebaseUserRepository>(context, listen: false)
+          Provider.of<SQLiteSettingsRepository>(context, listen: false)
               .themeData
               .primaryColor,
     );
@@ -82,9 +82,9 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       colorFilter: ColorFilter.mode(Colors.black.withAlpha(alpha), blend),
       fit: BoxFit.cover,
     ));
-    final favorites = Provider.of<FirebaseFavoritesRepository>(context);
+    final favorites = Provider.of<SQLiteFavoritesRepository>(context);
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     final theme = users.themeData;
     //isFavorite ??= await checkIfFavorite(favorites, await lyric);
     return SafeArea(
@@ -95,7 +95,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   Lyric currLyric = snapshot.data as Lyric;
-                  currLyric.owner = users.getUser!.email;
+                  currLyric.owner = "";
                   return buildPage(currLyric, manager, decoration, alpha, blend,
                       context, favorites);
                 } else {
@@ -128,9 +128,9 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       int alpha,
       BlendMode blend,
       BuildContext context,
-      FirebaseFavoritesRepository favorites) {
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    currLyric.owner = users.getUser!.email;
+      SQLiteFavoritesRepository favorites) {
+    //var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    currLyric.owner = "";
     logger.d("lyric is: ${currLyric.song}");
     if (!bgImageCreated) {
       try {
@@ -173,10 +173,10 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 icon: const Icon(Icons.arrow_back),
                 alignment: Alignment.centerLeft,
                 iconSize: 22,
-                color:
-                    Provider.of<FirebaseUserRepository>(context, listen: false)
-                        .themeData
-                        .highlightColor,
+                color: Provider.of<SQLiteSettingsRepository>(context,
+                        listen: false)
+                    .themeData
+                    .highlightColor,
                 onPressed: () {
                   final manager =
                       Provider.of<AppStateManager>(context, listen: false);
@@ -223,7 +223,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                   style: GoogleFonts.roboto(
                     fontSize: _fontSize,
                     fontWeight: FontWeight.normal,
-                    color: Provider.of<FirebaseUserRepository>(context,
+                    color: Provider.of<SQLiteSettingsRepository>(context,
                             listen: false)
                         .themeData
                         .highlightColor,
@@ -248,8 +248,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     return img;
   }
 
-  Widget buildFavoriteButton(
-      FirebaseFavoritesRepository favorites, Lyric lyric) {
+  Widget buildFavoriteButton(SQLiteFavoritesRepository favorites, Lyric lyric) {
     return FutureBuilder(
         future: checkIfFavorite(favorites, lyric),
         builder: (context, snapshot) {
@@ -257,7 +256,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
           if (isFavorite == null) {
             tempIcon = CircularProgressIndicator.adaptive(
               backgroundColor:
-                  Provider.of<FirebaseUserRepository>(context, listen: false)
+                  Provider.of<SQLiteSettingsRepository>(context, listen: false)
                       .themeData
                       .primaryColor,
             );
@@ -297,7 +296,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 child: currIcon),
             alignment: Alignment.centerRight,
             iconSize: 22,
-            color: Provider.of<FirebaseUserRepository>(context, listen: false)
+            color: Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .themeData
                 .primaryColor,
             onPressed: () {
@@ -310,9 +309,10 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 });
               } else {
                 lyric.owner =
-                    Provider.of<FirebaseUserRepository>(context, listen: false)
-                        .getUser!
-                        .email!;
+                    ""; /*Provider.of<SQLiteSettingsRepository>(context,
+                        listen: false)
+                    .getUser!
+                    .email!;*/
                 favorites.insertLyricInFavs(lyric);
                 setState(() {
                   isFavorite = true;
@@ -324,12 +324,10 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
   }
 
   Future<bool> checkIfFavorite(
-      FirebaseFavoritesRepository favorites, Lyric lyric) async {
+      SQLiteFavoritesRepository favorites, Lyric lyric) async {
     if (isFavorite != null) return Future.value(isFavorite);
-    var userManager =
-        Provider.of<FirebaseUserRepository>(context, listen: false);
-    isFavorite = await favorites.isLyricFavoriteById(
-        lyric.lyricId, userManager.getUser!.email);
+    //var userManager = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    isFavorite = await favorites.isLyricFavoriteById(lyric.lyricId, "");
     return Future.value(isFavorite);
   }
 

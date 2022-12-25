@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lyrics2/api/proxy.dart';
 import 'package:lyrics2/components/logger.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -152,7 +151,7 @@ class AppStateManager extends ChangeNotifier {
     if (_showSnackBar) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(msg,
-            style: Provider.of<FirebaseUserRepository>(context, listen: false)
+            style: Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .textTheme
                 .button),
         duration: const Duration(milliseconds: 500),
@@ -224,8 +223,6 @@ class AppStateManager extends ChangeNotifier {
 
   void logout(BuildContext context) {
     logger.d("Executing user logout");
-    final userRepository =
-        Provider.of<FirebaseUserRepository>(context, listen: false);
     final favoritesRepository =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
     _searchResults = List.empty();
@@ -234,7 +231,6 @@ class AppStateManager extends ChangeNotifier {
     lastTextSearch = "";
     lastAuthorSearch = "";
     _selectedTab = LyricsTab.search;
-    userRepository.logout();
     _loggedIn = false;
     favoritesRepository.insertSetting(
         Setting(setting: Setting.onboardingComplete, value: "false"));

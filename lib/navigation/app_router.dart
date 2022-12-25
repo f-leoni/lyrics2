@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyrics2/components/logger.dart';
-import 'package:lyrics2/data/firebase_favorites_repository.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_favorites_repository.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
@@ -13,27 +12,25 @@ class AppRouter extends RouterDelegate
   @override
   final GlobalKey<NavigatorState> navigatorKey;
   final AppStateManager appStateManager;
-  final FirebaseFavoritesRepository favoritesManager;
-  final FirebaseUserRepository profileManager;
+  final SQLiteFavoritesRepository favoritesManager;
+  final SQLiteSettingsRepository settingsRepository;
   BuildContext? _context;
 
   AppRouter({
     required this.appStateManager,
     required this.favoritesManager,
-    required this.profileManager,
+    required this.settingsRepository,
   }) : navigatorKey = GlobalKey<NavigatorState>() {
     appStateManager.addListener(notifyListeners);
     favoritesManager.addListener(notifyListeners);
-    profileManager.addListener(notifyListeners);
   }
 
   @override
   Widget build(BuildContext context) {
     logger.d("Building AppRouter");
     _context = context;
-    final repository = Provider.of<SQLiteSettingsRepository>(context);
-    final profile = Provider.of<FirebaseUserRepository>(context);
-    Future<Map<String, Setting>> fSettings = repository.getSettings();
+    final settingsRepository = Provider.of<SQLiteSettingsRepository>(context);
+    Future<Map<String, Setting>> fSettings = settingsRepository.getSettings();
 
     return FutureBuilder(
       future: fSettings,
@@ -44,20 +41,17 @@ class AppRouter extends RouterDelegate
                 snapshot.data as Map<String, Setting>;
             bool isOnboardingComplete =
                 settings[Setting.onboardingComplete]?.value == "true";
-            bool isLoggedIn = profile.isLoggedIn();
             return Navigator(
               key: navigatorKey,
               onPopPage: _handlePopPage,
               pages: [
                 if (!appStateManager.isInitialized) SplashScreen.page(),
-                if (appStateManager.isInitialized && !isLoggedIn)
-                  LoginScreen.page(),
-                if (isLoggedIn && !isOnboardingComplete)
-                  OnboardingScreen.page(),
+                /*if (appStateManager.isInitialized && !isLoggedIn)
+                  LoginScreen.page(),*/
+                if (!isOnboardingComplete) OnboardingScreen.page(),
                 if (isOnboardingComplete)
                   MainScreen.page(appStateManager.getSelectedTab),
-                if (profileManager.didSelectUser)
-                  ProfileScreen.page(profileManager.getUser!),
+                if (settingsRepository.didSelectUser) ProfileScreen.page(),
                 if (appStateManager.isViewingLyric)
                   ShowLyricScreen.page(
                       Future.value(appStateManager.viewedLyric)),
@@ -76,13 +70,13 @@ class AppRouter extends RouterDelegate
   Widget buildSpinner() {
     //return Container();
     return Container(
-        color: profileManager.themeData.backgroundColor,
+        color: settingsRepository.themeData.backgroundColor,
         child: Center(
           child: SizedBox(
             width: 50,
             height: 50,
             child: CircularProgressIndicator.adaptive(
-              backgroundColor: profileManager.themeData.primaryColor,
+              backgroundColor: settingsRepository.themeData.primaryColor,
             ),
           ),
         ));
@@ -103,7 +97,7 @@ class AppRouter extends RouterDelegate
     }
     // Handle state when user closes profile screen
     if (route.settings.name == LyricsPages.profilePath) {
-      profileManager.tapOnProfile(false);
+      settingsRepository.tapOnProfile(false);
     }
     // Handle state when user closes Lyrics View Screen
     if (route.settings.name == LyricsPages.showLyricPath) {
@@ -129,7 +123,7 @@ class AppRouter extends RouterDelegate
   void dispose() {
     appStateManager.removeListener(notifyListeners);
     favoritesManager.removeListener(notifyListeners);
-    profileManager.removeListener(notifyListeners);
+    settingsRepository.removeListener(notifyListeners);
     super.dispose();
   }
 }

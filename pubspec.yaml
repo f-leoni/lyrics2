@@ -47,12 +47,8 @@ dependencies:
   synchronized: ^3.0.0
   sqlbrite: ^2.1.0
   package_info_plus: ^3.0.1
-  firebase_core: ^1.6.0
-  cloud_firestore: ^2.5.3
-  firebase_auth: ^3.1.1
   genius_api_unofficial: ^2.0.1
   beautiful_soup_dart: ^0.3.0
-  firebase_crashlytics: ^2.9.0
   #font_awesome_flutter: ^10.2.1
   flutter_switch: ^0.3.2
 
