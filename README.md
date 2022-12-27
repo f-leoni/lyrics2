@@ -1,5 +1,5 @@
 # L Y R I C S   2
-Find and read your favourite songs' lyrics by (part of the) text, Autor and title or by listening to your song!
+Find and read your favourite songs' lyrics by (part of the) text, Author and title or by listening to your song!
 
 # PROJECT DESCRIPTION
 This project is a Flutter exercise but it's a complete app and it leverages some flutter features such as:

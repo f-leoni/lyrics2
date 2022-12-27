@@ -1,0 +1,6 @@
+First submit to FDroid Repository.
+Main features:
+- Genius and Chartlyrics search engines
+- Audio recognition
+- Removed all Firebase code as it seems Google libraries aren't allowed on F-Droid
+

@@ -1,0 +1,2 @@
+Find, read and save locally your favourite songs' lyrics by typing any part of the text, the
+author's name and song's title or by listening to a song!

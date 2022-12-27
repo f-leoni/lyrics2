@@ -1,0 +1,6 @@
+Prima versione sullo store F-Droid.
+Caratteristiche principali:
+- Ricerca tramite i motori Genius e Chartlyrics
+- Riconoscimento audio
+- Rimosso tutto il codice Firebase: a quanto sembra F-Droid non ne consente l'uso
+
