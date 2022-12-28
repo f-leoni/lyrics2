@@ -121,7 +121,7 @@ packages:
     source: hosted
     version: "0.17.2"
   cupertino_icons:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
@@ -169,25 +169,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
-  firebase_core_platform_interface:
-    dependency: "direct overridden"
-    description:
-      name: firebase_core_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.5.1"
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_acrcloud:
-    dependency: "direct main"
-    description:
-      name: flutter_acrcloud
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.6"
   flutter_driver:
     dependency: transitive
     description: flutter
