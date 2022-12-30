@@ -7,22 +7,28 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
+import 'package:catcher/catcher.dart';
 
 main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  /*Firebase.initializeApp().then((value) {
-    FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
-    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
+  CatcherOptions debugOptions =
+      CatcherOptions(DialogReportMode(), [ConsoleHandler()]);
 
-    runApp(const LyricsApp());
-  });*/ // Firebase Initialization
-  runApp(const LyricsApp());
+  CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
+    EmailManualHandler(["zitzusoft@gmail.com"],
+        enableDeviceParameters: true,
+        enableStackTrace: true,
+        enableCustomParameters: true,
+        enableApplicationParameters: true,
+        sendHtml: true,
+        emailTitle: "Lyrics 2 error report",
+        emailHeader: "Lyrics 2 error report",
+        printLogs: true)
+  ]);
+
+  Catcher(
+      rootWidget: const LyricsApp(),
+      debugConfig: debugOptions,
+      releaseConfig: releaseOptions);
 }
 
 class LyricsApp extends StatefulWidget {
@@ -33,7 +39,6 @@ class LyricsApp extends StatefulWidget {
 }
 
 class _LyricsAppState extends State<LyricsApp> {
-  //final _profileManager = SQLiteSettingsRepository(); //ProfileManager();
   final _appStateManager = AppStateManager();
   final _favoritesManager = SQLiteFavoritesRepository();
   final _settingsManager = SQLiteSettingsRepository();
@@ -77,6 +82,7 @@ class _LyricsAppState extends State<LyricsApp> {
             theme = LyricsTheme.light();
           }
           return MaterialApp(
+            navigatorKey: Catcher.navigatorKey,
             theme: theme,
             title: 'Lyrics2 🎶',
             localizationsDelegates: const [

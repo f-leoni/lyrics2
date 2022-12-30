@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
@@ -105,10 +106,12 @@ class InfoScreen extends StatelessWidget {
                               },
                             ),
                             // Crashlytics test
-                            /*TextButton(
-                              onPressed: () => throw Exception(),
-                              child: const Text("Throw Test Exception"),
-                            ),*/
+                            kReleaseMode == false
+                                ? TextButton(
+                                    onPressed: () => throw Exception(),
+                                    child: const Text("Throw Test Exception"),
+                                  )
+                                : const SizedBox(),
                           ],
                         );
                       }),
