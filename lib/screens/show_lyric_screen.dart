@@ -134,7 +134,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     logger.d("lyric is: ${currLyric.song}");
     if (!bgImageCreated) {
       try {
-        bgImage = getBackgroundImage(currLyric);
+        bgImage = getBackgroundImage(currLyric).image;
       } catch (e) {
         logger.e("Error Creating background image ${e.hashCode}");
       }
@@ -237,13 +237,13 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     );
   }
 
-  ImageProvider<Object> getBackgroundImage(Lyric currLyric) {
-    var img = Image.network(
+  Image getBackgroundImage(Lyric currLyric) {
+    Image img = Image.network(
       currLyric.imageUrl,
       errorBuilder:
           (BuildContext context, Object exception, StackTrace? stackTrace) =>
-              const Image(image: AssetImage("assets/lyrics_assets/logo.png")),
-    ).image;
+              Image.asset("assets/lyrics_assets/logo.png"),
+    );
 
     return img;
   }

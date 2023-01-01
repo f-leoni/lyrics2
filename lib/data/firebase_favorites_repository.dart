@@ -7,8 +7,14 @@ import 'favorites_repository.dart';
 
 class FirebaseFavoritesRepository extends FavoritesRepository
     with ChangeNotifier {
-  final CollectionReference collection =
-      FirebaseFirestore.instance.collection('lyrics');
+  /*final CollectionReference collection =
+      FirebaseFirestore.instance.collection('lyrics');*/
+  late final CollectionReference collection;
+
+  FirebaseFavoritesRepository(
+      CollectionReference<Map<String, dynamic>> lyricsCollection) {
+    collection = lyricsCollection;
+  }
 
   @override
   Stream<QuerySnapshot> getLyricStream() {

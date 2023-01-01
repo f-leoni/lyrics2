@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -37,14 +38,16 @@ class LyricsApp extends StatefulWidget {
 }
 
 class _LyricsAppState extends State<LyricsApp> {
-  final _profileManager = FirebaseUserRepository(); //ProfileManager();
+  final _profileManager = FirebaseUserRepository();
   final _appStateManager = AppStateManager();
-  final _favoritesManager = FirebaseFavoritesRepository();
+  late final FirebaseFavoritesRepository _favoritesManager;
   final _settingsManager = SQLiteSettingsRepository();
   late AppRouter _appRouter;
 
   @override
   void initState() {
+    _favoritesManager = FirebaseFavoritesRepository(
+        FirebaseFirestore.instance.collection('lyrics'));
     super.initState();
     _appRouter = AppRouter(
       appStateManager: _appStateManager,

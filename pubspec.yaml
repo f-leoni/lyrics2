@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+19
+version: 1.0.0+21
 
 environment:
   sdk: ">=2.15.0-178.1.beta <3.0.0"
@@ -31,30 +31,31 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  google_fonts: ^2.1.0
+  google_fonts: ^3.0.1
   http: ^0.13.4
   html: ^0.15.1
-  provider: ^6.0.0
+  provider: ^6.0.5
   intl: ^0.17.0
-  uuid: ^3.0.5
+  uuid: ^3.0.7
   smooth_page_indicator: ^1.0.0+2
-  xml2json: ^5.3.5
+  xml2json: ^5.3.6
   logger: ^1.1.0
   flutter_acrcloud: ^0.1.6
   equatable: ^2.0.3
-  sqflite: ^2.0.0+4
+  sqflite: ^2.2.2
   path_provider: ^2.0.2
   synchronized: ^3.0.0
   sqlbrite: ^2.1.0
-  package_info_plus: ^3.0.1
+  package_info_plus: ^3.0.2
   firebase_core: ^1.6.0
   cloud_firestore: ^2.5.3
   firebase_auth: ^3.1.1
+  firebase_crashlytics: ^2.9.0
   genius_api_unofficial: ^2.0.1
   beautiful_soup_dart: ^0.3.0
-  firebase_crashlytics: ^2.9.0
   #font_awesome_flutter: ^10.2.1
   flutter_switch: ^0.3.2
+  fake_cloud_firestore: 1.1.3
 
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1
@@ -71,7 +72,7 @@ dev_dependencies:
     sdk: flutter
   test: ^1.14.4
 
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.11.0
   flutter_lints: ^2.0.1
 
 flutter_icons:
