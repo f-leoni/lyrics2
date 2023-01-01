@@ -11,7 +11,7 @@ AutoName: lyrics_2
 Description: |-
   Lyrics 2 is a lyrics finder and reader. You can search any song's lyrics by title
   or if you simply remember a few words of the song.
-  Once found, you can save your favorite lyrics.
+  Once you found your favorite song's lyrics, you can save them locally.
   Lyrics 2 uses Genius and ChartLyrics Services.
 
 RepoType: git
@@ -20,7 +20,7 @@ Repo: https://github.com/f-leoni/lyrics2
 Builds:
   - versionName: 1.0.0
     versionCode: 22
-    commit: v1.0.8_fdroid
+    commit: v1.0.9_fdroid
     submodules: true
     output: build/app/outputs/flutter-apk/app-release.apk
     rm:
@@ -46,4 +46,4 @@ AutoUpdateMode: Version
 UpdateCheckMode: Tags
 UpdateCheckData: pubspec.yaml|version:\s.+\+(\d+)|.|version:\s(.+)\+
 CurrentVersion: 1.0.0
-CurrentVersionCode: 21
+CurrentVersionCode: 22
