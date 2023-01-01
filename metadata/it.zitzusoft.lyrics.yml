@@ -1,0 +1,15 @@
+Categories:
+  - Multimedia
+License: CC-BY-4.0
+AuthorName: ZitzuSoft
+AuthorEmail: zitzusoft@gmail.com
+SourceCode: https://github.com/f-leoni/lyrics2
+IssueTracker: https://github.com/f-leoni/lyrics2/issues
+Changelog: https://github.com/f-leoni/lyrics2
+
+AutoName: lyrics_2
+Description: |-
+  Lyrics 2 is a lyrics finder and reader. You can search any song's lyrics by title
+  or if you simply remember a few words of the song.
+  Once found, you can save your favorite lyrics.
+  Lyrics 2 uses Genius and ChartLyrics Services.
