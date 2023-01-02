@@ -8,15 +8,14 @@ import 'package:provider/provider.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:catcher/catcher.dart';
+import 'package:lyrics2/env.dart';
 
 main() {
   CatcherOptions debugOptions = CatcherOptions(DialogReportMode(),
       [ConsoleHandler(enableStackTrace: true, handleWhenRejected: false)]);
 
   CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
-    SlackHandler(
-        "https://hooks.slack.com/services/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",
-        "#lyrics2",
+    SlackHandler(Env.slackWebHook, "#lyrics2",
         username: "CatcherTest",
         iconEmoji: ":thinking_face:",
         enableDeviceParameters: true,

@@ -6,4 +6,7 @@ class Env {
 
 // Genius API
   static const String geniusToken = '<insert your Genius Token here>';
+
+// Slack webHook
+  static const String slackWebHook = '<Insert your Slack WebHook here';
 }
