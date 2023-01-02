@@ -10,10 +10,23 @@ import 'lyricstheme.dart';
 import 'package:catcher/catcher.dart';
 
 main() {
-  CatcherOptions debugOptions =
-      CatcherOptions(DialogReportMode(), [ConsoleHandler()]);
+  CatcherOptions debugOptions = CatcherOptions(DialogReportMode(),
+      [ConsoleHandler(enableStackTrace: true, handleWhenRejected: false)]);
 
-  CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
+  CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
+    SlackHandler(
+        "https://hooks.slack.com/services/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",
+        "#lyrics2",
+        username: "CatcherTest",
+        iconEmoji: ":thinking_face:",
+        enableDeviceParameters: true,
+        enableApplicationParameters: true,
+        enableCustomParameters: true,
+        enableStackTrace: true,
+        printLogs: true),
+  ]);
+
+  /*CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
     EmailManualHandler(["zitzusoft@gmail.com"],
         enableDeviceParameters: true,
         enableStackTrace: true,
@@ -23,7 +36,7 @@ main() {
         emailTitle: "Lyrics 2 error report",
         emailHeader: "Lyrics 2 error report",
         printLogs: true)
-  ]);
+  ]);*/
 
   Catcher(
       rootWidget: const LyricsApp(),

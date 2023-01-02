@@ -98,6 +98,7 @@ flutter:
   assets:
     - assets/
     - assets/lyrics_assets/
+    - assets/fonts/
 
   # Required for localization
   generate: true 

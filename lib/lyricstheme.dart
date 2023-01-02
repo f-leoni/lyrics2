@@ -3,36 +3,36 @@ import 'package:google_fonts/google_fonts.dart';
 
 class LyricsTheme {
   static TextTheme lightTextTheme = TextTheme(
-    bodyText1: GoogleFonts.roboto(
+    bodyText1: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black),
-    headline1: GoogleFonts.roboto(
+    headline1: GoogleFonts.lato(
         fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.black87),
-    headline2: GoogleFonts.roboto(
+    headline2: GoogleFonts.lato(
         fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.white),
-    headline3: GoogleFonts.roboto(
+    headline3: GoogleFonts.lato(
         fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black87),
-    button: GoogleFonts.roboto(
+    button: GoogleFonts.lato(
         fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
-    bodyText2: GoogleFonts.roboto(
+    bodyText2: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black87),
-    headline4: GoogleFonts.roboto(
+    headline4: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black87),
   );
 
   static TextTheme darkTextTheme = TextTheme(
-    bodyText1: GoogleFonts.roboto(
+    bodyText1: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
-    headline1: GoogleFonts.roboto(
+    headline1: GoogleFonts.lato(
         fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white70),
-    headline2: GoogleFonts.roboto(
+    headline2: GoogleFonts.lato(
         fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.white70),
-    headline3: GoogleFonts.roboto(
+    headline3: GoogleFonts.lato(
         fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white70),
-    button: GoogleFonts.roboto(
+    button: GoogleFonts.lato(
         fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
-    bodyText2: GoogleFonts.roboto(
+    bodyText2: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
-    headline4: GoogleFonts.roboto(
+    headline4: GoogleFonts.lato(
         fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white70),
   );
 
