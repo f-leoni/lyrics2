@@ -205,7 +205,7 @@
     },
     "msgUseService": "Select service",
     "@msgUseService": {
-        "description": "Message for ChartLyrics Service switch"
+        "description": "Message for service switch"
     },
     "msgDismissed": "dismissed",
     "@msgDismissed": {

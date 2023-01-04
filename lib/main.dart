@@ -11,7 +11,7 @@ import 'package:catcher/catcher.dart';
 import 'package:lyrics2/env.dart';
 
 main() {
-  CatcherOptions debugOptions = CatcherOptions(DialogReportMode(),
+  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(),
       [ConsoleHandler(enableStackTrace: true, handleWhenRejected: false)]);
 
   CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
