@@ -19,19 +19,32 @@ main() {
     final license = await rootBundle.loadString('google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
-  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(),
-      [ConsoleHandler(enableStackTrace: true, handleWhenRejected: false)]);
+  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(), [
+    ConsoleHandler(
+      enableStackTrace: true,
+      handleWhenRejected: false,
+    )
+  ]);
 
-  CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
-    SlackHandler(Env.slackWebHook, "#lyrics2",
+  CatcherOptions releaseOptions = CatcherOptions(
+    DialogReportMode(),
+    [
+      SlackHandler(
+        Env.slackWebHook,
+        "#lyrics2",
         username: "CatcherTest",
         iconEmoji: ":thinking_face:",
         enableDeviceParameters: true,
         enableApplicationParameters: true,
         enableCustomParameters: true,
         enableStackTrace: true,
-        printLogs: true),
-  ]);
+        printLogs: true,
+      ),
+    ],
+    localizationOptions: [
+      LocalizationOptions.buildDefaultItalianOptions(),
+    ],
+  );
 
   /*CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
     EmailManualHandler(["zitzusoft@gmail.com"],
