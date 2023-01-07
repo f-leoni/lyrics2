@@ -38,6 +38,11 @@ class LyricsTheme {
 
   static ThemeData light() {
     return ThemeData(
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+        },
+      ),
       brightness: Brightness.light,
       primaryColor: Colors.grey.shade100,
       textTheme: lightTextTheme,
@@ -52,6 +57,11 @@ class LyricsTheme {
 
   static ThemeData dark() {
     return ThemeData(
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+        },
+      ),
       brightness: Brightness.dark,
       primaryColor: Colors.grey.shade700,
       textTheme: darkTextTheme,
