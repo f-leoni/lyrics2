@@ -27,7 +27,8 @@ main() {
   ]);
 
   CatcherOptions releaseOptions = CatcherOptions(
-    DialogReportMode(),
+    //DialogReportMode(),
+    SilentReportMode(),
     [
       SlackHandler(
         Env.slackWebHook,
