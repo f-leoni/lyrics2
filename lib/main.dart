@@ -79,12 +79,12 @@ class _LyricsAppState extends State<LyricsApp> {
 
   @override
   void initState() {
-    super.initState();
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
       favoritesManager: _favoritesManager,
       settingsRepository: _settingsManager,
     );
+    super.initState();
   }
 
   @override
@@ -101,10 +101,6 @@ class _LyricsAppState extends State<LyricsApp> {
           lazy: false,
           create: (context) => _favoritesManager,
         ),
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (_) => _settingsManager,
-        )
       ],
       child: Consumer<SQLiteSettingsRepository>(
         builder: (context, profileManager, child) {

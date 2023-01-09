@@ -23,6 +23,7 @@ class AppRouter extends RouterDelegate
   }) : navigatorKey = GlobalKey<NavigatorState>() {
     appStateManager.addListener(notifyListeners);
     favoritesManager.addListener(notifyListeners);
+    settingsRepository.addListener(notifyListeners);
   }
 
   @override
@@ -30,17 +31,19 @@ class AppRouter extends RouterDelegate
     logger.d("Building AppRouter");
     _context = context;
     final settingsRepository = Provider.of<SQLiteSettingsRepository>(context);
-    Future<Map<String, Setting>> fSettings = settingsRepository.getSettings();
+    //Future<Map<String, Setting>> fSettings = settingsRepository.getSettings();
+    Future<bool> fOnboarding = appStateManager.checkOnboarding(context);
 
     return FutureBuilder(
-      future: fSettings,
+      future: fOnboarding, //fSettings,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            Map<String, Setting> settings =
+            /*Map<String, Setting> settings =
                 snapshot.data as Map<String, Setting>;
             bool isOnboardingComplete =
-                settings[Setting.onboardingComplete]?.value == "true";
+                settings[Setting.onboardingComplete]?.value == "true";*/
+            bool isOnboardingComplete = snapshot.data as bool;
             return Navigator(
               key: navigatorKey,
               onPopPage: _handlePopPage,
@@ -48,7 +51,8 @@ class AppRouter extends RouterDelegate
                 if (!appStateManager.isInitialized) SplashScreen.page(),
                 /*if (appStateManager.isInitialized && !isLoggedIn)
                   LoginScreen.page(),*/
-                if (!isOnboardingComplete) OnboardingScreen.page(),
+                if (appStateManager.isInitialized & !isOnboardingComplete)
+                  OnboardingScreen.page(),
                 if (isOnboardingComplete)
                   MainScreen.page(appStateManager.getSelectedTab),
                 if (settingsRepository.didSelectUser) ProfileScreen.page(),

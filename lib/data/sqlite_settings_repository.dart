@@ -58,8 +58,9 @@ class SQLiteSettingsRepository with ChangeNotifier {
 
   Future<Map<String, Setting>> getSettings() async {
     logger.d("SQLite - Retrieving ALL settings");
-    _settings ??= await dbHelper.getSettings();
-    return Future.value(_settings);
+    /*_settings ??= await dbHelper.getSettings();
+    return Future.value(_settings);*/
+    return dbHelper.getSettings();
   }
 
   Future<void> deleteSetting(String setting) {
