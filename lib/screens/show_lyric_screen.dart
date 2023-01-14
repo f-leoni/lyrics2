@@ -86,6 +86,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     final manager = Provider.of<AppStateManager>(context, listen: false);
     final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     final theme = users.themeData;
+    //isFavorite ??= await checkIfFavorite(favorites, await lyric);
     return SafeArea(
       child: Scaffold(
         body: FutureBuilder(
@@ -98,7 +99,9 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                   return buildPage(currLyric, manager, decoration, alpha, blend,
                       context, favorites);
                 } else {
-                  //snapshot still haven't data
+                  //container hasn't data
+                  /*return buildPage(Lyric.empty, manager, decoration, alpha,
+                      blend, context, favorites);*/
                   return Center(
                       child: CircularProgressIndicator.adaptive(
                     backgroundColor: theme.primaryColor,
@@ -106,6 +109,8 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 }
               } else {
                 // Snapshot  State is not done
+                /*return buildPage(Lyric.empty, manager, decoration, alpha, blend,
+                    context, favorites);*/
                 return Center(
                     child: CircularProgressIndicator.adaptive(
                   backgroundColor: theme.primaryColor,
@@ -116,7 +121,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     );
   }
 
-  Widget buildPage(
+  Container buildPage(
       Lyric currLyric,
       AppStateManager manager,
       BoxDecoration decoration,
@@ -124,6 +129,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       BlendMode blend,
       BuildContext context,
       SQLiteFavoritesRepository favorites) {
+    //var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     currLyric.owner = "";
     logger.d("lyric is: ${currLyric.song}");
     if (!bgImageCreated) {
