@@ -203,6 +203,10 @@
     "@msgUseCL": {
         "description": "Message for ChartLyrics Service switch"
     },
+    "msgUseService": "Select service",
+    "@msgUseService": {
+        "description": "Message for service switch"
+    },
     "msgDismissed": "dismissed",
     "@msgDismissed": {
            "description": "Message for slide/deleting a favorite"

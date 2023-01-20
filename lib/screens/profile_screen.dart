@@ -29,6 +29,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  static const List<String> services = <String>['Genius', 'ChartLyrics'];
   @override
   Widget build(BuildContext context) {
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
@@ -134,11 +135,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   buildProxyRow() {
     final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    String dropdownValue = users.useGenius ? services.first : services.last;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          Row(
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocalizations.of(context)!.msgUseGenius,
@@ -164,6 +166,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 activeColor: users.themeData.indicatorColor,
               )
+            ],
+          ),*/
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(AppLocalizations.of(context)!.msgUseService,
+                  style: users.themeData.textTheme.bodyText2),
+              DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.miscellaneous_services),
+                  items: services.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: users.themeData.textTheme.bodyText2,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      dropdownValue = value!;
+                      if (dropdownValue == services.first) {
+                        users.useGenius = true;
+                      } else {
+                        users.useGenius = false;
+                      }
+                    });
+                  }),
             ],
           ),
         ],
