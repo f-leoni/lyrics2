@@ -1,6 +1,10 @@
 # L Y R I C S   2
 Find and read your favourite songs' lyrics by (part of the) text, Autor and title or by listening to your song!
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/it.zitzusoft.lyrics_2/)
+
 # PROJECT DESCRIPTION
 This project is a Flutter exercise but it's a complete app and it leverages some flutter features such as:
 * Multiple Providers
