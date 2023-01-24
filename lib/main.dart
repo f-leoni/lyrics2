@@ -9,6 +9,7 @@ import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:catcher/catcher.dart';
 import 'package:lyrics2/env.dart';
+import 'package:nowplaying/nowplaying.dart';
 
 main() {
   CatcherOptions debugOptions = CatcherOptions(DialogReportMode(),
@@ -41,6 +42,8 @@ main() {
       rootWidget: const LyricsApp(),
       debugConfig: debugOptions,
       releaseConfig: releaseOptions);
+
+  NowPlaying.instance.start(resolveImages: true);
 }
 
 class LyricsApp extends StatefulWidget {
@@ -64,6 +67,12 @@ class _LyricsAppState extends State<LyricsApp> {
       favoritesManager: _favoritesManager,
       settingsRepository: _settingsManager,
     );
+    NowPlaying.instance.isEnabled().then((bool isEnabled) async {
+      if (!isEnabled) {
+        final shown = await NowPlaying.instance.requestPermissions();
+        //print('MANAGED TO SHOW PERMS PAGE: $shown');
+      }
+    });
   }
 
   @override
