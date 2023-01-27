@@ -5,6 +5,7 @@ import 'package:lyrics2/data/sqlite_favorites_repository.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
+import 'components/logger.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:catcher/catcher.dart';
@@ -12,7 +13,7 @@ import 'package:lyrics2/env.dart';
 import 'package:nowplaying/nowplaying.dart';
 
 main() {
-  CatcherOptions debugOptions = CatcherOptions(DialogReportMode(),
+  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(),
       [ConsoleHandler(enableStackTrace: true, handleWhenRejected: false)]);
 
   CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
@@ -70,7 +71,7 @@ class _LyricsAppState extends State<LyricsApp> {
     NowPlaying.instance.isEnabled().then((bool isEnabled) async {
       if (!isEnabled) {
         final shown = await NowPlaying.instance.requestPermissions();
-        //print('MANAGED TO SHOW PERMS PAGE: $shown');
+        logger.v('MANAGED TO SHOW PERMS PAGE: $shown');
       }
     });
   }
@@ -92,7 +93,12 @@ class _LyricsAppState extends State<LyricsApp> {
         ChangeNotifierProvider(
           lazy: false,
           create: (_) => _settingsManager,
-        )
+        ),
+        StreamProvider<NowPlayingTrack?>.value(
+          initialData: NowPlayingTrack.notPlaying,
+          value: NowPlaying.instance.stream,
+        ),
+
       ],
       child: Consumer<SQLiteSettingsRepository>(
         builder: (context, profileManager, child) {

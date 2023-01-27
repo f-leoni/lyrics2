@@ -59,5 +59,7 @@
     "msgAudioSearch": "Audio",
     "msgTextSearch": "Testuale",
     "filterHint": "Filtra per titolo e autore...",
-    "msgSearchMode": "Modo Ricerca"
+    "msgSearchMode": "Modo Ricerca",
+    "msgNoPlay": "Nessun brano in riproduzione!",
+    "msgNoArtwork": "Nessuna immagine trovata!"
 }
