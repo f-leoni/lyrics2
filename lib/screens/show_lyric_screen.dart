@@ -220,7 +220,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 child: Text(
                   currLyric.lyric.replaceAll("\\r\\\\n", "\r\n"),
                   //style: LyricsTheme.darkTextTheme.bodyText1,
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.lato(
                     fontSize: _fontSize,
                     fontWeight: FontWeight.normal,
                     color: Provider.of<SQLiteSettingsRepository>(context,
@@ -241,8 +241,9 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     Image img = Image.network(
       currLyric.imageUrl,
       errorBuilder:
-          (BuildContext context, Object exception, StackTrace? stackTrace) =>
-              Image.asset("assets/lyrics_assets/logo.png"),
+          (BuildContext context, Object exception, StackTrace? stackTrace) {
+        return Image.asset("assets/lyrics_assets/logo.png");
+      },
     );
 
     return img;

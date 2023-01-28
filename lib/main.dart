@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lyrics2/data/sqlite_favorites_repository.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
@@ -13,19 +14,38 @@ import 'package:lyrics2/env.dart';
 import 'package:nowplaying/nowplaying.dart';
 
 main() {
-  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(),
-      [ConsoleHandler(enableStackTrace: true, handleWhenRejected: false)]);
+  GoogleFonts.config.allowRuntimeFetching = false;
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
+  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(), [
+    ConsoleHandler(
+      enableStackTrace: true,
+      handleWhenRejected: false,
+    )
+  ]);
 
-  CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
-    SlackHandler(Env.slackWebHook, "#lyrics2",
+  CatcherOptions releaseOptions = CatcherOptions(
+    //DialogReportMode(),
+    SilentReportMode(),
+    [
+      SlackHandler(
+        Env.slackWebHook,
+        "#lyrics2",
         username: "CatcherTest",
         iconEmoji: ":thinking_face:",
         enableDeviceParameters: true,
         enableApplicationParameters: true,
         enableCustomParameters: true,
         enableStackTrace: true,
-        printLogs: true),
-  ]);
+        printLogs: true,
+      ),
+    ],
+    localizationOptions: [
+      LocalizationOptions.buildDefaultItalianOptions(),
+    ],
+  );
 
   /*CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
     EmailManualHandler(["zitzusoft@gmail.com"],
@@ -62,7 +82,6 @@ class _LyricsAppState extends State<LyricsApp> {
 
   @override
   void initState() {
-    super.initState();
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
       favoritesManager: _favoritesManager,
@@ -74,6 +93,7 @@ class _LyricsAppState extends State<LyricsApp> {
         logger.v('MANAGED TO SHOW PERMS PAGE: $shown');
       }
     });
+    super.initState();
   }
 
   @override

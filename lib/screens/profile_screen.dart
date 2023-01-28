@@ -164,32 +164,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
               )
             ],
           ),*/
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(AppLocalizations.of(context)!.msgUseService,
-                style: users.themeData.textTheme.bodyText2),
-            DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.miscellaneous_services),
-                items: services.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: users.themeData.textTheme.bodyText2,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    dropdownValue = value!;
-                    if (dropdownValue == services.first) {
-                      users.useGenius = true;
-                    } else {
-                      users.useGenius = false;
-                    }
-                  });
-                }),
-          ]),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(AppLocalizations.of(context)!.msgUseService,
+                  style: users.themeData.textTheme.bodyText2),
+              DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.miscellaneous_services),
+                  items: services.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: users.themeData.textTheme.bodyText2,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      dropdownValue = value!;
+                      if (dropdownValue == services.first) {
+                        users.useGenius = true;
+                      } else {
+                        users.useGenius = false;
+                      }
+                    });
+                  }),
+            ],
+          ),
         ],
       ),
     );

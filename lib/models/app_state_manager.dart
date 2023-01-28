@@ -25,6 +25,7 @@ class AppStateManager extends ChangeNotifier {
   //Private
   bool _initialized = false;
   bool _loggedIn = false;
+  bool _onboardingComplete = false;
   int _selectedTab = LyricsTab.search;
   List<LyricSearchResult> _searchResults = List.empty();
   int _status = -1;
@@ -65,7 +66,7 @@ class AppStateManager extends ChangeNotifier {
   String get buildNr => _buildNr;
 
   void initializeApp() {
-    logger.d("Initialising...");
+    logger.d("Initialising App...");
     Timer(
       const Duration(milliseconds: 2000),
       () {
@@ -203,6 +204,7 @@ class AppStateManager extends ChangeNotifier {
   }
 
   Future<bool> checkOnboarding(BuildContext context) async {
+    if (_onboardingComplete) return true;
     final sqlRepository =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
     Setting? onBoardingSavedStatus =
@@ -212,6 +214,7 @@ class AppStateManager extends ChangeNotifier {
   }
 
   Future<void> completeOnboarding(BuildContext context) async {
+    _onboardingComplete = true;
     final sqlRepository =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
     await sqlRepository.insertSetting(
