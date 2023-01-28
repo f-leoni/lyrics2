@@ -1,5 +1,6 @@
-Lyrics 2 is a lyrics finder and reader. You can search any song's lyrics by author, title
-or if you simply remember a few words of the song.
+Lyrics 2 is a lyrics finder and reader.
+You can search any song's lyrics by author, title or if you simply remember a few words of the song.
+Or you can search the song you are listening to on your device!
 Once you found your lyrics, you can save them locally.
 
 Lyrics 2 uses Genius and ChartLyrics search services.

@@ -1,0 +1,2 @@
+- Added recognition of the song being played on the device (thanks go to ildar for suggesting this feature)
+- Some minor fixes
