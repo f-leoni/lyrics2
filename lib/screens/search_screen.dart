@@ -220,7 +220,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget buildNowPlayingSearchFields(BuildContext context, Proxy proxy) {
-    return NowPlayingPanel(service: proxy);
+    return NowPlayingPanel(proxy: proxy);
   }
 
   Widget buildTextSearchFields(BuildContext context) {

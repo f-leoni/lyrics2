@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lyrics2/api/genius_proxy.dart';
 import 'package:nowplaying/nowplaying.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,10 +7,8 @@ import '../data/sqlite_settings_repository.dart';
 import '../models/app_state_manager.dart';
 
 class NowPlayingPanel extends StatefulWidget {
-  Proxy proxy = GeniusProxy();
-  NowPlayingPanel({Key? key, required Proxy service}) : super(key: key) {
-    proxy = service;
-  }
+  final Proxy proxy;
+  const NowPlayingPanel({Key? key, required this.proxy}) : super(key: key);
 
   @override
   State<NowPlayingPanel> createState() => _NowPlayingPanelState();
