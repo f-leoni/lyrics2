@@ -216,7 +216,15 @@ class AppStateManager extends ChangeNotifier {
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
     await sqlRepository.insertSetting(
         Setting(setting: Setting.onboardingComplete, value: "true"));
-    notifyListeners();
+
+    //TODO Smells like a bad hack... remove if possible
+    // Waiting 500ms to allow sqlite writing data before reading again
+    Timer(
+      const Duration(milliseconds: 500),
+          () {
+        notifyListeners();
+      },
+    );
   }
 
   void goToTab(index) {
