@@ -1,0 +1,2 @@
+- Nuova funzionalità che permette la ricerca dei testi della canzone in riproduzione sul device (grazie a ildar per il suggerimento!)
+- Alcuni fix minori

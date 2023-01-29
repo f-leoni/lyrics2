@@ -20,7 +20,7 @@
     "lblSearch": "Cerca",
     "errNoLyric": "Si è verificato un errore: impossibile accedere al testo",
     "splashInit": "Inizializzazione...",
-    "info": "Lyrics 2 è stato creato da Zitzusoft.\nE' un'app open source che utilizza alcune parti di codice dall'ottimo corso di RayWenderlicht 'Flutter Apprentice'.\n\nInoltre Lyrics 2 fa uso di alcune librerie di terze parti. In ordine di apparizione:\n- provider\n- smooth_page_indicator\n- xml2json\n- logger\n- flutter_acrcloud\n- sqflite\n- package_info_plus\n- firebase_core + cloud + auth\n- genius_api_unofficial\n- beautiful_soup_dart\n\nInfine, Lyrics 2 è basato sulle API esposte da ChartLyrics ma non è in nessun modo collegato a ChartLyrics\n\nGrazie a tutti!\nF. of Zitzusoft",
+    "info": "Lyrics 2 è stato creato da Zitzusoft.\nE' un'app open source che utilizza alcune parti di codice dall'ottimo corso di RayWenderlicht 'Flutter Apprentice'.\n\nInoltre Lyrics 2 fa uso di alcune librerie di terze parti. In ordine di apparizione:\n- provider\n- smooth_page_indicator\n- xml2json\n- logger\n- flutter_acrcloud\n- sqflite\n- package_info_plus\n- firebase_core + cloud + auth\n- genius_api_unofficial\n- beautiful_soup_dart\nanimated_toggle_switch\nnowplaying\n(spero di non avere scordato nessuno!)\n\nInfine, Lyrics 2 è basato sulle API esposte da ChartLyrics e Genius, ma non è in nessun modo collegato a questi servizi.\n\nGrazie a tutti!\nF. (Zitzusoft)",
     "infoTitle": "Lyrics 2\nInformazioni",
     "noResults": "Nessun risultato",
     "searchTextTooShort": "Il testo da ricercare è troppo corto!",
@@ -59,5 +59,7 @@
     "msgAudioSearch": "Audio",
     "msgTextSearch": "Testuale",
     "filterHint": "Filtra per titolo e autore...",
-    "msgSearchMode": "Modo Ricerca"
+    "msgSearchMode": "Modo Ricerca",
+    "msgNoPlay": "Nessun brano in riproduzione!",
+    "msgNoArtwork": "Nessuna immagine trovata!"
 }

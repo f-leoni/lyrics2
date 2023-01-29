@@ -6,9 +6,13 @@ import 'package:lyrics2/api/proxies.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
+import 'package:lyrics2/components/search_selector.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
+
+import '../api/proxy.dart';
+import '../components/now_playing_panel.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -60,75 +64,85 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     logger.d("Building Search Screen");
     final manager = Provider.of<AppStateManager>(context, listen: false);
+    int searchType = manager.searchType;
     var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
-    return Scaffold(
-      backgroundColor: users.themeData.primaryColor,
-      body: Stack(
-        children: [
-          Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: CustomScrollView(slivers: <Widget>[
-                SliverAppBar(
-                    pinned: false,
-                    snap: true,
-                    floating: true,
-                    backgroundColor: users.themeData.primaryColor,
-                    expandedHeight: 100.0,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                    flex: 3, child: buildSearchFields(context)),
-                                /*Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: buildSearchButton(context),
-                                  ),
-                                ),*/
-                              ],
+      return Scaffold(
+        backgroundColor: users.themeData.primaryColor,
+        body: Stack(
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                  SliverAppBar(
+                      pinned: false,
+                      snap: true,
+                      floating: true,
+                      backgroundColor: users.themeData.primaryColor,
+                      expandedHeight: 100.0,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Row(
+                          children: [
+                            Expanded(
+                              flex:2,
+                              child: buildSearchFields(context),
+                        ),
+                            Expanded(
+                              flex:1,
+                              child: buildSearchSelector(
+                                  searchType,
+                                  _searchControllerText,
+                                  _searchControllerAuthor,
+                                  _searchControllerSong),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    )),
-                SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return buildTile(context, index);
-                  },
-                  childCount: manager.searchResults.length,
-                ))
-              ])),
-          spinner
-        ],
-      ),
-    );
+                        ),
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return buildTile(context, index);
+                    },
+                    childCount: manager.searchResults.length,
+                  ))
+                ])),
+            spinner
+          ],
+        ),
+      );
   }
 
   Widget buildSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     int searchType = manager.searchType;
 
-    if (searchType == SearchType.text) {
-      return buildTextSearchFields(context);
-    } else {
-      return buildSongAuthorSearchFields(context);
+    switch(searchType){
+      case SearchType.nowPlaying:
+        {
+          var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
+          return buildNowPlayingSearchFields(context, currProxy);
+        }
+      case SearchType.songAuthor:
+        {
+          return buildSongAuthorSearchFields(context);
+        }
+      case SearchType.text:
+      default:
+        {
+          return buildTextSearchFields(context);
+        }
     }
   }
 
   Widget buildSongAuthorSearchFields(BuildContext context) {
-    var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //var manager = Provider.of<AppStateManager>(context, listen: false);
+    //var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        IconButton(
+        /*IconButton(
             iconSize: 50,
             onPressed: () {
               manager.switchSearch(context, _searchControllerText.text,
@@ -137,7 +151,7 @@ class _SearchScreenState extends State<SearchScreen> {
             icon: Icon(
               Icons.radio_outlined,
               color: users.themeData.colorScheme.secondary,
-            )),
+            )),*/
         Flexible(
           flex: 2,
           child: Container(
@@ -146,48 +160,54 @@ class _SearchScreenState extends State<SearchScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Expanded(
-                  child: TextField(
-                    textAlignVertical: TextAlignVertical.bottom,
-                    controller: _searchControllerAuthor,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          // Clear the search field
-                          _searchControllerAuthor.text = "";
-                        },
+                  child: Padding(padding:
+                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                    child: TextField(
+                      //textAlignVertical: TextAlignVertical.bottom,
+                      controller: _searchControllerAuthor,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            // Clear the search field
+                            _searchControllerAuthor.text = "";
+                          },
+                        ),
+                        hintText: AppLocalizations.of(context)!.searchAuthorHint,
+                        border: const UnderlineInputBorder(),
+                        filled: false,
+                        fillColor: Theme.of(context)
+                            .backgroundColor, //Colors.yellow[50],
                       ),
-                      hintText: AppLocalizations.of(context)!.searchAuthorHint,
-                      border: const OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Theme.of(context)
-                          .backgroundColor, //Colors.yellow[50],
+                      //onEditingComplete: () => startSearch(context),
                     ),
-                    //onEditingComplete: () => startSearch(context),
                   ),
                 ),
-                SizedBox.fromSize(size: const Size.fromHeight(5)),
+                //SizedBox.fromSize(size: const Size.fromHeight(5)),
                 Expanded(
-                  child: TextField(
-                    textAlignVertical: TextAlignVertical.bottom,
-                    controller: _searchControllerSong,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          // Clear the search field
-                          _searchControllerSong.text = "";
-                        },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                    child: TextField(
+                      textAlignVertical: TextAlignVertical.bottom,
+                      controller: _searchControllerSong,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            // Clear the search field
+                            _searchControllerSong.text = "";
+                          },
+                        ),
+                        hintText: AppLocalizations.of(context)!.searchSongHint,
+                        border: const UnderlineInputBorder(),
+                        filled: false,
+                        fillColor: Theme.of(context)
+                            .backgroundColor, //Colors.yellow[50],
                       ),
-                      hintText: AppLocalizations.of(context)!.searchSongHint,
-                      border: const OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Theme.of(context)
-                          .backgroundColor, //Colors.yellow[50],
+                      //onEditingComplete: () => startSearch(context),
                     ),
-                    //onEditingComplete: () => startSearch(context),
                   ),
                 ),
                 SizedBox.fromSize(size: const Size.fromHeight(5)),
@@ -199,6 +219,10 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  Widget buildNowPlayingSearchFields(BuildContext context, Proxy proxy) {
+    return NowPlayingPanel(proxy: proxy);
+  }
+
   Widget buildTextSearchFields(BuildContext context) {
     return Row(
       //mainAxisSize: MainAxisSize.max,
@@ -208,7 +232,7 @@ class _SearchScreenState extends State<SearchScreen> {
           flex: 1,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 16.0),
             child: TextField(
               controller: _searchControllerText,
               onSubmitted: (value) => startSearch(context),
@@ -358,6 +382,19 @@ class _SearchScreenState extends State<SearchScreen> {
                 .button),
       ));
     }
+  }
+
+  SearchSelector buildSearchSelector(
+      int searchType,
+      TextEditingController searchControllerText,
+      TextEditingController searchControllerAuthor,
+      TextEditingController searchControllerSong,
+      ) {
+    return SearchSelector(
+        searchType: searchType,
+        searchControllerText: _searchControllerText,
+        searchControllerAuthor: _searchControllerAuthor,
+        searchControllerSong: _searchControllerSong);
   }
 
   @override

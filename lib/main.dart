@@ -8,10 +8,12 @@ import 'package:lyrics2/data/sqlite_favorites_repository.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
+import 'components/logger.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:catcher/catcher.dart';
 import 'package:lyrics2/env.dart';
+import 'package:nowplaying/nowplaying.dart';
 
 main() {
   GoogleFonts.config.allowRuntimeFetching = false;
@@ -63,6 +65,8 @@ main() {
       rootWidget: const LyricsApp(),
       debugConfig: debugOptions,
       releaseConfig: releaseOptions);
+
+  NowPlaying.instance.start(resolveImages: true);
 }
 
 class LyricsApp extends StatefulWidget {
@@ -85,6 +89,12 @@ class _LyricsAppState extends State<LyricsApp> {
       favoritesManager: _favoritesManager,
       settingsRepository: _settingsManager,
     );
+    NowPlaying.instance.isEnabled().then((bool isEnabled) async {
+      if (!isEnabled) {
+        final shown = await NowPlaying.instance.requestPermissions();
+        logger.v('MANAGED TO SHOW PERMS PAGE: $shown');
+      }
+    });
     super.initState();
   }
 
@@ -102,6 +112,15 @@ class _LyricsAppState extends State<LyricsApp> {
           lazy: false,
           create: (context) => _favoritesManager,
         ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (_) => _settingsManager,
+        ),
+        StreamProvider<NowPlayingTrack?>.value(
+          initialData: NowPlayingTrack.notPlaying,
+          value: NowPlaying.instance.stream,
+        ),
+
       ],
       child: Consumer<SQLiteSettingsRepository>(
         builder: (context, profileManager, child) {

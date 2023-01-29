@@ -12,7 +12,7 @@ class SQLiteSettingsRepository with ChangeNotifier {
   bool get darkMode => _darkMode;
   var _useGenius = true;
   bool get useGenius => _useGenius;
-  Map<String, Setting>? _settings;
+  //Map<String, Setting>? _settings;
   set useGenius(bool value) {
     _useGenius = value;
     notifyListeners();
@@ -46,7 +46,7 @@ class SQLiteSettingsRepository with ChangeNotifier {
   Future<void> insertSetting(Setting setting) {
     logger.d("SQLite - Inserting ${setting.value} in  ${setting.setting}");
     dbHelper.insertSetting(setting);
-    _settings = null;
+    //_settings = null;
     notifyListeners();
     return Future.value(null);
   }

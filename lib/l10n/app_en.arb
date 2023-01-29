@@ -79,7 +79,7 @@
     "@splashInit": {
         "description": "Splash Screen  Msg"
     },
-    "info": "Lyrics 2 was created by Zitzusoft.\nIt is an open source app and uses some code from RayWenderlicht's very good course 'Flutter Apprentice'.\n\nAlso, Lyrics 2 uses some third party libraries. In appearance order:\n- provider\n- smooth_page_indicator\n- xml2json\n- logger\n- flutter_acrcloud\n- sqflite\n- package_info_plus\n- firebase_core + cloud + auth\n- genius_api_unofficial\n- beautiful_soup_dart\n\nFinally, Lyrics 2 leverages APIs from ChartLyrics but is not related in any way with ChartLyrics\n\nThanks all!\nF. of Zitzusoft",
+    "info": "Lyrics 2 was created by Zitzusoft.\nIt is an open source app and uses some code from RayWenderlicht's very good course 'Flutter Apprentice'.\n\nAlso, Lyrics 2 uses some third party libraries. In appearance order:\n- provider\n- smooth_page_indicator\n- xml2json\n- logger\n- flutter_acrcloud\n- sqflite\n- package_info_plus\n- firebase_core + cloud + auth\n- genius_api_unofficial\n- beautiful_soup_dart\nanimated_toggle_switch\nnowplaying\n(hope I didn't forget anyone!)\n\nFinally, Lyrics 2 leverages APIs from ChartLyrics and Genius, but is not related in any way with these services\n\nThanks all!\nF. of Zitzusoft",
     "@info": {
         "description": "Info text"
     },
@@ -238,5 +238,13 @@
     "msgSearchMode": "Search mode",
     "@msgSearchMode": {
         "description": "Dropdown title in search screen"
+    },
+    "msgNoPlay": "Nothing is playing at the moment!",
+    "@msgNoPlay": {
+        "description": "Shown when no song is detected"
+    },
+    "msgNoArtwork": "No artwork found!",
+    "@msgNoArtwork": {
+        "description": "Shown when no artwork is found for nowplaying search"
     }
 }
