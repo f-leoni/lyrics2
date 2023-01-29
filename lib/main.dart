@@ -2,19 +2,29 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lyrics2/data/firebase_favorites_repository.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
+import 'package:nowplaying/nowplaying.dart';
 import 'package:provider/provider.dart';
+import 'components/logger.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 main() {
+  GoogleFonts.config.allowRuntimeFetching = false;
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp().then((value) {
     FlutterError.onError = (errorDetails) {
@@ -25,7 +35,7 @@ main() {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };
-
+    NowPlaying.instance.start(resolveImages: true);
     runApp(const LyricsApp());
   }); // Firebase Initialization
 }
@@ -48,6 +58,12 @@ class _LyricsAppState extends State<LyricsApp> {
   void initState() {
     _favoritesManager = FirebaseFavoritesRepository(
         FirebaseFirestore.instance.collection('lyrics'));
+    NowPlaying.instance.isEnabled().then((bool isEnabled) async {
+      if (!isEnabled) {
+        final shown = await NowPlaying.instance.requestPermissions();
+        logger.v('MANAGED TO SHOW PERMS PAGE: $shown');
+      }
+    });
     super.initState();
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
@@ -73,7 +89,11 @@ class _LyricsAppState extends State<LyricsApp> {
         ChangeNotifierProvider(
           lazy: false,
           create: (_) => _settingsManager,
-        )
+        ),
+        StreamProvider<NowPlayingTrack?>.value(
+          initialData: NowPlayingTrack.notPlaying,
+          value: NowPlaying.instance.stream,
+        ),
       ],
       child: Consumer<FirebaseUserRepository>(
         builder: (context, profileManager, child) {

@@ -220,7 +220,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 child: Text(
                   currLyric.lyric.replaceAll("\\r\\\\n", "\r\n"),
                   //style: LyricsTheme.darkTextTheme.bodyText1,
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.lato(
                     fontSize: _fontSize,
                     fontWeight: FontWeight.normal,
                     color: Provider.of<FirebaseUserRepository>(context,

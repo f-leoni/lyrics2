@@ -14,6 +14,8 @@ import 'package:lyrics2/env.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
+import 'package:lyrics2/api/proxy.dart';
+import 'package:lyrics2/components/now_playing_panel.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -129,15 +131,24 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     int searchType = manager.searchType;
 
-    if (searchType == SearchType.text) {
-      return buildTextSearchFields(context);
-    } else if (searchType == SearchType.songAuthor) {
-      return buildSongAuthorSearchFields(context);
-    } else {
-      // Search by audio recognition
-      return buildAudioSearchFields(context);
+    switch (searchType) {
+      case SearchType.nowPlaying:
+        {
+          var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
+          return buildNowPlayingSearchFields(context, currProxy);
+        }
+      case SearchType.audio:
+        {
+          return buildAudioSearchFields(context);
+        }
+      case SearchType.text:
+      default:
+        {
+          return buildTextSearchFields(context);
+        }
     }
   }
 
@@ -153,16 +164,16 @@ class _SearchScreenState extends State<SearchScreen> {
           Column(
             children: [
               Expanded(
+                flex:2,
                 child: Builder(
                   builder: (context) => ConstrainedBox(
                     constraints:
                         const BoxConstraints(minHeight: 50, maxHeight: 90),
-                    child: Container(
+                    child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      //color: Colors.red,
                       child: Center(
                         child: MaterialButton(
-                          minWidth: 150,
+                          minWidth: 100,
                           height: 50,
                           color: theme.indicatorColor,
                           shape: RoundedRectangleBorder(
@@ -275,15 +286,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 SizedBox.fromSize(size: const Size(1, 9)),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Expanded(
-                    child: SizedBox(
-                      width: 230,
-                      child: Text(
-                          '${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.bodyText1),
-                    ),
-                  ),
+                  child: Text(
+                      '${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.bodyText1),
                 ),
               ],
             ],
@@ -292,12 +298,12 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget buildSongAuthorSearchFields(BuildContext context) {
-    var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    //var manager = Provider.of<AppStateManager>(context, listen: false);
+    //var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        IconButton(
+        /*IconButton(
             iconSize: 50,
             onPressed: () {
               manager.switchSearch(context, _searchControllerText.text,
@@ -306,7 +312,7 @@ class _SearchScreenState extends State<SearchScreen> {
             icon: Icon(
               Icons.radio_outlined,
               color: users.themeData.colorScheme.secondary,
-            )),
+            )),*/
         Flexible(
           flex: 2,
           child: Container(
@@ -366,6 +372,10 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ],
     );
+  }
+
+  Widget buildNowPlayingSearchFields(BuildContext context, Proxy proxy) {
+    return NowPlayingPanel(proxy: proxy);
   }
 
   Widget buildTextSearchFields(BuildContext context) {

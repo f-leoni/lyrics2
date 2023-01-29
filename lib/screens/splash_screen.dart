@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
-import '../models/models.dart';
+import 'package:lyrics2/models/models.dart';
 
 class SplashScreen extends StatefulWidget {
   // SplashScreen MaterialPage Helper (15)

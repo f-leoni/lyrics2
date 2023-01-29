@@ -19,6 +19,7 @@ class SearchType {
   static const int text = 0;
   static const int songAuthor = 1;
   static const int audio = 2;
+  static const nowPlaying = 3;
 }
 
 class AppStateManager extends ChangeNotifier {
@@ -137,10 +138,12 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void switchSearch(BuildContext context, String textSearch,
-      String authorSearch, String songSearch) {
+  void switchSearch(BuildContext context, int newSearchType,
+      String textSearch, String authorSearch, String songSearch) {
     String msg = "";
-    int currSearchType = searchType;
+    //int currSearchType = searchType;
+    _searchType = newSearchType;
+    /*
     // TEXT -> AUDIO
     if (currSearchType == SearchType.text) {
       // Save Textfield text
@@ -148,7 +151,7 @@ class AppStateManager extends ChangeNotifier {
       // AUDIO -> TEXT
     } else if (currSearchType == SearchType.audio) {
       msg = switchAudio2Text(context);
-    }
+    }*/
     if (_showSnackBar) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(msg,
@@ -209,7 +212,15 @@ class AppStateManager extends ChangeNotifier {
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
     await sqlRepository.insertSetting(
         Setting(setting: Setting.onboardingComplete, value: "true"));
-    notifyListeners();
+
+    //TODO Smells like a bad hack... remove if possible
+    // Waiting 500ms to allow sqlite writing data before reading again
+    Timer(
+      const Duration(milliseconds: 500),
+          () {
+        notifyListeners();
+      },
+    );
   }
 
   void goToTab(index) {

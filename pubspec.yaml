@@ -54,8 +54,10 @@ dependencies:
   genius_api_unofficial: ^2.0.1
   beautiful_soup_dart: ^0.3.0
   #font_awesome_flutter: ^10.2.1
-  flutter_switch: ^0.3.2
+  #flutter_switch: ^0.3.2
   fake_cloud_firestore: 1.1.3
+  nowplaying: ^2.0.6
+  animated_toggle_switch: ^0.6.1
 
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1
@@ -106,6 +108,7 @@ flutter:
   assets:
     - assets/
     - assets/lyrics_assets/
+    - assets/fonts/
 
   # Required for localization
   generate: true 

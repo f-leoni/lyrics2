@@ -57,8 +57,9 @@ class GeniusProxy extends Proxy {
   }
 
   Future<dynamic> _getSearch(String query, GeniusApiOptions? options) async {
+    query = query.trim();
     if (options == null) {
-      final res = await geniusApi.getSearch(query);
+      final res  = await geniusApi.getSearch(query);
       return _getResults(res.data!['hits']);
     }
     //final res = await geniusApi.getSearch(query, options: options);
@@ -78,12 +79,17 @@ class GeniusProxy extends Proxy {
       logger.e(e.toString());
       rethrow;
     }
+    String outLyric = "";
     BeautifulSoup bs = BeautifulSoup(body);
-    String outLyric = bs
+    if(bs.find('*', id: 'lyrics-root') != null) {
+    outLyric = bs
         .find('*', id: 'lyrics-root')!
         .children[2]
         .innerHtml
         .replaceAll("<br>", "\n");
+    } else {
+      outLyric = "Sorry, something went wrong looking for your lyrics on the Genius website.<br />Try changing used service to Chartlyrics in settings and search again!";
+    }
     return _parseHtmlString(outLyric);
   }
 

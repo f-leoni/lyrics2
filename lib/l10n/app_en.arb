@@ -238,5 +238,13 @@
     "msgSearchMode": "Search mode",
     "@msgSearchMode": {
         "description": "Dropdown title in search screen"
+    },
+    "msgNoPlay": "Nothing is playing at the moment!",
+    "@msgNoPlay": {
+        "description": "Shown when no song is detected"
+    },
+    "msgNoArtwork": "No artwork found!",
+    "@msgNoArtwork": {
+        "description": "Shown when no artwork is found for nowplaying search"
     }
 }

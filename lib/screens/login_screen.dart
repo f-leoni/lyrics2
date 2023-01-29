@@ -5,7 +5,7 @@ import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/models/models.dart';
 
-import '../components/logger.dart';
+import 'package:lyrics2/components/logger.dart';
 
 class LoginScreen extends StatefulWidget {
   // LoginScreen MaterialPage Helper
