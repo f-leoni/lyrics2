@@ -43,7 +43,13 @@
 	<false/>
 	<key>NSAppleMusicUsageDescription</key>
     <string>We need this to show you what's currently playing</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need to access to your mic to listen to music and recognize it</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
 </dict>
 </plist>

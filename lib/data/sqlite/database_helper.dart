@@ -1,5 +1,6 @@
 import 'package:lyrics2/components/logger.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import 'package:sqlbrite/sqlbrite.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:lyrics2/models/models.dart';
@@ -54,14 +55,16 @@ class DatabaseHelper {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path =
         //join(documentsDirectory.path, _databaseName);
-        "${documentsDirectory.path}$_databaseName";
+        //"${documentsDirectory.path}$_databaseName";
+      p.join(documentsDirectory.toString(),_databaseName);
     logger.i(
         "Database $_databaseName path is: $path. Version: $_databaseVersion");
 
     // Remember to turn off debugging before deploying app to store(s).
     Sqflite.setDebugModeOn(false);
-
-    return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    Database database = await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    //return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    return database;
   }
 
   Future<Database> get database async {
