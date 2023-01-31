@@ -88,7 +88,7 @@ class AppRouter extends RouterDelegate
         ));
   }
 
-  // What do do when a page is closed or dismissed ("popped")?
+  // What to do when a page is closed or dismissed ("popped")?
   bool _handlePopPage(
       //  argument 1 - current route
       Route<dynamic> route,
