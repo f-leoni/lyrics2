@@ -30,7 +30,7 @@
 .pub-cache/
 .pub/
 /build/
-local.properties
+/local.properties
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -61,3 +61,4 @@ macos/Flutter/ephemeral/.symlinks/plugins/package_info_plus
 macos/Flutter/ephemeral/.symlinks/plugins/path_provider_macos
 macos/Flutter/ephemeral/.symlinks/plugins/sqflite
 macos/Pods/Local Podspecs/FlutterMacOS.podspec.json
+/.flutter/

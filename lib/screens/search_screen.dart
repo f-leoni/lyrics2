@@ -86,7 +86,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     backgroundColor: users.themeData.primaryColor,
                     expandedHeight: 100.0,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Row(
+                      background: Column(
                         children: [
                           Expanded(
                             flex: 3,
