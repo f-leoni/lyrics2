@@ -54,26 +54,29 @@ class _SearchSelectorState extends State<SearchSelector> {
                 widget.searchControllerAuthor.text,
                 widget.searchControllerSong.text);
           },
-          iconBuilder: (value, _ , __) {
+          iconBuilder: (value, _, __) {
             switch (value) {
               case SearchType.songAuthor:
                 {
                   return Icon(
                     Icons.radio,
-                    color: users.themeData.colorScheme.background,);
+                    color: users.themeData.colorScheme.background,
+                  );
                 }
               case SearchType.nowPlaying:
                 {
                   return Icon(
                     Icons.play_circle,
-                    color: users.themeData.colorScheme.background,);
+                    color: users.themeData.colorScheme.background,
+                  );
                 }
-                case SearchType.text:
+              case SearchType.text:
               default:
                 {
                   return Icon(
                     Icons.text_snippet,
-                    color: users.themeData.colorScheme.background,);
+                    color: users.themeData.colorScheme.background,
+                  );
                 }
             }
           },

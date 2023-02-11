@@ -66,51 +66,50 @@ class _SearchScreenState extends State<SearchScreen> {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     int searchType = manager.searchType;
     var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
-      return Scaffold(
-        backgroundColor: users.themeData.primaryColor,
-        body: Stack(
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                  SliverAppBar(
-                      pinned: false,
-                      snap: true,
-                      floating: true,
-                      backgroundColor: users.themeData.primaryColor,
-                      expandedHeight: 100.0,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Row(
-                          children: [
-                            Expanded(
-                              flex:2,
-                              child: buildSearchFields(context),
+    return Scaffold(
+      backgroundColor: users.themeData.primaryColor,
+      body: Stack(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: CustomScrollView(slivers: <Widget>[
+                SliverAppBar(
+                  pinned: false,
+                  snap: true,
+                  floating: true,
+                  backgroundColor: users.themeData.primaryColor,
+                  expandedHeight: 100.0,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: buildSearchFields(context),
                         ),
-                            Expanded(
-                              flex:1,
-                              child: buildSearchSelector(
-                                  searchType,
-                                  _searchControllerText,
-                                  _searchControllerAuthor,
-                                  _searchControllerSong),
-                            ),
-                          ],
+                        Expanded(
+                          flex: 1,
+                          child: buildSearchSelector(
+                              searchType,
+                              _searchControllerText,
+                              _searchControllerAuthor,
+                              _searchControllerSong),
                         ),
-                      ),
-                        ),
-                  SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return buildTile(context, index);
-                    },
-                    childCount: manager.searchResults.length,
-                  ))
-                ])),
-            spinner
-          ],
-        ),
-      );
+                      ],
+                    ),
+                  ),
+                ),
+                SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return buildTile(context, index);
+                  },
+                  childCount: manager.searchResults.length,
+                ))
+              ])),
+          spinner
+        ],
+      ),
+    );
   }
 
   Widget buildSearchFields(BuildContext context) {
@@ -118,7 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
     var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     int searchType = manager.searchType;
 
-    switch(searchType){
+    switch (searchType) {
       case SearchType.nowPlaying:
         {
           var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
@@ -160,8 +159,9 @@ class _SearchScreenState extends State<SearchScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Expanded(
-                  child: Padding(padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 16.0),
                     child: TextField(
                       //textAlignVertical: TextAlignVertical.bottom,
                       controller: _searchControllerAuthor,
@@ -174,7 +174,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             _searchControllerAuthor.text = "";
                           },
                         ),
-                        hintText: AppLocalizations.of(context)!.searchAuthorHint,
+                        hintText:
+                            AppLocalizations.of(context)!.searchAuthorHint,
                         border: const UnderlineInputBorder(),
                         filled: false,
                         fillColor: Theme.of(context)
@@ -187,7 +188,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 //SizedBox.fromSize(size: const Size.fromHeight(5)),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 16.0),
                     child: TextField(
                       textAlignVertical: TextAlignVertical.bottom,
                       controller: _searchControllerSong,
@@ -375,8 +377,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void showNoResultsMsg(List<LyricSearchResult> results) {
     if (results.isEmpty) {
+      AppLocalizations? appLocale = AppLocalizations.of(context);
+      String noResults = "No results found";
+      if (appLocale != null) {
+        noResults = AppLocalizations.of(context)!.noResults;
+      }
+      if (appLocale != null) {}
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.noResults,
+        content: Text(noResults,
             style: Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .textTheme
                 .button),
@@ -385,11 +393,11 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   SearchSelector buildSearchSelector(
-      int searchType,
-      TextEditingController searchControllerText,
-      TextEditingController searchControllerAuthor,
-      TextEditingController searchControllerSong,
-      ) {
+    int searchType,
+    TextEditingController searchControllerText,
+    TextEditingController searchControllerAuthor,
+    TextEditingController searchControllerSong,
+  ) {
     return SearchSelector(
         searchType: searchType,
         searchControllerText: _searchControllerText,

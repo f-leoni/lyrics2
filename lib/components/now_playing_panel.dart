@@ -27,7 +27,8 @@ class _NowPlayingPanelState extends State<NowPlayingPanel> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (track.isStopped) Text(AppLocalizations.of(context)!.msgNoPlay),
+                  if (track.isStopped)
+                    Text(AppLocalizations.of(context)!.msgNoPlay),
                   if (!track.isStopped) ...[
                     if (track.title != null)
                       Text(
@@ -56,14 +57,21 @@ class _NowPlayingPanelState extends State<NowPlayingPanel> {
                                   .themeData
                                   .indicatorColor,
                               onPressed: () async {
-                                final manager = Provider.of<AppStateManager>(context, listen: false);
-                                manager.lastTextSearch = '${track.artist} ${track.title}';
-                                manager.lastAuthorSearch = track.artist ?? "null";
+                                final manager = Provider.of<AppStateManager>(
+                                    context,
+                                    listen: false);
+                                manager.lastTextSearch =
+                                    '${track.artist} ${track.title}';
+                                manager.lastAuthorSearch =
+                                    track.artist ?? "null";
                                 manager.lastSongSearch = track.title ?? "null";
                                 await manager.startSearchSongAuthor(
-                                    track.artist??"null", track.title??"null", widget.proxy);
+                                    track.artist ?? "null",
+                                    firstFewWords(track.title ?? "null", 4),
+                                    widget.proxy);
                               },
-                              child: Text(AppLocalizations.of(context)!.lblSearch),
+                              child:
+                                  Text(AppLocalizations.of(context)!.lblSearch),
                             )),
                         Positioned(bottom: 0, right: 0, child: _iconFrom(track))
                       ],
@@ -81,6 +89,25 @@ class _NowPlayingPanelState extends State<NowPlayingPanel> {
         }
       },
     );
+  }
+
+  String firstFewWords(String bigSentence, int numWords) {
+    int startIndex = 0, indexOfSpace = -1;
+    // Trim at first parenthesis
+    int indexOfParenthesis = bigSentence.indexOf('(', 0);
+    if (indexOfParenthesis > 0) {
+      bigSentence = bigSentence.substring(0, bigSentence.indexOf('(', 0));
+    }
+    for (int i = 0; i < numWords; i++) {
+      indexOfSpace = bigSentence.indexOf(' ', startIndex);
+      if (indexOfSpace == -1) {
+        //-1 is when character is not found
+        return bigSentence;
+      }
+      startIndex = indexOfSpace + 1;
+    }
+
+    return bigSentence.substring(0, indexOfSpace);
   }
 
   /*Widget _imageFrom(NowPlayingTrack track) {

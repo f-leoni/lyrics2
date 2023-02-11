@@ -143,8 +143,8 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void switchSearch(BuildContext context, int newSearchType,
-      String textSearch, String authorSearch, String songSearch) {
+  void switchSearch(BuildContext context, int newSearchType, String textSearch,
+      String authorSearch, String songSearch) {
     String msg = "";
     //int currSearchType = searchType;
     _searchType = newSearchType;
@@ -224,7 +224,7 @@ class AppStateManager extends ChangeNotifier {
     // Waiting 500ms to allow sqlite writing data before reading again
     Timer(
       const Duration(milliseconds: 500),
-          () {
+      () {
         notifyListeners();
       },
     );
