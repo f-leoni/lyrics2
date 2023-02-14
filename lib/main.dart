@@ -112,15 +112,10 @@ class _LyricsAppState extends State<LyricsApp> {
           lazy: false,
           create: (context) => _favoritesManager,
         ),
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (_) => _settingsManager,
-        ),
         StreamProvider<NowPlayingTrack?>.value(
           initialData: NowPlayingTrack.notPlaying,
           value: NowPlaying.instance.stream,
         ),
-
       ],
       child: Consumer<SQLiteSettingsRepository>(
         builder: (context, profileManager, child) {
