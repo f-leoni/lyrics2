@@ -19,9 +19,11 @@ class MainScreen extends StatefulWidget {
     );
   }
 
-  const MainScreen({Key? key, required this.currentTab}) : super(key: key);
+  MainScreen({Key? key, required this.currentTab, this.search})
+      : super(key: key);
 
   final int currentTab;
+  String? search;
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -32,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     List<Widget> pages = <Widget>[
       const FavoritesScreen(),
-      const SearchScreen(),
+      SearchScreen(search: widget.search),
       const InfoScreen(),
     ];
     return Consumer<AppStateManager>(

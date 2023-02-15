@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyrics2/components/logger.dart';
-import 'package:lyrics2/data/sqlite_favorites_repository.dart';
+//import 'package:lyrics2/data/sqlite_favorites_repository.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
@@ -12,25 +12,25 @@ class AppRouter extends RouterDelegate
   @override
   final GlobalKey<NavigatorState> navigatorKey;
   final AppStateManager appStateManager;
-  final SQLiteFavoritesRepository favoritesManager;
+  //final SQLiteFavoritesRepository favoritesManager;
   final SQLiteSettingsRepository settingsRepository;
   BuildContext? _context;
 
   AppRouter({
     required this.appStateManager,
-    required this.favoritesManager,
+    // required this.favoritesManager,
     required this.settingsRepository,
   }) : navigatorKey = GlobalKey<NavigatorState>() {
     appStateManager.addListener(notifyListeners);
-    favoritesManager.addListener(notifyListeners);
-    settingsRepository.addListener(notifyListeners);
+    //favoritesManager.addListener(notifyListeners);
+    //settingsRepository.addListener(notifyListeners);
   }
 
   @override
   Widget build(BuildContext context) {
     logger.d("Building AppRouter");
     _context = context;
-    final settingsRepository = Provider.of<SQLiteSettingsRepository>(context);
+    //final settingsRepository = Provider.of<SQLiteSettingsRepository>(context);
     //Future<Map<String, Setting>> fSettings = settingsRepository.getSettings();
     Future<bool> fOnboarding = appStateManager.checkOnboarding(context);
 
@@ -126,8 +126,8 @@ class AppRouter extends RouterDelegate
   @override
   void dispose() {
     appStateManager.removeListener(notifyListeners);
-    favoritesManager.removeListener(notifyListeners);
-    settingsRepository.removeListener(notifyListeners);
+    //favoritesManager.removeListener(notifyListeners);
+    //settingsRepository.removeListener(notifyListeners);
     super.dispose();
   }
 }

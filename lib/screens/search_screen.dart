@@ -19,12 +19,12 @@ class SearchScreen extends StatefulWidget {
     return MaterialPage(
       name: LyricsPages.searchResultsPath,
       key: ValueKey(LyricsPages.searchResultsPath),
-      child: const SearchScreen(),
+      child: SearchScreen(),
     );
   }
 
-  const SearchScreen({Key? key}) : super(key: key);
-
+  SearchScreen({Key? key, this.search}) : super(key: key);
+  String? search;
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -348,6 +348,9 @@ class _SearchScreenState extends State<SearchScreen> {
     manager.lastSongSearch = _searchControllerSong.text;
     var searchType = manager.searchType;
 
+    if (widget.search != null) {
+      await manager.startSearchText(widget.search!, currProxy);
+    }
     if (searchType == SearchType.text &&
             _searchStringText.length < minSearchLen ||
         searchType == SearchType.songAuthor &&
