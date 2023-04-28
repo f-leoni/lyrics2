@@ -153,7 +153,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
             colorFilter: ColorFilter.mode(Colors.black.withAlpha(alpha), blend),
             fit: BoxFit.cover,
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          //borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         );
       } on Exception catch (e) {
         logger.w(

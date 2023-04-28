@@ -84,9 +84,10 @@ class GeniusProxy extends Proxy {
     if(bs.find('*', id: 'lyrics-root') != null) {
       outLyric = bs
           .find('*', id: 'lyrics-root')!
-          .children[2]
+          .children[1]
           .innerHtml
-          .replaceAll("<br>", "\n");
+          .replaceAll("<br>", "\n")
+      ;
     } else {
       outLyric = "Sorry, something went wrong looking for your lyrics on the Genius website.<br />Try changing used service to Chartlyrics in settings and search again!";
     }
