@@ -1,5 +1,5 @@
 # L Y R I C S   2
-Find and read your favourite songs' lyrics by (part of the) text, Autor and title or by listening to your song!
+Find and read your favourite songs' lyrics by (part of the) text, Author and title or by listening to your song!
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
 alt="Get it on F-Droid"

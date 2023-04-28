@@ -86,7 +86,7 @@ class _LyricsAppState extends State<LyricsApp> {
   void initState() {
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
-      favoritesManager: _favoritesManager,
+      //favoritesManager: _favoritesManager,
       settingsRepository: _settingsManager,
     );
     NowPlaying.instance.isEnabled().then((bool isEnabled) async {
