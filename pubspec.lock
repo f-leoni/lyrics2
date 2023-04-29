@@ -282,13 +282,12 @@ packages:
       name: glob
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.0"
   go_router:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: "67b83df7a1260c81686afe4ac1b29566cbb815f73f4e44c26f1c602c3cdd3f0f"
-      url: "https://pub.dev"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "2.5.7"
   google_fonts:
@@ -524,8 +523,7 @@ packages:
     dependency: transitive
     description:
       name: path_to_regexp
-      sha256: "169d78fbd55e61ea8873bcca545979f559d22238f66facdd7ef30870c7f53327"
-      url: "https://pub.dev"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.0"
   pedantic:

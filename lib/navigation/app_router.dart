@@ -30,9 +30,10 @@ class AppRouter extends RouterDelegate
   Widget build(BuildContext context) {
     logger.d("Building AppRouter");
     _context = context;
-    //final settingsRepository = Provider.of<SQLiteSettingsRepository>(context);
+    final settingsRepository = Provider.of<SQLiteSettingsRepository>(context);
     //Future<Map<String, Setting>> fSettings = settingsRepository.getSettings();
-    Future<bool> fOnboarding = appStateManager.checkOnboarding(context);
+    Future<bool> fOnboarding =
+        appStateManager.checkOnboarding(settingsRepository);
 
     return FutureBuilder(
       future: fOnboarding, //fSettings,
