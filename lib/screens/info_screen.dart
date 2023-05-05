@@ -50,14 +50,14 @@ class InfoScreen extends StatelessWidget {
                       height: 80,
                       child: Row(
                         children: [
-                          IconButton(
+                          /*IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
                               Provider.of<AppStateManager>(context,
                                       listen: false)
                                   .goToTab(LyricsTab.search);
                             },
-                          ),
+                          ),*/
                           Image(height: 80, image: logoImg),
                           //AssetImage("assets/lyrics_assets/logo.png")),
                           Text(AppLocalizations.of(context)!.infoTitle,

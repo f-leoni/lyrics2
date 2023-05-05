@@ -27,19 +27,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SQLiteSettingsRepository settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //settings.init();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(AppLocalizations.of(context)!.gettingStarted,
-            style: Provider.of<SQLiteSettingsRepository>(context, listen: false)
+            style: settings
                 .textTheme
                 .headline1),
         leading: GestureDetector(
           child: Icon(
             Icons.chevron_left,
             size: 35,
-            color: Provider.of<SQLiteSettingsRepository>(context, listen: false)
+            color: settings
                 .themeData
                 .primaryColorDark,
           ),

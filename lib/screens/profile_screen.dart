@@ -7,6 +7,8 @@ import 'package:lyrics2/components/circle_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/models/models.dart';
 
+import '../components/proxy_selector.dart';
+
 class ProfileScreen extends StatefulWidget {
   // ProfileScreen MaterialPage Helper
   static MaterialPage page() {
@@ -26,10 +28,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  static const List<String> services = <String>['Genius', 'ChartLyrics'];
+  //static const List<String> services = <String>['Genius', 'ChartLyrics'];
   @override
   Widget build(BuildContext context) {
     var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: users.themeData.colorScheme.primaryContainer,
@@ -94,6 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget buildDarkModeRow() {
     final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -105,6 +109,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             value: users.darkMode, //widget.user.darkMode,
             onChanged: (value) {
               users.darkMode = value;
+              final sqlRepository =
+              Provider.of<SQLiteSettingsRepository>(context, listen: false);
+              //sqlRepository.init();
+              sqlRepository.insertSetting(
+                  Setting(setting: Setting.darkTheme, value: "$value"));
             },
             activeColor: users.themeData.indicatorColor,
           )
@@ -116,6 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget buildProfile() {
     //final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
     return Column(
       children: [
         const CircleImage(
@@ -130,12 +140,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   buildProxyRow() {
-    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
-    String dropdownValue = users.useGenius ? services.first : services.last;
+    //final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //String dropdownValue = users.useGenius ? services.first : services.last;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        children: [
+        children: const [
           /*Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -164,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               )
             ],
           ),*/
-          Row(
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocalizations.of(context)!.msgUseService,
@@ -192,7 +202,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     });
                   }),
             ],
-          ),
+          ),*/
+          ProxySelector(),
         ],
       ),
     );

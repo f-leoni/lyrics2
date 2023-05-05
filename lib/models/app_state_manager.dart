@@ -207,6 +207,7 @@ class AppStateManager extends ChangeNotifier {
     if (_onboardingComplete) return true;
     final sqlRepository =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //sqlRepository.init();
     Setting? onBoardingSavedStatus =
         await sqlRepository.getSetting(Setting.onboardingComplete);
     if (onBoardingSavedStatus == null) return false;
@@ -217,6 +218,7 @@ class AppStateManager extends ChangeNotifier {
     _onboardingComplete = true;
     final sqlRepository =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    sqlRepository.init();
     await sqlRepository.insertSetting(
         Setting(setting: Setting.onboardingComplete, value: "true"));
 

@@ -85,6 +85,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
     final favorites = Provider.of<SQLiteFavoritesRepository>(context);
     final manager = Provider.of<AppStateManager>(context, listen: false);
     final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
     final theme = users.themeData;
     //isFavorite ??= await checkIfFavorite(favorites, await lyric);
     return SafeArea(

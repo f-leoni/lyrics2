@@ -84,6 +84,7 @@ class _LyricsAppState extends State<LyricsApp> {
 
   @override
   void initState() {
+    //_settingsManager.init();
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
       favoritesManager: _favoritesManager,
@@ -117,38 +118,54 @@ class _LyricsAppState extends State<LyricsApp> {
           value: NowPlaying.instance.stream,
         ),
       ],
-      child: Consumer<SQLiteSettingsRepository>(
-        builder: (context, profileManager, child) {
-          ThemeData theme;
-          if (profileManager.darkMode) {
-            theme = LyricsTheme.dark();
-          } else {
-            theme = LyricsTheme.light();
-          }
-          return MaterialApp(
-            navigatorKey: Catcher.navigatorKey,
-            theme: theme,
-            title: 'Lyrics2 🎶',
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en', ''), // English, no country code
-              Locale('it', ''), // Italian, no country code
-            ],
-            debugShowCheckedModeBanner: false,
-            home: Router(
-              routerDelegate: _appRouter,
-              // Add backButtonDispatcher
-              backButtonDispatcher: RootBackButtonDispatcher(),
-            ),
-            // home: const SplashScreen(),
-          );
-        }, // (builder)
-      ),
+      child: FutureBuilder(
+          future: _settingsManager.init(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return Consumer<SQLiteSettingsRepository>(
+                builder: (context, profileManager, child) {
+                  profileManager.init();
+                  //profileManager.init();
+
+                  ThemeData theme;
+                  if (profileManager.darkMode) {
+                    theme = LyricsTheme.dark();
+                  } else {
+                    theme = LyricsTheme.light();
+                  }
+                  return MaterialApp(
+                    navigatorKey: Catcher.navigatorKey,
+                    theme: theme,
+                    title: 'Lyrics 2 🎶',
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: const [
+                      Locale('en', ''), // English, no country code
+                      Locale('it', ''), // Italian, no country code
+                    ],
+                    debugShowCheckedModeBanner: false,
+                    home: Router(
+                      routerDelegate: _appRouter,
+                      // Add backButtonDispatcher
+                      backButtonDispatcher: RootBackButtonDispatcher(),
+                    ),
+                    // home: const SplashScreen(),
+                  );
+                }, // (builder)
+              );
+            } else if (snapshot.hasError) {
+              return const Icon(Icons.error_outline);
+            } else {
+              return const CircularProgressIndicator();
+            }
+          }),
+
+
+
     );
   }
 }

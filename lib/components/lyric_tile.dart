@@ -20,6 +20,7 @@ class LyricTile extends StatelessWidget {
     SQLiteFavoritesRepository repository =
         Provider.of<SQLiteFavoritesRepository>(context);
     var users = Provider.of<SQLiteSettingsRepository>(context);
+    //users.init();
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
@@ -90,8 +91,9 @@ class LyricTile extends StatelessWidget {
         ),
       );
     }
-    SQLiteSettingsRepository profileManager =
+    SQLiteSettingsRepository settings =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //settings.init();
     Widget currIcon = Container();
     return FutureBuilder(
         future: repository.isLyricFavoriteById(pLyric.getId(), ""),
@@ -122,7 +124,7 @@ class LyricTile extends StatelessWidget {
                 width: iconSize,
                 height: iconSize,
                 child: CircularProgressIndicator.adaptive(
-                  backgroundColor: profileManager.themeData.primaryColor,
+                  backgroundColor: settings.themeData.primaryColor,
                 ));
           }
           return currIcon;
@@ -148,6 +150,7 @@ class LyricTile extends StatelessWidget {
 
   Widget buildAuthor(BuildContext context) {
     var users = Provider.of<SQLiteSettingsRepository>(context);
+    //users.init();
     return Text(lyric.getArtist(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,
@@ -156,6 +159,7 @@ class LyricTile extends StatelessWidget {
 
   buildTitle(BuildContext context, LyricData lyric) {
     var users = Provider.of<SQLiteSettingsRepository>(context);
+    //users.init();
     return Text(lyric.getSong(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,

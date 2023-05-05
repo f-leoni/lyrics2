@@ -26,13 +26,17 @@ class SearchSelector extends StatefulWidget {
 
 class _SearchSelectorState extends State<SearchSelector> {
   int searchType = SearchType.audio;
+  late ThemeData currTheme;
 
   @override
   Widget build(BuildContext context) {
     searchType = widget.searchType;
     final manager = Provider.of<AppStateManager>(context, listen: false);
     final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    users.init();
+    //currTheme = users.themeData;
     final value = widget.searchType;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,19 +59,20 @@ class _SearchSelectorState extends State<SearchSelector> {
                 widget.searchControllerSong.text);
           },
           iconBuilder: (value, _, __) {
+            currTheme = users.themeData;
             switch (value) {
               case SearchType.songAuthor:
                 {
                   return Icon(
                     Icons.radio,
-                    color: users.themeData.colorScheme.background,
+                    color: currTheme.colorScheme.background,
                   );
                 }
               case SearchType.nowPlaying:
                 {
                   return Icon(
                     Icons.play_circle,
-                    color: users.themeData.colorScheme.background,
+                    color: currTheme.colorScheme.background,
                   );
                 }
               case SearchType.text:
@@ -75,7 +80,7 @@ class _SearchSelectorState extends State<SearchSelector> {
                 {
                   return Icon(
                     Icons.text_snippet,
-                    color: users.themeData.colorScheme.background,
+                    color: currTheme.colorScheme.background,
                   );
                 }
             }

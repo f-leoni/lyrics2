@@ -5,6 +5,10 @@ class Setting {
   static String get onboardingComplete => _onboardingSettingName;
   static const String _loginSettingName = "logged_id";
   static String get loggedIn => _loginSettingName;
+  static const String _darkThemeSettingName = "darkTheme";
+  static String get darkTheme => _darkThemeSettingName;
+  static const String _geniusProxySettingName = "geniusProxy";
+  static String get geniusProxy => _geniusProxySettingName;
 
 // Constructor
   Setting({

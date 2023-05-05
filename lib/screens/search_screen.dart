@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../api/proxy.dart';
 import '../components/now_playing_panel.dart';
+import '../components/proxy_selector.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -66,6 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     int searchType = manager.searchType;
     var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
     return Scaffold(
       backgroundColor: users.themeData.primaryColor,
       body: Stack(
@@ -78,9 +80,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   snap: true,
                   floating: true,
                   backgroundColor: users.themeData.primaryColor,
-                  expandedHeight: 100.0,
+                  expandedHeight: 130.0,
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Row(
+                    background: Column(
                       children: [
                         Expanded(
                           flex: 2,
@@ -88,11 +90,17 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         Expanded(
                           flex: 1,
-                          child: buildSearchSelector(
-                              searchType,
-                              _searchControllerText,
-                              _searchControllerAuthor,
-                              _searchControllerSong),
+                          child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              buildSearchSelector(
+                                  searchType,
+                                  _searchControllerText,
+                                  _searchControllerAuthor,
+                                  _searchControllerSong),
+                              const SizedBox(width: 50,),
+                              const ProxySelector(),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -115,6 +123,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget buildSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
     int searchType = manager.searchType;
 
     switch (searchType) {
@@ -341,6 +350,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<void> startSearch(BuildContext context) async {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
     var theme = users.themeData;
     var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
     manager.lastTextSearch = _searchControllerText.text;

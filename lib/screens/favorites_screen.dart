@@ -43,7 +43,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final favoritesRepository = Provider.of<SQLiteFavoritesRepository>(context);
     final profile =
         Provider.of<SQLiteSettingsRepository>(context, listen: false);
-
+    //profile.init();
     Future<List<Lyric>> favorites = favoritesRepository.findAllFavsLyrics("");
     return Column(
       children: [

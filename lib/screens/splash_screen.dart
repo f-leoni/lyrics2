@@ -29,25 +29,36 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDark =
-        Provider.of<SQLiteSettingsRepository>(context, listen: false).darkMode;
-    final logoImg = isDark
-        ? const AssetImage('assets/lyrics_assets/splash_dark.png')
-        : const AssetImage('assets/lyrics_assets/splash.png');
+    return FutureBuilder(
+        future: Provider.of<SQLiteSettingsRepository>(context, listen: false).init(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            bool isDark =
+            snapshot.data as bool;
+                //Provider.of<SQLiteSettingsRepository>(context, listen: false).darkMode;
+            final logoImg = isDark
+                ? const AssetImage('assets/lyrics_assets/splash_dark.png')
+                : const AssetImage('assets/lyrics_assets/splash.png');
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image(
+                      height: 300,
+                      image: logoImg,
+                    ),
+                    const Text("Initializing..."),
+                  ],
+                ),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return const Icon(Icons.error_outline);
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
 
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image(
-              height: 300,
-              image: logoImg,
-            ),
-            const Text("Initializing..."),
-          ],
-        ),
-      ),
-    );
   }
 }

@@ -31,6 +31,7 @@ class AppRouter extends RouterDelegate
     logger.d("Building AppRouter");
     _context = context;
     final settingsRepository = Provider.of<SQLiteSettingsRepository>(context);
+    //settingsRepository.init();
     //Future<Map<String, Setting>> fSettings = settingsRepository.getSettings();
     Future<bool> fOnboarding = appStateManager.checkOnboarding(context);
 
