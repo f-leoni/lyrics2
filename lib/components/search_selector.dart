@@ -48,6 +48,9 @@ class _SearchSelectorState extends State<SearchSelector> {
             SearchType.nowPlaying,
           ],
           height: 40.0,
+          indicatorColor: users.themeData.colorScheme.primary,
+          //innerColor: Colors.red,
+          borderColor: users.themeData.colorScheme.primary,
           onChanged: (int newSearchType) {
             searchType = newSearchType;
             manager.switchSearch(

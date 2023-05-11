@@ -106,7 +106,7 @@ class LyricsTheme {
       primaryColorDark: Colors.white70,
       colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.green)
-          .copyWith(secondary: Colors.greenAccent,
+          .copyWith(secondary: Colors.green.shade300,
         brightness: Brightness.dark).copyWith(
         background: Colors.grey.shade900),
     );
