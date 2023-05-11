@@ -61,5 +61,6 @@
     "filterHint": "Filtra per titolo e autore...",
     "msgSearchMode": "Modo Ricerca",
     "msgNoPlay": "Nessun brano in riproduzione!",
-    "msgNoArtwork": "Nessuna immagine trovata!"
+    "msgNoArtwork": "Nessuna immagine trovata!",
+    "msgAddedToClipboard": "Testo copiato"
 }

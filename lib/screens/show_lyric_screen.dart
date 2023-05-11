@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/sqlite_favorites_repository.dart';
@@ -7,6 +8,7 @@ import 'package:lyrics2/lyricstheme.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShowLyricScreen extends StatefulWidget {
   static MaterialPage page(Future<Lyric> lyric) {
@@ -188,6 +190,8 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
               ),
               buildArtist(currLyric),
               buildFavoriteButton(favorites, currLyric),
+              Container(width:5),
+              buildCopyToClipboard(currLyric),
             ],
           ),
           SizedBox(
@@ -196,7 +200,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
               currLyric.song,
               softWrap: true,
               overflow: TextOverflow.fade,
-              style: LyricsTheme.darkTextTheme.headline2,
+              style: LyricsTheme.darkTextTheme.displayMedium,
             ),
           ),
           Expanded(
@@ -353,5 +357,32 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  buildCopyToClipboard(Lyric currLyric) {
+    String lyricString = "${currLyric.song}\n${currLyric.artist}\n\n${currLyric.lyric}";
+    AppLocalizations? appLocale = AppLocalizations.of(context);
+    String msgAddedToClipboard = "Lyric added to clipboard!";
+    if (appLocale != null) {
+      msgAddedToClipboard = AppLocalizations.of(context)!.msgAddedToClipboard;
+    }
+    ScaffoldMessengerState msgr = ScaffoldMessenger.of(context);
+    var settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    return IconButton(
+      icon: const Icon(
+          Icons.content_copy,
+          color:Colors.white60,
+          size:30),
+      onPressed: () async {
+        await Clipboard.setData(
+            ClipboardData(text: lyricString)
+        ).then((_) {msgr.showSnackBar(SnackBar(
+          content: Text(msgAddedToClipboard,
+              style: settings
+                  .textTheme
+                  .labelLarge),
+        ));});
+        },
+    );
   }
 }

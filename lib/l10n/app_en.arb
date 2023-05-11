@@ -246,5 +246,9 @@
     "msgNoArtwork": "No artwork found!",
     "@msgNoArtwork": {
         "description": "Shown when no artwork is found for nowplaying search"
+    },
+    "msgAddedToClipboard": "Lyric added to clipboard!",
+        "@msgAddedToClipboard": {
+            "description": "Shown when lyric is added to clipboard"
     }
 }

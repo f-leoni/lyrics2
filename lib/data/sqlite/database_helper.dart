@@ -12,6 +12,7 @@ class DatabaseHelper {
   static const settingsTable = 'settings';
   static const settingsId = 'id';
   static const settingsName = 'setting';
+  static const String _orderBy = "LyricArtist ASC, album ASC, LyricSong ASC";
   static late BriteDatabase _streamDatabase;
 
   // make this a singleton class
@@ -93,7 +94,7 @@ class DatabaseHelper {
 
   Future<List<Lyric>> findAllLyrics() async {
     final db = await instance.streamDatabase;
-    final lyricsList = await db.query(lyricsTable);
+    final lyricsList = await db.query(lyricsTable, orderBy: _orderBy);
     final lyrics = parseLyrics(lyricsList);
     return lyrics;
   }
