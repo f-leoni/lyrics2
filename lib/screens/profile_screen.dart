@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
         title: Text(AppLocalizations.of(context)!.ttlProfile,
-            style: users.themeData.textTheme.headline2),
+            style: users.themeData.textTheme.displayMedium),
       ),
       body: Container(
         color: users.themeData.primaryColor,
@@ -100,23 +100,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //users.init();
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(AppLocalizations.of(context)!.msgDarkMode,
-              style: users.themeData.textTheme.bodyText2),
-          Switch(
-            value: users.darkMode, //widget.user.darkMode,
-            onChanged: (value) {
-              users.darkMode = value;
-              final sqlRepository =
-              Provider.of<SQLiteSettingsRepository>(context, listen: false);
-              //sqlRepository.init();
-              sqlRepository.insertSetting(
-                  Setting(setting: Setting.darkTheme, value: "$value"));
-            },
-            activeColor: users.themeData.indicatorColor,
-          )
+          Row(
+            // Dark Mode
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(AppLocalizations.of(context)!.msgDarkMode,
+                  style: users.themeData.textTheme.bodyMedium),
+              Switch(
+                value: users.darkMode, //widget.user.darkMode,
+                onChanged: (value) {
+                  users.darkMode = value;
+                  final sqlRepository =
+                  Provider.of<SQLiteSettingsRepository>(context, listen: false);
+                  //sqlRepository.init();
+                  sqlRepository.insertSetting(
+                      Setting(setting: Setting.darkTheme, value: "$value"));
+                },
+                activeColor: users.themeData.indicatorColor,
+              )
+            ],
+          ),
+          Row(
+            //Darker Mode
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(AppLocalizations.of(context)!.msgDarkerMode  ,
+                  style: users.themeData.textTheme.bodyMedium),
+              Switch(
+                value: users.darkerMode, //widget.user.darkMode,
+                onChanged: (value) {
+                  users.darkerMode = value;
+                  final sqlRepository =
+                  Provider.of<SQLiteSettingsRepository>(context, listen: false);
+                  //sqlRepository.init();
+                  sqlRepository.insertSetting(
+                      Setting(setting: Setting.darkerTheme, value: "$value"));
+                },
+                activeColor: users.themeData.indicatorColor,
+              )
+            ],
+          ),
         ],
       ),
     );
@@ -133,7 +158,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           imageRadius: 60.0,
         ),
         const SizedBox(height: 8.0),
-        Text("Local User", style: users.themeData.textTheme.headline1),
+        Text(AppLocalizations.of(context)!.msgLocalUser,
+            style: users.themeData.textTheme.displayLarge),
         const Text(""), //role
       ],
     );

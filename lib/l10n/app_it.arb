@@ -49,9 +49,10 @@
     "errWeakPassword": "La password è troppo corta. Usare almeno 6 caratteri",
     "msgLogout": "Esci",
     "msgDarkMode": "Modalità scura",
+    "msgDarkerMode": "Modalità scura+ (OLED)",
     "msgUseGenius": "Usa il servizio Genius",
     "msgUseCL": "Usa il servizio ChartLyrics",
-    "msgUseService": "Seleziona il servizio da usare",
+    "msgUseService": "Servizio",
     "msgDismissed": "eliminata dai preferiti",
     "msgFavorites": "Preferiti",
     "ttlProfile": "Profilo",
@@ -62,5 +63,6 @@
     "msgSearchMode": "Modo Ricerca",
     "msgNoPlay": "Nessun brano in riproduzione!",
     "msgNoArtwork": "Nessuna immagine trovata!",
-    "msgAddedToClipboard": "Testo copiato"
+    "msgAddedToClipboard": "Testo copiato",
+    "msgLocalUser": "Utente Locale"
 }

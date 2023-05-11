@@ -7,6 +7,8 @@ class Setting {
   static String get loggedIn => _loginSettingName;
   static const String _darkThemeSettingName = "darkTheme";
   static String get darkTheme => _darkThemeSettingName;
+  static const String _darkerThemeSettingName = "darkerTheme";
+  static String get darkerTheme => _darkerThemeSettingName;
   static const String _geniusProxySettingName = "geniusProxy";
   static String get geniusProxy => _geniusProxySettingName;
 

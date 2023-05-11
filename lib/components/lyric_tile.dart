@@ -28,7 +28,7 @@ class LyricTile extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(2.0),
           child: Card(
-            color: theme.backgroundColor,
+            color: theme.colorScheme.background,
             shape: RoundedRectangleBorder(
               borderRadius: const BorderRadius.all(Radius.circular(12.0)),
               side: BorderSide(color: theme.focusColor),
@@ -154,7 +154,7 @@ class LyricTile extends StatelessWidget {
     return Text(lyric.getArtist(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,
-        style: users.textTheme.headline3);
+        style: users.textTheme.displaySmall);
   }
 
   buildTitle(BuildContext context, LyricData lyric) {
@@ -163,6 +163,6 @@ class LyricTile extends StatelessWidget {
     return Text(lyric.getSong(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,
-        style: users.textTheme.headline1);
+        style: users.textTheme.displayLarge);
   }
 }

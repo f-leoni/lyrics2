@@ -7,31 +7,46 @@ import 'package:lyrics2/data/sqlite/database_helper.dart';
 
 class SQLiteSettingsRepository with ChangeNotifier {
   final dbHelper = DatabaseHelper.instance;
-  bool _isInitialized = false;
-  //TODO Change here for initial dark mode state
   late bool _darkMode;// = false;
-  bool get darkMode => _darkMode;
+  late bool _darkerMode;// = false;
+  bool _isInitialized = false;
   bool _useGenius = true;
+  bool _didSelectUser = false;
+
+  bool get darkMode => _darkMode;
+  bool get darkerMode => _darkerMode;
   bool get useGenius => _useGenius;
-  //Map<String, Setting>? _settings;
-  set useGenius(bool value) {
-    _useGenius = value;
-    notifyListeners();
+  bool get didSelectUser => _didSelectUser;
+  ThemeData get themeData {
+    if (_darkMode) {
+      if(_darkerMode) {
+        return LyricsTheme.darker();
+      }
+      return LyricsTheme.dark();
+    }
+    return LyricsTheme.light();
   }
-  get getUser => null;
+  TextTheme get textTheme {
+    if (_darkMode) {
+      if (_darkerMode) {
+        return LyricsTheme.darkerTextTheme;
+      }
+      return LyricsTheme.darkTextTheme;
+    }
+    return LyricsTheme.lightTextTheme;
+  }
+
   set darkMode(bool value) {
     _darkMode = value;
     notifyListeners();
   }
-  var _didSelectUser = false;
-  get didSelectUser => _didSelectUser;
-  ThemeData get themeData {
-    if (_darkMode) return LyricsTheme.dark();
-    return LyricsTheme.light();
+  set darkerMode(bool value) {
+    _darkerMode = value;
+    notifyListeners();
   }
-  TextTheme get textTheme {
-    if (_darkMode) return LyricsTheme.darkTextTheme;
-    return LyricsTheme.lightTextTheme;
+  set useGenius(bool value) {
+    _useGenius = value;
+    notifyListeners();
   }
 
   SQLiteSettingsRepository(){
@@ -40,8 +55,10 @@ class SQLiteSettingsRepository with ChangeNotifier {
   Future<bool> init() async {
     if(_isInitialized) return _darkMode;
     Setting? dark = (await getSetting(Setting.darkTheme));
+    Setting? darker = (await getSetting(Setting.darkerTheme));
     Setting? genius = (await getSetting(Setting.geniusProxy));
     _darkMode = dark==null?false:toBoolean(dark.value.toLowerCase());
+    _darkerMode = darker==null?false:toBoolean(darker.value.toLowerCase());
     _useGenius = genius==null?false:toBoolean(genius.value.toLowerCase());
     _isInitialized=true;
     return _darkMode;

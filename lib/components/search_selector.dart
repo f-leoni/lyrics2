@@ -34,7 +34,6 @@ class _SearchSelectorState extends State<SearchSelector> {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     users.init();
-    //currTheme = users.themeData;
     final value = widget.searchType;
 
     return Column(
@@ -65,14 +64,14 @@ class _SearchSelectorState extends State<SearchSelector> {
                 {
                   return Icon(
                     Icons.radio,
-                    color: currTheme.colorScheme.background,
+                    color: currTheme.colorScheme.onPrimaryContainer,
                   );
                 }
               case SearchType.nowPlaying:
                 {
                   return Icon(
                     Icons.play_circle,
-                    color: currTheme.colorScheme.background,
+                    color: currTheme.colorScheme.onPrimaryContainer,
                   );
                 }
               case SearchType.text:
@@ -80,7 +79,7 @@ class _SearchSelectorState extends State<SearchSelector> {
                 {
                   return Icon(
                     Icons.text_snippet,
-                    color: currTheme.colorScheme.background,
+                    color: currTheme.colorScheme.onPrimaryContainer,
                   );
                 }
             }

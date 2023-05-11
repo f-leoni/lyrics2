@@ -3,36 +3,53 @@ import 'package:google_fonts/google_fonts.dart';
 
 class LyricsTheme {
   static TextTheme lightTextTheme = TextTheme(
-    bodyText1: GoogleFonts.lato(
+    bodyLarge: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black),
-    headline1: GoogleFonts.lato(
+    displayLarge: GoogleFonts.lato(
         fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.black87),
-    headline2: GoogleFonts.lato(
+    displayMedium: GoogleFonts.lato(
         fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.white),
-    headline3: GoogleFonts.lato(
+    displaySmall: GoogleFonts.lato(
         fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black87),
-    button: GoogleFonts.lato(
+    labelLarge: GoogleFonts.lato(
         fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
-    bodyText2: GoogleFonts.lato(
+    bodyMedium: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black87),
-    headline4: GoogleFonts.lato(
+    headlineMedium: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black87),
   );
 
   static TextTheme darkTextTheme = TextTheme(
-    bodyText1: GoogleFonts.lato(
+    bodyLarge: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
-    headline1: GoogleFonts.lato(
+    displayLarge: GoogleFonts.lato(
         fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white70),
-    headline2: GoogleFonts.lato(
+    displayMedium: GoogleFonts.lato(
         fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.white70),
-    headline3: GoogleFonts.lato(
+    displaySmall: GoogleFonts.lato(
         fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white70),
-    button: GoogleFonts.lato(
+    labelLarge: GoogleFonts.lato(
         fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
-    bodyText2: GoogleFonts.lato(
+    bodyMedium: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
-    headline4: GoogleFonts.lato(
+    headlineMedium: GoogleFonts.lato(
+        fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white70),
+  );
+
+  static TextTheme darkerTextTheme = TextTheme(
+    bodyLarge: GoogleFonts.lato(
+        fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
+    displayLarge: GoogleFonts.lato(
+        fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white70),
+    displayMedium: GoogleFonts.lato(
+        fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.white70),
+    displaySmall: GoogleFonts.lato(
+        fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white70),
+    labelLarge: GoogleFonts.lato(
+        fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
+    bodyMedium: GoogleFonts.lato(
+        fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
+    headlineMedium: GoogleFonts.lato(
         fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white70),
   );
 
@@ -47,11 +64,11 @@ class LyricsTheme {
       primaryColor: Colors.grey.shade100,
       textTheme: lightTextTheme,
       highlightColor: Colors.white70,
-      backgroundColor: Colors.blue.shade50,
       indicatorColor: Colors.blue,
       primaryColorDark: Colors.black87,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightBlue)
-          .copyWith(secondary: Colors.lightBlue, brightness: Brightness.light),
+          .copyWith(secondary: Colors.lightBlue, brightness: Brightness.light)
+          .copyWith(background: Colors.blue.shade50),
     );
   }
 
@@ -66,11 +83,32 @@ class LyricsTheme {
       primaryColor: Colors.grey.shade700,
       textTheme: darkTextTheme,
       highlightColor: Colors.white70,
-      backgroundColor: Colors.grey.shade800,
       indicatorColor: Colors.green.shade500,
       primaryColorDark: Colors.white70,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
-          .copyWith(secondary: Colors.greenAccent, brightness: Brightness.dark),
+          .copyWith(secondary: Colors.greenAccent, brightness: Brightness.dark)
+          .copyWith(background: Colors.grey.shade800),
+    );
+  }
+
+  static ThemeData darker() {
+    return ThemeData(
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+        },
+      ),
+      brightness: Brightness.dark,
+      primaryColor: Colors.black,
+      textTheme: darkerTextTheme,
+      highlightColor: Colors.white70,
+      indicatorColor: Colors.green.shade500,
+      primaryColorDark: Colors.white70,
+      colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.green)
+          .copyWith(secondary: Colors.greenAccent,
+        brightness: Brightness.dark).copyWith(
+        background: Colors.grey.shade900),
     );
   }
 }

@@ -195,6 +195,10 @@
     "@msgDarkMode": {
            "description": "Message for dark mode switch"
     },
+    "msgDarkerMode": "Darker (OLED) Mode",
+    "@msgDarkerMode": {
+           "description": "Message for darker mode switch"
+    },
     "msgUseGenius": "Use Genius Service",
     "@msgUseGenius": {
            "description": "Message for Genius Service switch"
@@ -250,5 +254,14 @@
     "msgAddedToClipboard": "Lyric added to clipboard!",
         "@msgAddedToClipboard": {
             "description": "Shown when lyric is added to clipboard"
-    }
+    },
+     "msgAddedToClipboard": "Lyric added to clipboard!",
+         "@msgAddedToClipboard": {
+             "description": "Shown when lyric is added to clipboard"
+     },
+    "msgLocalUser": "Local User",
+         "@msgLocalUser": {
+             "description": "Generic Username"
+     }
+
 }
