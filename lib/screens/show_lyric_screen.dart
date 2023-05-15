@@ -132,14 +132,18 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       BlendMode blend,
       BuildContext context,
       SQLiteFavoritesRepository favorites) {
-    //var users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    var settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     currLyric.owner = "";
     logger.d("lyric is: ${currLyric.song}");
     if (!bgImageCreated) {
-      try {
-        bgImage = getBackgroundImage(currLyric).image;
-      } catch (e) {
-        logger.e("Error Creating background image ${e.hashCode}");
+      if(!settings.blackBackground) {
+        try {
+          bgImage = getBackgroundImage(currLyric).image;
+        } catch (e) {
+          logger.e("Error Creating background image ${e.hashCode}");
+        }
+      } else {
+        logger.d("Black background selected from settings");
       }
       bgImageCreated = true;
     }
@@ -149,15 +153,21 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       logger.w("lyric.imageUrl is void!");
     } else {
       try {
-        decoration = BoxDecoration(
-          color: Colors.black87,
-          image: DecorationImage(
-            image: bgImage,
-            colorFilter: ColorFilter.mode(Colors.black.withAlpha(alpha), blend),
-            fit: BoxFit.cover,
-          ),
-          //borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        );
+        if(settings.blackBackground) {
+          decoration = const BoxDecoration(
+            color: Colors.black87,
+          );
+        } else {
+          decoration = BoxDecoration(
+            color: Colors.black87,
+            image: DecorationImage(
+              image: bgImage,
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withAlpha(alpha), blend),
+              fit: BoxFit.cover,
+            ),
+          );
+        }
       } on Exception catch (e) {
         logger.w(
             "Image at ${currLyric.imageUrl} cannot be retrieved! ${e.toString()}");

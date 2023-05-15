@@ -72,78 +72,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListView(
       children: [
         buildDarkModeRow(),
+        buildBackgroundRow(),
         buildProxyRow(),
-        /*ListTile(
-          title: const Text('View raywenderlich.com'),
-          onTap: () {
-            // Open raywenderlich.com webview
-            Provider.of<FirebaseUserRepository>(context, listen: false)
-                .tapOnRaywenderlich(true);
-          },
-        ),*/
-        /*ListTile(
-          title: Center(child: Text(AppLocalizations.of(context)!.msgLogout)),
-          onTap: () {
-            // Logout user
-            Provider.of<SQLiteSettingsRepository>(context, listen: false)
-                .tapOnProfile(false);
-            Provider.of<AppStateManager>(context, listen: false)
-                .logout(context);
-          },
-        )*/
       ],
-    );
-  }
-
-  Widget buildDarkModeRow() {
-    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
-    //users.init();
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Row(
-            // Dark Mode
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.msgDarkMode,
-                  style: users.themeData.textTheme.bodyMedium),
-              Switch(
-                value: users.darkMode, //widget.user.darkMode,
-                onChanged: (value) {
-                  users.darkMode = value;
-                  final sqlRepository =
-                  Provider.of<SQLiteSettingsRepository>(context, listen: false);
-                  //sqlRepository.init();
-                  sqlRepository.insertSetting(
-                      Setting(setting: Setting.darkTheme, value: "$value"));
-                },
-                activeColor: users.themeData.indicatorColor,
-              )
-            ],
-          ),
-          Row(
-            //Darker Mode
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.msgDarkerMode  ,
-                  style: users.themeData.textTheme.bodyMedium),
-              Switch(
-                value: users.darkerMode, //widget.user.darkMode,
-                onChanged: (value) {
-                  users.darkerMode = value;
-                  final sqlRepository =
-                  Provider.of<SQLiteSettingsRepository>(context, listen: false);
-                  //sqlRepository.init();
-                  sqlRepository.insertSetting(
-                      Setting(setting: Setting.darkerTheme, value: "$value"));
-                },
-                activeColor: users.themeData.indicatorColor,
-              )
-            ],
-          ),
-        ],
-      ),
     );
   }
 
@@ -165,73 +96,97 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  buildProxyRow() {
-    //final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
-    //String dropdownValue = users.useGenius ? services.first : services.last;
+  Widget buildDarkModeRow() {
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        children: const [
-          /*Row(
+        children: [
+          Row(
+            // Dark Mode
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.msgUseGenius,
-                  style: users.themeData.textTheme.bodyText2),
+              Text(AppLocalizations.of(context)!.msgDarkMode,
+                  style: users.themeData.textTheme.bodyMedium),
               Switch(
-                value: users.useGenius, //widget.user.darkMode,
+                value: users.darkMode, //widget.user.darkMode,
                 onChanged: (value) {
-                  users.useGenius = value;
+                  users.darkMode = value;
+                  final sqlRepository = Provider.of<SQLiteSettingsRepository>(
+                      context,
+                      listen: false);
+                  //sqlRepository.init();
+                  sqlRepository.insertSetting(
+                      Setting(setting: Setting.darkTheme, value: "$value"));
                 },
                 activeColor: users.themeData.indicatorColor,
               )
             ],
           ),
           Row(
+            //Darker Mode
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.msgUseCL,
-                  style: users.themeData.textTheme.bodyText2),
+              Text(AppLocalizations.of(context)!.msgDarkerMode,
+                  style: users.themeData.textTheme.bodyMedium),
               Switch(
-                value: !users.useGenius, //widget.user.darkMode,
+                value: users.darkerMode, //widget.user.darkMode,
                 onChanged: (value) {
-                  users.useGenius = !value;
+                  users.darkerMode = value;
+                  final sqlRepository = Provider.of<SQLiteSettingsRepository>(
+                      context,
+                      listen: false);
+                  //sqlRepository.init();
+                  sqlRepository.insertSetting(
+                      Setting(setting: Setting.darkerTheme, value: "$value"));
                 },
                 activeColor: users.themeData.indicatorColor,
               )
             ],
-          ),*/
-          /*Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.msgUseService,
-                  style: users.themeData.textTheme.bodyText2),
-              DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: const Icon(Icons.miscellaneous_services),
-                  items: services.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: users.themeData.textTheme.bodyText2,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? value) {
-                    setState(() {
-                      dropdownValue = value!;
-                      if (dropdownValue == services.first) {
-                        users.useGenius = true;
-                      } else {
-                        users.useGenius = false;
-                      }
-                    });
-                  }),
-            ],
-          ),*/
+          ),
+        ],
+      ),
+    );
+  }
+
+  buildProxyRow() {
+    //final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //String dropdownValue = users.useGenius ? services.first : services.last;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0,8.0,16.0,8.0),
+      child: Column(
+        children: const [
           ProxySelector(),
         ],
       ),
     );
+  }
+
+  buildBackgroundRow() {
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //users.init();
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(16.0,0.0,16.0,0.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(AppLocalizations.of(context)!.msgBlackBackground,
+                style: users.themeData.textTheme.bodyMedium),
+            Switch(
+              value: users.blackBackground, //widget.user.darkMode,
+              onChanged: (value) {
+                users.blackBackground = value;
+                final sqlRepository = Provider.of<SQLiteSettingsRepository>(
+                    context,
+                    listen: false);
+                //sqlRepository.init();
+                sqlRepository.insertSetting(
+                    Setting(setting: Setting.blackBackground, value: "$value"));
+              },
+              activeColor: users.themeData.indicatorColor,
+            )
+          ],
+        ));
   }
 }

@@ -11,6 +11,8 @@ class Setting {
   static String get darkerTheme => _darkerThemeSettingName;
   static const String _geniusProxySettingName = "geniusProxy";
   static String get geniusProxy => _geniusProxySettingName;
+  static const String _blackBackgroundSettingName = "blackBackground";
+  static String get blackBackground => _blackBackgroundSettingName;
 
 // Constructor
   Setting({

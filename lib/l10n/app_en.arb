@@ -262,6 +262,10 @@
     "msgLocalUser": "Local User",
          "@msgLocalUser": {
              "description": "Generic Username"
+     },
+     "msgBlackBackground": "Black background (for lyrics)",
+        "@msgBlackBackground": {
+            "description": "Setting name for lyrics background"
      }
 
 }

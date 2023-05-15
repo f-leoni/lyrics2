@@ -7,16 +7,39 @@ import 'package:lyrics2/data/sqlite/database_helper.dart';
 
 class SQLiteSettingsRepository with ChangeNotifier {
   final dbHelper = DatabaseHelper.instance;
-  late bool _darkMode;// = false;
-  late bool _darkerMode;// = false;
   bool _isInitialized = false;
-  bool _useGenius = true;
-  bool _didSelectUser = false;
 
+  late bool _darkMode;// = false;
   bool get darkMode => _darkMode;
+  set darkMode(bool value) {
+    _darkMode = value;
+    notifyListeners();
+  }
+
+  late bool _darkerMode;// = false;
   bool get darkerMode => _darkerMode;
+  set darkerMode(bool value) {
+    _darkerMode = value;
+    notifyListeners();
+  }
+
+  bool _useGenius = true;
   bool get useGenius => _useGenius;
+  set useGenius(bool value) {
+    _useGenius = value;
+    notifyListeners();
+  }
+
+  bool _blackBackground = true;
+  bool get blackBackground => _blackBackground;
+  set blackBackground(bool value) {
+    _blackBackground = value;
+    notifyListeners();
+  }
+
+  bool _didSelectUser = false;
   bool get didSelectUser => _didSelectUser;
+
   ThemeData get themeData {
     if (_darkMode) {
       if(_darkerMode) {
@@ -26,6 +49,7 @@ class SQLiteSettingsRepository with ChangeNotifier {
     }
     return LyricsTheme.light();
   }
+
   TextTheme get textTheme {
     if (_darkMode) {
       if (_darkerMode) {
@@ -36,22 +60,10 @@ class SQLiteSettingsRepository with ChangeNotifier {
     return LyricsTheme.lightTextTheme;
   }
 
-  set darkMode(bool value) {
-    _darkMode = value;
-    notifyListeners();
-  }
-  set darkerMode(bool value) {
-    _darkerMode = value;
-    notifyListeners();
-  }
-  set useGenius(bool value) {
-    _useGenius = value;
-    notifyListeners();
-  }
-
   SQLiteSettingsRepository(){
     init();
   }
+
   Future<bool> init() async {
     if(_isInitialized) return _darkMode;
     Setting? dark = (await getSetting(Setting.darkTheme));

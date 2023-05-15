@@ -63,6 +63,7 @@
     "msgSearchMode": "Modo Ricerca",
     "msgNoPlay": "Nessun brano in riproduzione!",
     "msgNoArtwork": "Nessuna immagine trovata!",
-    "msgAddedToClipboard": "Testo copiato",
-    "msgLocalUser": "Utente Locale"
+    "msgAddedToClipboard": "Testo copiato negli appunti!",
+    "msgLocalUser": "Utente Locale",
+    "msgBlackBackground": "Sfondo nero (per i testi)"
 }
