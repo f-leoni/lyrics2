@@ -6,7 +6,11 @@ import '../data/sqlite_settings_repository.dart';
 import '../models/setting.dart';
 
 class ProxySelector extends StatefulWidget {
-  const ProxySelector({Key? key}) : super(key: key);
+  //var callback = <Future<void> Function(BuildContext context)>[];
+  final Function callback;
+
+  const ProxySelector({Key? key,
+    required this.callback}) : super(key: key);
 
   @override
   State<ProxySelector> createState() => _ProxySelectorState();
@@ -24,7 +28,7 @@ class _ProxySelectorState extends State<ProxySelector> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(AppLocalizations.of(context)!.msgUseService,
-            style: users.themeData.textTheme.bodyText2),
+            style: users.themeData.textTheme.bodyMedium),
         const SizedBox(width: 10,),
         DropdownButton<String>(
             value: dropdownValue,
@@ -34,7 +38,7 @@ class _ProxySelectorState extends State<ProxySelector> {
                 value: value,
                 child: Text(
                   value,
-                  style: users.themeData.textTheme.bodyText2,
+                  style: users.themeData.textTheme.bodyMedium,
                 ),
               );
             }).toList(),
@@ -47,6 +51,8 @@ class _ProxySelectorState extends State<ProxySelector> {
                   users.useGenius = false;
                 }
               });
+              // Call callback only if not null!
+              widget.callback(context);
               final sqlRepository =
               Provider.of<SQLiteSettingsRepository>(context, listen: false);
               //sqlRepository.init();

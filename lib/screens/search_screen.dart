@@ -98,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   _searchControllerAuthor,
                                   _searchControllerSong),
                               const SizedBox(width: 50,),
-                              const ProxySelector(),
+                              ProxySelector(callback:startSearch),
                             ],
                           ),
                         ),
@@ -188,7 +188,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         border: const UnderlineInputBorder(),
                         filled: false,
                         fillColor: Theme.of(context)
-                            .backgroundColor, //Colors.yellow[50],
+                            .colorScheme.background, //Colors.yellow[50],
                       ),
                       //onEditingComplete: () => startSearch(context),
                     ),
@@ -215,7 +215,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         border: const UnderlineInputBorder(),
                         filled: false,
                         fillColor: Theme.of(context)
-                            .backgroundColor, //Colors.yellow[50],
+                            .colorScheme.background, //Colors.yellow[50],
                       ),
                       //onEditingComplete: () => startSearch(context),
                     ),
@@ -262,7 +262,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 border: const UnderlineInputBorder(), //OutlineInputBorder(),
                 filled: false,
                 fillColor:
-                    Theme.of(context).backgroundColor, //Colors.yellow[50],
+                    Theme.of(context).colorScheme.background, //Colors.yellow[50],
               ),
               onEditingComplete: () => startSearch(context),
             ),
@@ -293,7 +293,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         child: Text(
           AppLocalizations.of(context)!.searchText,
-          style: textTheme.button,
+          style: textTheme.labelLarge,
         ),
         onPressed: () async {
           logger.v("Click on Search button in search screen");
@@ -366,7 +366,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.of(context)!.searchTextTooShort,
-          style: theme.textTheme.button,
+          style: theme.textTheme.labelLarge,
         ),
       ));
       return;
@@ -397,7 +397,7 @@ class _SearchScreenState extends State<SearchScreen> {
         content: Text(noResults,
             style: Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .textTheme
-                .button),
+                .labelLarge),
       ));
     }
   }
@@ -412,7 +412,8 @@ class _SearchScreenState extends State<SearchScreen> {
         searchType: searchType,
         searchControllerText: _searchControllerText,
         searchControllerAuthor: _searchControllerAuthor,
-        searchControllerSong: _searchControllerSong);
+        searchControllerSong: _searchControllerSong,
+        );
   }
 
   @override

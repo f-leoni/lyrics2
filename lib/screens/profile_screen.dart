@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:intl/intl.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
-//import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/components/circle_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -156,8 +154,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16.0,8.0,16.0,8.0),
       child: Column(
-        children: const [
-          ProxySelector(),
+        children: [
+          // empty callback function: don't do anything after selection
+          ProxySelector(callback: () {}),
         ],
       ),
     );
