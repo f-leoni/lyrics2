@@ -390,9 +390,8 @@ class _SearchScreenState extends State<SearchScreen> {
       AppLocalizations? appLocale = AppLocalizations.of(context);
       String noResults = "No results found";
       if (appLocale != null) {
-        noResults = AppLocalizations.of(context)!.noResults;
+        noResults = appLocale.noResults;
       }
-      if (appLocale != null) {}
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(noResults,
             style: Provider.of<SQLiteSettingsRepository>(context, listen: false)

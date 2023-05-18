@@ -162,7 +162,7 @@ class AppStateManager extends ChangeNotifier {
         content: Text(msg,
             style: Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .textTheme
-                .button),
+                .labelLarge),
         duration: const Duration(milliseconds: 500),
       ));
     }
