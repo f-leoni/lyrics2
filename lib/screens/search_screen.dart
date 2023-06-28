@@ -9,13 +9,15 @@ import 'package:lyrics2/api/proxies.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:lyrics2/components/search_selector.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/env.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/api/proxy.dart';
 import 'package:lyrics2/components/now_playing_panel.dart';
+
+import '../components/proxy_selector.dart';
 
 class SearchScreen extends StatefulWidget {
   static MaterialPage page() {
@@ -70,10 +72,10 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     logger.d("Building Search Screen");
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     int searchType = manager.searchType;
     return Scaffold(
-      backgroundColor: users.themeData.primaryColor,
+      backgroundColor: settings.themeData.primaryColor,
       body: Stack(
         children: [
           Padding(
@@ -83,38 +85,33 @@ class _SearchScreenState extends State<SearchScreen> {
                     pinned: false,
                     snap: true,
                     floating: true,
-                    backgroundColor: users.themeData.primaryColor,
-                    expandedHeight: 100.0,
+                    backgroundColor: settings.themeData.primaryColor,
+                    expandedHeight: 130.0,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Column(
                         children: [
                           Expanded(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                    flex: 3, child: buildSearchFields(context)),
-                                /*Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: buildSearchButton(context),
-                                  ),
-                                ),*/
-                              ],
-                            ),
+                            flex: 2,
+                            child: buildSearchFields(context),
                           ),
-                          Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 8.0, 0),
-                              child: buildSearchSelector(
+                          Expanded(
+                            flex: 1,
+                            child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                              children:[
+                                buildSearchSelector(
                                   searchType,
                                   _searchControllerText,
                                   _searchControllerAuthor,
-                                  _searchControllerSong)),
+                                  _searchControllerSong),
+                                const SizedBox(width: 50,),
+                                ProxySelector(callback:startSearch),
+                              ],
+                            ),
+                          ),
                         ],
-                      ),
-                    )),
+                    ),
+                    ),
+                ),
                 SliverList(
                     delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
@@ -131,13 +128,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+
     int searchType = manager.searchType;
 
     switch (searchType) {
       case SearchType.nowPlaying:
         {
-          var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
+          var currProxy = settings.useGenius ? GeniusProxy() : ChartLyricsProxy();
           return buildNowPlayingSearchFields(context, currProxy);
         }
       case SearchType.audio:
@@ -154,9 +152,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget buildAudioSearchFields(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    var theme = users.themeData;
-    var textTheme = users.textTheme;
+    var settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    var theme = settings.themeData;
+    var textTheme = settings.textTheme;
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -243,7 +241,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   .showSnackBar(SnackBar(
                                 content: Text(
                                   '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}',
-                                  style: textTheme.button,
+                                  style: textTheme.labelLarge,
                                 ),
                               ));
                               return;
@@ -259,7 +257,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           },
                           child: Text(
                             AppLocalizations.of(context)!.msgListen,
-                            style: textTheme.button,
+                            style: textTheme.labelLarge,
                           ),
                         ),
                       ),
@@ -289,7 +287,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Text(
                       '${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.bodyText1),
+                      style: textTheme.bodyLarge),
                 ),
               ],
             ],
@@ -337,7 +335,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       border: const OutlineInputBorder(),
                       filled: true,
                       fillColor: Theme.of(context)
-                          .backgroundColor, //Colors.yellow[50],
+                          .colorScheme.background, //Colors.yellow[50],
                     ),
                     //onEditingComplete: () => startSearch(context),
                   ),
@@ -360,7 +358,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       border: const OutlineInputBorder(),
                       filled: true,
                       fillColor: Theme.of(context)
-                          .backgroundColor, //Colors.yellow[50],
+                          .colorScheme.background, //Colors.yellow[50],
                     ),
                     //onEditingComplete: () => startSearch(context),
                   ),
@@ -387,7 +385,7 @@ class _SearchScreenState extends State<SearchScreen> {
           flex: 1,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
+                const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
             child: TextField(
               controller: _searchControllerText,
               onSubmitted: (value) => startSearch(context),
@@ -406,7 +404,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 border: const UnderlineInputBorder(), //OutlineInputBorder(),
                 filled: false,
                 fillColor:
-                    Theme.of(context).backgroundColor, //Colors.yellow[50],
+                    Theme.of(context).colorScheme.background, //Colors.yellow[50],
               ),
               onEditingComplete: () => startSearch(context),
             ),
@@ -419,9 +417,9 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget buildSearchButton(BuildContext context) {
     var manager = Provider.of<AppStateManager>(context, listen: false);
     var theme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).themeData;
     var textTheme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).textTheme;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).textTheme;
     int searchType = manager.searchType;
     if (searchType == SearchType.audio) {
       return const SizedBox(
@@ -437,7 +435,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         child: Text(
           AppLocalizations.of(context)!.searchText,
-          style: textTheme.button,
+          style: textTheme.labelLarge,
         ),
         onPressed: () async {
           logger.v("Click on Search button in search screen");
@@ -450,7 +448,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget buildTile(BuildContext context, int index) {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     final theme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).themeData;
     if (manager.isSearchCompleted) {
       List<LyricSearchResult> results = manager.searchResults;
       LyricSearchResult lsr = results[index];
@@ -492,10 +490,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> startSearch(BuildContext context) async {
-    final manager = Provider.of<AppStateManager>(context, listen: false);
-    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    var theme = users.themeData;
-    var currProxy = users.useGenius ? GeniusProxy() : ChartLyricsProxy();
+    final AppStateManager manager = Provider.of<AppStateManager>(context, listen: false);
+    final SQLiteSettingsRepository settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    var theme = settings.themeData;
+    var currProxy = settings.useGenius ? GeniusProxy() : ChartLyricsProxy();
     manager.lastTextSearch = _searchControllerText.text;
     manager.lastAuthorSearch = _searchControllerAuthor.text;
     manager.lastSongSearch = _searchControllerSong.text;
@@ -509,7 +507,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.of(context)!.searchTextTooShort,
-          style: theme.textTheme.button,
+          style: theme.textTheme.labelLarge,
         ),
       ));
       return;
@@ -532,9 +530,9 @@ class _SearchScreenState extends State<SearchScreen> {
     if (results.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.noResults,
-            style: Provider.of<FirebaseUserRepository>(context, listen: false)
+            style: Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .textTheme
-                .button),
+                .labelLarge),
       ));
     }
   }

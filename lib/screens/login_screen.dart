@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/models/models.dart';
 
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     bool isDark =
-        Provider.of<FirebaseUserRepository>(context, listen: false).darkMode;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).darkMode;
     final logoImg = isDark
         ? const AssetImage('assets/lyrics_assets/splash_dark.png')
         : const AssetImage('assets/lyrics_assets/splash.png');
@@ -91,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget buildEmailField(
       BuildContext context, String hintText, TextInputType keyboardType) {
     final theme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).themeData;
 
     return TextFormField(
       cursorColor: theme.colorScheme.secondary,
@@ -118,15 +119,15 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         hintText: hintText,
-        hintStyle: theme.textTheme.headline4,
+        hintStyle: theme.textTheme.headlineMedium,
       ),
     );
   }
 
   Widget buildPasswordField(
       BuildContext context, String hintText, TextInputType keyboardType) {
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    var theme = users.themeData;
+    final settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    var theme = settings.themeData;
     return TextFormField(
         cursorColor: theme.colorScheme.secondary,
         controller: _passwordController,
@@ -157,11 +158,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             hintText: hintText,
-            hintStyle: theme.textTheme.headline4,
+            hintStyle: theme.textTheme.headlineMedium,
             suffixIcon: IconButton(
               icon: Icon(
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: users.themeData.primaryColorDark),
+                  color: settings.themeData.primaryColorDark),
               onPressed: () {
                 // Update the state i.e. toogle the state of passwordVisible variable
                 setState(() {
@@ -173,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildButtons(BuildContext context) {
     var theme =
-        Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
+        Provider.of<SQLiteSettingsRepository>(context, listen: false).themeData;
     var locale = AppLocalizations.of(context)!;
     if (!_isRegistering) {
       return SizedBox(
@@ -189,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.msgLogin,
-                style: theme.textTheme.button,
+                style: theme.textTheme.labelLarge,
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
@@ -208,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                             '${locale.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}',
-                            style: theme.textTheme.button),
+                            style: theme.textTheme.labelLarge),
                       ));
                     }
                   } on FirebaseAuthException catch (e) {
@@ -216,14 +217,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       SnackBar(
                         content: Text(
                             '${locale.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, e.code)}',
-                            style: theme.textTheme.button),
+                            style: theme.textTheme.labelLarge),
                       ),
                     );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                         '${locale.msgError}: ${e.toString()}',
-                        style: theme.textTheme.button,
+                        style: theme.textTheme.labelLarge,
                       ),
                     ));
                   }
@@ -236,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   locale.msgRegisterExtended,
-                  style: theme.textTheme.bodyText2,
+                  style: theme.textTheme.bodyMedium,
                 ),
                 TextButton(
                   onPressed: () {
@@ -261,13 +262,13 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MaterialButton(
-              color: theme.errorColor,
+              color: theme.colorScheme.error,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
                 AppLocalizations.of(context)!.msgRegister,
-                style: theme.textTheme.button,
+                style: theme.textTheme.labelLarge,
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
@@ -286,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}',
-                          style: theme.textTheme.button,
+                          style: theme.textTheme.labelLarge,
                         ),
                       ));
                     }
@@ -297,14 +298,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           AppLocalizations.of(context)!,
                           e.code,
                         )}',
-                        style: theme.textTheme.button,
+                        style: theme.textTheme.labelLarge,
                       ),
                     ));
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                         '${AppLocalizations.of(context)!.msgError}: ${e.toString()}',
-                        style: theme.textTheme.button,
+                        style: theme.textTheme.labelLarge,
                       ),
                     ));
                   }

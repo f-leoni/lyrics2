@@ -7,6 +7,8 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/lyric_data.dart';
 import 'package:provider/provider.dart';
 
+import '../data/sqlite_settings_repository.dart';
+
 class LyricTile extends StatelessWidget {
   final LyricData lyric;
   final bool isFavoritePage;
@@ -19,15 +21,15 @@ class LyricTile extends StatelessWidget {
     logger.v("building tile");
     FirebaseFavoritesRepository repository =
         Provider.of<FirebaseFavoritesRepository>(context);
-    var users = Provider.of<FirebaseUserRepository>(context);
+    SQLiteSettingsRepository settings = Provider.of<SQLiteSettingsRepository>(context);
 
     return Consumer<AppStateManager>(
       builder: (context, appStateManager, child) {
-        ThemeData theme = users.themeData;
+        ThemeData theme = settings.themeData;
         return Padding(
           padding: const EdgeInsets.all(2.0),
           child: Card(
-            color: theme.backgroundColor,
+            color: theme.colorScheme.background,
             shape: RoundedRectangleBorder(
               borderRadius: const BorderRadius.all(Radius.circular(12.0)),
               side: BorderSide(color: theme.focusColor),
@@ -92,6 +94,8 @@ class LyricTile extends StatelessWidget {
     }
     FirebaseUserRepository profileManager =
         Provider.of<FirebaseUserRepository>(context, listen: false);
+    SQLiteSettingsRepository settings =
+    Provider.of<SQLiteSettingsRepository>(context, listen: false);
     Widget currIcon = Container();
     return FutureBuilder(
         future: repository.isLyricFavoriteById(
@@ -123,7 +127,7 @@ class LyricTile extends StatelessWidget {
                 width: iconSize,
                 height: iconSize,
                 child: CircularProgressIndicator.adaptive(
-                  backgroundColor: profileManager.themeData.primaryColor,
+                  backgroundColor: settings.themeData.primaryColor,
                 ));
           }
           return currIcon;
@@ -148,18 +152,18 @@ class LyricTile extends StatelessWidget {
   }
 
   Widget buildAuthor(BuildContext context) {
-    var users = Provider.of<FirebaseUserRepository>(context);
+    var settings = Provider.of<SQLiteSettingsRepository>(context);
     return Text(lyric.getArtist(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,
-        style: users.textTheme.headline3);
+        style: settings.textTheme.displaySmall);
   }
 
   buildTitle(BuildContext context, LyricData lyric) {
-    var users = Provider.of<FirebaseUserRepository>(context);
+    var settings = Provider.of<SQLiteSettingsRepository>(context);
     return Text(lyric.getSong(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,
-        style: users.textTheme.headline1);
+        style: settings.textTheme.displayLarge);
   }
 }

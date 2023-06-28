@@ -61,7 +61,7 @@ class DatabaseHelper {
         "Database $_databaseName path is: $path. Version: $_databaseVersion");
 
     // Remember to turn off debugging before deploying app to store(s).
-    Sqflite.setDebugModeOn(false);
+    //Sqflite.setDebugModeOn(false);
     Database database = await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
     //return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
     return database;
@@ -122,9 +122,9 @@ class DatabaseHelper {
     return db.insert(table, row, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<int> update(String table, Map<String, dynamic> row) async {
+  Future<int> update(String table, Map<String, dynamic> row, String where) async {
     final db = await instance.streamDatabase;
-    return db.update(table, row);
+    return db.update(table, row, where: where);
   }
 
   Future<int> insertLyric(Lyric lyric) {
@@ -170,7 +170,7 @@ class DatabaseHelper {
     if (oldSetting == null) {
       return insert(settingsTable, setting.toJson());
     } else {
-      return update(settingsTable, setting.toJson());
+      return update(settingsTable, setting.toJson(), "$settingsName='${setting.setting}'");
     }
   }
 

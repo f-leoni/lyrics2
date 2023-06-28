@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -20,11 +20,11 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final manager = Provider.of<AppStateManager>(context, listen: false);
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     late final String version;
     late final String build;
-    final bool isDark = users.darkMode;
-    final theme = users.themeData;
+    final bool isDark = settings.darkMode;
+    final theme = settings.themeData;
     final logoImg = isDark
         ? const AssetImage('assets/lyrics_assets/logo_dark.png')
         : const AssetImage('assets/lyrics_assets/logo.png');
@@ -60,7 +60,7 @@ class InfoScreen extends StatelessWidget {
                           Image(height: 80, image: logoImg),
                           //AssetImage("assets/lyrics_assets/logo.png")),
                           Text(AppLocalizations.of(context)!.infoTitle,
-                              style: theme.textTheme.headline1),
+                              style: theme.textTheme.displayLarge),
                         ],
                       ),
                     ),
@@ -79,7 +79,7 @@ class InfoScreen extends StatelessWidget {
                         return Column(
                           children: [
                             Text(AppLocalizations.of(context)!.info,
-                                style: theme.textTheme.headline4),
+                                style: theme.textTheme.headlineMedium),
                             const SizedBox(height: 30),
                             FutureBuilder(
                               future: Provider.of<AppStateManager>(context,
@@ -94,7 +94,7 @@ class InfoScreen extends StatelessWidget {
                                     build = result[1];
                                     return Text(
                                       "Version: $version - Build: $build\n",
-                                      style: theme.textTheme.headline3,
+                                      style: theme.textTheme.displaySmall,
                                     );
                                   } else {
                                     return Container(); //Text("Retrieving version info....");

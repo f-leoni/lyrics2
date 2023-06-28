@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lyrics2/components/logger.dart';
-import 'package:lyrics2/lyricstheme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FirebaseUserRepository with ChangeNotifier {
@@ -10,36 +9,13 @@ class FirebaseUserRepository with ChangeNotifier {
   String _lastErrorCode = "";
 
   bool get didSelectUser => _didSelectUser;
-  bool get darkMode => _darkMode;
-  bool get useGenius => _useGenius;
+  //bool get darkMode => _darkMode;
+  //bool get useGenius => _useGenius;
   String get lastErrorMsg => _lastErrorMsg;
   String get lastErrorCode => _lastErrorCode;
 
-  set darkMode(bool value) {
-    _darkMode = value;
-    notifyListeners();
-  }
-
-  set useGenius(bool value) {
-    _useGenius = value;
-    notifyListeners();
-  }
-
-  ThemeData get themeData {
-    if (_darkMode) return LyricsTheme.dark();
-    return LyricsTheme.light();
-  }
-
-  TextTheme get textTheme {
-    if (_darkMode) return LyricsTheme.darkTextTheme;
-    return LyricsTheme.lightTextTheme;
-  }
-
   User? get getUser => auth.currentUser;
   var _didSelectUser = false;
-  //TODO Change here for initial dark mode state
-  var _darkMode = false;
-  var _useGenius = true;
 
   ImageProvider<Object> get userImage {
     if (auth.currentUser == null) return const AssetImage('assets/icon.png');
@@ -118,8 +94,6 @@ class FirebaseUserRepository with ChangeNotifier {
   }
 
   void logout() async {
-    //_darkMode = false;
-    _useGenius = false;
     await auth.signOut();
     notifyListeners();
   }

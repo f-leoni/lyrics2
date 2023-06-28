@@ -11,7 +11,7 @@ import firebase_core
 import firebase_crashlytics
 import package_info
 import package_info_plus
-import path_provider_macos
+import path_provider_foundation
 import sqflite
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {

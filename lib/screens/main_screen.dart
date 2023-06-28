@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/components/circle_image.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/screens/info_screen.dart';
 import 'package:lyrics2/screens/screens.dart';
@@ -37,8 +38,8 @@ class _MainScreenState extends State<MainScreen> {
     ];
     return Consumer<AppStateManager>(
       builder: (context, manager, child) {
-        final users =
-            Provider.of<FirebaseUserRepository>(context, listen: false);
+        final settings =
+            Provider.of<SQLiteSettingsRepository>(context, listen: false);
         String pageTitle = "";
 
         if (widget.currentTab == 0) {
@@ -51,9 +52,9 @@ class _MainScreenState extends State<MainScreen> {
         }
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: users.themeData.colorScheme.primaryContainer,
+            backgroundColor: settings.themeData.colorScheme.primaryContainer,
             title:
-                Text(pageTitle, style: Theme.of(context).textTheme.headline2),
+                Text(pageTitle, style: Theme.of(context).textTheme.displayMedium),
             actions: [
               profileButton(widget.currentTab),
             ],
@@ -61,8 +62,8 @@ class _MainScreenState extends State<MainScreen> {
           // Select which tab is to be shown
           body: pages[widget.currentTab],
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: users.themeData.colorScheme.primaryContainer,
-            unselectedItemColor: users.themeData.colorScheme.background,
+            selectedItemColor: settings.themeData.colorScheme.primaryContainer,
+            unselectedItemColor: settings.themeData.colorScheme.background,
             currentIndex: widget.currentTab,
             onTap: (index) {
               //only redraw if we are not already in that tab

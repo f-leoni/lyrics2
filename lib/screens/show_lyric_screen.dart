@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/firebase_favorites_repository.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/lyricstheme.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
@@ -67,7 +68,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
   Widget createSpinner(BuildContext context) {
     return CircularProgressIndicator.adaptive(
       backgroundColor:
-          Provider.of<FirebaseUserRepository>(context, listen: false)
+          Provider.of<SQLiteSettingsRepository>(context, listen: false)
               .themeData
               .primaryColor,
     );
@@ -82,10 +83,11 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       colorFilter: ColorFilter.mode(Colors.black.withAlpha(alpha), blend),
       fit: BoxFit.cover,
     ));
-    final favorites = Provider.of<FirebaseFavoritesRepository>(context);
-    final manager = Provider.of<AppStateManager>(context, listen: false);
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    final theme = users.themeData;
+    final FirebaseFavoritesRepository favorites = Provider.of<FirebaseFavoritesRepository>(context);
+    final AppStateManager manager = Provider.of<AppStateManager>(context, listen: false);
+    final FirebaseUserRepository users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final SQLiteSettingsRepository settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    final theme = settings.themeData;
     //isFavorite ??= await checkIfFavorite(favorites, await lyric);
     return SafeArea(
       child: Scaffold(
@@ -130,13 +132,18 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       BuildContext context,
       FirebaseFavoritesRepository favorites) {
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    var settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     currLyric.owner = users.getUser!.email;
     logger.d("lyric is: ${currLyric.song}");
     if (!bgImageCreated) {
+      if(!settings.blackBackground) {
       try {
         bgImage = getBackgroundImage(currLyric).image;
       } catch (e) {
         logger.e("Error Creating background image ${e.hashCode}");
+      }
+      } else {
+        logger.d("Black background selected from settings");
       }
       bgImageCreated = true;
     }
@@ -146,15 +153,21 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
       logger.w("lyric.imageUrl is void!");
     } else {
       try {
-        decoration = BoxDecoration(
-          color: Colors.black87,
-          image: DecorationImage(
-            image: bgImage,
-            colorFilter: ColorFilter.mode(Colors.black.withAlpha(alpha), blend),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        );
+        if(settings.blackBackground) {
+          decoration = const BoxDecoration(
+            color: Colors.black87,
+          );
+        } else {
+          decoration = BoxDecoration(
+            color: Colors.black87,
+            image: DecorationImage(
+              image: bgImage,
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withAlpha(alpha), blend),
+              fit: BoxFit.cover,
+            ),
+          );
+        }
       } on Exception catch (e) {
         logger.w(
             "Image at ${currLyric.imageUrl} cannot be retrieved! ${e.toString()}");
@@ -174,7 +187,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 alignment: Alignment.centerLeft,
                 iconSize: 22,
                 color:
-                    Provider.of<FirebaseUserRepository>(context, listen: false)
+                    Provider.of<SQLiteSettingsRepository>(context, listen: false)
                         .themeData
                         .highlightColor,
                 onPressed: () {
@@ -195,7 +208,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
               currLyric.song,
               softWrap: true,
               overflow: TextOverflow.fade,
-              style: LyricsTheme.darkTextTheme.headline2,
+              style: LyricsTheme.darkTextTheme.displayMedium,
             ),
           ),
           Expanded(
@@ -223,7 +236,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                   style: GoogleFonts.lato(
                     fontSize: _fontSize,
                     fontWeight: FontWeight.normal,
-                    color: Provider.of<FirebaseUserRepository>(context,
+                    color: Provider.of<SQLiteSettingsRepository>(context,
                             listen: false)
                         .themeData
                         .highlightColor,
@@ -257,7 +270,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
           if (isFavorite == null) {
             tempIcon = CircularProgressIndicator.adaptive(
               backgroundColor:
-                  Provider.of<FirebaseUserRepository>(context, listen: false)
+                  Provider.of<SQLiteSettingsRepository>(context, listen: false)
                       .themeData
                       .primaryColor,
             );
@@ -297,7 +310,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
                 child: currIcon),
             alignment: Alignment.centerRight,
             iconSize: 22,
-            color: Provider.of<FirebaseUserRepository>(context, listen: false)
+            color: Provider.of<SQLiteSettingsRepository>(context, listen: false)
                 .themeData
                 .primaryColor,
             onPressed: () {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
-//import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
@@ -30,7 +29,7 @@ class _SearchSelectorState extends State<SearchSelector> {
   Widget build(BuildContext context) {
     searchType = widget.searchType;
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
+    final settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
     final int value = widget.searchType;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -59,20 +58,20 @@ class _SearchSelectorState extends State<SearchSelector> {
                 {
                   return Icon(
                     Icons.radio,
-                    color: users.themeData.colorScheme.background,);
+                    color: settings.themeData.colorScheme.background,);
                 }
               case SearchType.nowPlaying:
                 {
                   return Icon(
                     Icons.play_circle,
-                    color: users.themeData.colorScheme.background,);
+                    color: settings.themeData.colorScheme.background,);
                 }
               case SearchType.text:
               default:
                 {
                   return Icon(
                     Icons.text_snippet,
-                    color: users.themeData.colorScheme.background,);
+                    color: settings.themeData.colorScheme.background,);
                 }
             }
           },

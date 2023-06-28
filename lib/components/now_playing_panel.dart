@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:nowplaying/nowplaying.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/api/proxy.dart';
-import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 
 class NowPlayingPanel extends StatefulWidget {
@@ -42,7 +42,7 @@ class _NowPlayingPanelState extends State<NowPlayingPanel> {
                                 alignment: Alignment.center,
                                 //color: Colors.grey,
                                 child: MaterialButton(
-                                  textColor: Provider.of<FirebaseUserRepository>(
+                                  textColor: Provider.of<SQLiteSettingsRepository>(
                                       context,
                                       listen: false)
                                       .themeData
@@ -50,7 +50,7 @@ class _NowPlayingPanelState extends State<NowPlayingPanel> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
-                                  color: Provider.of<FirebaseUserRepository>(
+                                  color: Provider.of<SQLiteSettingsRepository>(
                                       context,
                                       listen: false)
                                       .themeData

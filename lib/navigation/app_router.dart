@@ -15,12 +15,14 @@ class AppRouter extends RouterDelegate
   final AppStateManager appStateManager;
   final FirebaseFavoritesRepository favoritesManager;
   final FirebaseUserRepository profileManager;
+  //final SQLiteSettingsRepository settingsManager;
   BuildContext? _context;
 
   AppRouter({
     required this.appStateManager,
     required this.favoritesManager,
     required this.profileManager,
+    //required this.settingsManager,
   }) : navigatorKey = GlobalKey<NavigatorState>() {
     appStateManager.addListener(notifyListeners);
     favoritesManager.addListener(notifyListeners);
@@ -31,9 +33,9 @@ class AppRouter extends RouterDelegate
   Widget build(BuildContext context) {
     logger.d("Building AppRouter");
     _context = context;
-    final repository = Provider.of<SQLiteSettingsRepository>(context);
+    final settings = Provider.of<SQLiteSettingsRepository>(context);
     final profile = Provider.of<FirebaseUserRepository>(context);
-    Future<Map<String, Setting>> fSettings = repository.getSettings();
+    Future<Map<String, Setting>> fSettings = settings.getSettings();
 
     return FutureBuilder(
       future: fSettings,
@@ -64,25 +66,25 @@ class AppRouter extends RouterDelegate
               ], // pages[]
             );
           } else {
-            return buildSpinner(); //;Text("No data found in settings")
+            return buildSpinner(context); //;Text("No data found in settings")
           }
         } else {
-          return buildSpinner(); //Text("Getting settings from DB")
+          return buildSpinner(context); //Text("Getting settings from DB")
         }
       },
     );
   }
 
-  Widget buildSpinner() {
+  Widget  buildSpinner(BuildContext context) {
     //return Container();
     return Container(
-        color: profileManager.themeData.backgroundColor,
+        color: Provider.of<SQLiteSettingsRepository>(context, listen: false).themeData.colorScheme.background,
         child: Center(
           child: SizedBox(
             width: 50,
             height: 50,
             child: CircularProgressIndicator.adaptive(
-              backgroundColor: profileManager.themeData.primaryColor,
+              backgroundColor: Provider.of<SQLiteSettingsRepository>(context, listen: false).themeData.primaryColor,
             ),
           ),
         ));
