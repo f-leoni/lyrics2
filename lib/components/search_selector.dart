@@ -24,12 +24,15 @@ class SearchSelector extends StatefulWidget {
 
 class _SearchSelectorState extends State<SearchSelector> {
   int searchType = 0;
+  late ThemeData currTheme;
 
   @override
   Widget build(BuildContext context) {
     searchType = widget.searchType;
     final manager = Provider.of<AppStateManager>(context, listen: false);
-    final settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    //final settings = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    final users = Provider.of<SQLiteSettingsRepository>(context, listen: false);
+    currTheme=users.themeData;
     final int value = widget.searchType;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -43,6 +46,9 @@ class _SearchSelectorState extends State<SearchSelector> {
             SearchType.nowPlaying,
           ],
           height: 40.0,
+          indicatorColor: users.themeData.colorScheme.primary,
+          //innerColor: Colors.red,
+          borderColor: users.themeData.colorScheme.primary,
           onChanged: (int newSearchType) {
             searchType = newSearchType;
             manager.switchSearch(
@@ -58,20 +64,21 @@ class _SearchSelectorState extends State<SearchSelector> {
                 {
                   return Icon(
                     Icons.radio,
-                    color: settings.themeData.colorScheme.background,);
+                    color: currTheme.colorScheme.onPrimaryContainer,
+                  );
                 }
               case SearchType.nowPlaying:
                 {
                   return Icon(
                     Icons.play_circle,
-                    color: settings.themeData.colorScheme.background,);
+                    color: currTheme.colorScheme.onPrimaryContainer,);
                 }
               case SearchType.text:
               default:
                 {
                   return Icon(
                     Icons.text_snippet,
-                    color: settings.themeData.colorScheme.background,);
+                    color: currTheme.colorScheme.onPrimaryContainer,);
                 }
             }
           },

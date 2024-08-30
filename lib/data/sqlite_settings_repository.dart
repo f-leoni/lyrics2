@@ -10,14 +10,14 @@ class SQLiteSettingsRepository with ChangeNotifier {
   final dbHelper = DatabaseHelper.instance;
   bool _isInitialized = false;
 
-  late bool _darkMode;// = false;
+  late bool _darkMode = false;
   bool get darkMode => _darkMode;
   set darkMode(bool value) {
     _darkMode = value;
     notifyListeners();
   }
 
-  late bool _darkerMode;// = false;
+  late bool _darkerMode = false;
   bool get darkerMode => _darkerMode;
   set darkerMode(bool value) {
     _darkerMode = value;
