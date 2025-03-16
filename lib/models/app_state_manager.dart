@@ -143,15 +143,6 @@ class AppStateManager extends ChangeNotifier {
     String msg = "";
     //int currSearchType = searchType;
     _searchType = newSearchType;
-    /*
-    // TEXT -> AUDIO
-    if (currSearchType == SearchType.text) {
-      // Save Textfield text
-      msg = switchText2Audio(context, textSearch);
-      // AUDIO -> TEXT
-    } else if (currSearchType == SearchType.audio) {
-      msg = switchAudio2Text(context);
-    }*/
     if (_showSnackBar) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(msg,

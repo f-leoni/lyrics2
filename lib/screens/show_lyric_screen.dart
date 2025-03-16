@@ -20,9 +20,9 @@ class ShowLyricScreen extends StatefulWidget {
   final Future<Lyric>? lyric;
 
   const ShowLyricScreen({
-    Key? key,
+    super.key,
     required this.lyric,
-  }) : super(key: key);
+  });
 
   @override
   State<ShowLyricScreen> createState() => _ShowLyricScreenState();

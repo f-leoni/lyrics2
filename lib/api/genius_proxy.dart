@@ -1,4 +1,4 @@
-library lyrics_library;
+library; //  lyrics_library;
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:lyrics2/api/proxy.dart';
@@ -129,5 +129,10 @@ class GeniusProxy extends Proxy {
       logger.e("Error: $error\n$stackTrace");
     });
     return _songToLyric(result);
+  }
+
+  @override
+  String getIconPath() {
+    return 'assets/lyrics_assets/genius_logo.png';
   }
 }

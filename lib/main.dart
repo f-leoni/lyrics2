@@ -45,10 +45,10 @@ main() {
 }
 
 class LyricsApp extends StatefulWidget {
-  const LyricsApp({Key? key}) : super(key: key);
+  const LyricsApp({super.key});
 
   @override
-  _LyricsAppState createState() => _LyricsAppState();
+  State<LyricsApp> createState() => _LyricsAppState();
 }
 
 class _LyricsAppState extends State<LyricsApp> {
@@ -65,7 +65,7 @@ class _LyricsAppState extends State<LyricsApp> {
     NowPlaying.instance.isEnabled().then((bool isEnabled) async {
       if (!isEnabled) {
         final shown = await NowPlaying.instance.requestPermissions();
-        logger.v('MANAGED TO SHOW PERMS PAGE: $shown');
+        logger.t('MANAGED TO SHOW PERMS PAGE: $shown');
       }
     });
     super.initState();

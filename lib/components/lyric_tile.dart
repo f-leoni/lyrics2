@@ -10,13 +10,14 @@ import 'package:provider/provider.dart';
 class LyricTile extends StatelessWidget {
   final LyricData lyric;
   final bool isFavoritePage;
-  final double iconSize = 40;
-  const LyricTile({Key? key, required this.lyric, required this.isFavoritePage})
-      : super(key: key);
+  final double iconSize = 25;
+  const LyricTile({super.key, required this.lyric, required this.isFavoritePage});
+  static const AssetImage chartLyricsIcon = AssetImage('assets/lyrics_assets/chartlyrics_logo.png');
+  static const AssetImage geniusIcon = AssetImage('assets/lyrics_assets/genius_logo.png');
 
   @override
   Widget build(BuildContext context) {
-    logger.v("building tile");
+    logger.t("building tile");
     FirebaseFavoritesRepository repository =
         Provider.of<FirebaseFavoritesRepository>(context);
     var users = Provider.of<FirebaseUserRepository>(context);
@@ -108,7 +109,8 @@ class LyricTile extends StatelessWidget {
                 ),
               );
             } else {
-              currIcon = /*Center(
+              currIcon = Center(child: SizedBox(width: iconSize, height: iconSize));
+              /*currIcon = Center(
                 child: Icon(
                   Provider.of<AppStateManager>(context, listen: false)
                       .icnNoFavorite,
@@ -116,7 +118,7 @@ class LyricTile extends StatelessWidget {
                   size: iconSize,
                 ),
               );*/
-                  Center(child: SizedBox(width: iconSize, height: iconSize));
+
             }
           } else {
             currIcon = SizedBox(
@@ -131,12 +133,10 @@ class LyricTile extends StatelessWidget {
   }
 
   buildProxyIcon(BuildContext context, LyricData lyric) {
-    AssetImage providerImg =
-        const AssetImage('assets/lyrics_assets/chartlyrics_logo.png');
+    AssetImage providerImg = chartLyricsIcon;
     double height = 30;
     if (lyric.getProxy() == Proxies.genius) {
-      providerImg = const AssetImage('assets/lyrics_assets/genius_logo.png');
-      height = 30;
+      providerImg = geniusIcon;
     }
     return Center(
       child: Image(

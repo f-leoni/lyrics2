@@ -23,15 +23,15 @@ class LyricsTheme {
     bodyLarge: GoogleFonts.lato(
         fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
     displayLarge: GoogleFonts.lato(
-        fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white70),
+        fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white70),
     displayMedium: GoogleFonts.lato(
-        fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.white70),
+        fontSize: 16.0, fontWeight: FontWeight.w700, color: Colors.white70),
     displaySmall: GoogleFonts.lato(
-        fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white70),
+        fontSize: 12.0, fontWeight: FontWeight.w400, color: Colors.white70),
     labelLarge: GoogleFonts.lato(
-        fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
+        fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white70),
     bodyMedium: GoogleFonts.lato(
-        fontSize: 13, fontWeight: FontWeight.normal, color: Colors.white70),
+        fontSize: 15, fontWeight: FontWeight.normal, color: Colors.white70),
     headlineMedium: GoogleFonts.lato(
         fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white70),
   );

@@ -1,4 +1,4 @@
-library lyrics_library;
+library; // lyrics_library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -91,7 +91,7 @@ class ChartLyricsProxy extends Proxy {
     }
     for (Map<String, dynamic> item in jsonSearchResults) {
       if (item.keys.contains(_lyricTitle) && item[_lyricTitle] != null) {
-        logger.v(
+        logger.t(
             "simpleSearchText found Lyric - title: ${item[_lyricTitle]} - Author: ${item[_lyricAuthor]} (Id: ${item[_lyricID]})");
         result.add(LyricSearchResult.fromJson(item, Proxies.chartLyrics));
       }
@@ -113,7 +113,7 @@ class ChartLyricsProxy extends Proxy {
     }
     for (Map<String, dynamic> item in jsonSearchResults) {
       if (item.keys.contains(_lyricTitle) && item[_lyricTitle] != null) {
-        logger.v(
+        logger.t(
             "simpleSearch found Lyric - title: ${item[_lyricTitle]} - Author: ${item[_lyricAuthor]} (Id: ${item[_lyricID]})");
         result.add(LyricSearchResult.fromJson(item, Proxies.chartLyrics));
       }
@@ -127,5 +127,10 @@ class ChartLyricsProxy extends Proxy {
     Map<String, dynamic> jsonResults =
         jsonDecode(myTransformer.toParkerWithAttrs());
     return jsonResults;
+  }
+
+  @override
+  String getIconPath() {
+    return 'assets/lyrics_assets/chartlyrics_logo.png';
   }
 }

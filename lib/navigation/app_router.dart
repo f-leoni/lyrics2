@@ -48,6 +48,7 @@ class AppRouter extends RouterDelegate
             return Navigator(
               key: navigatorKey,
               onPopPage: _handlePopPage,
+              //onDidRemovePage: _handlePopPage
               pages: [
                 if (!appStateManager.isInitialized) SplashScreen.page(),
                 if (appStateManager.isInitialized && !isLoggedIn)

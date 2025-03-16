@@ -19,12 +19,12 @@ class MainScreen extends StatefulWidget {
     );
   }
 
-  const MainScreen({Key? key, required this.currentTab}) : super(key: key);
+  const MainScreen({super.key, required this.currentTab});
 
   final int currentTab;
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {

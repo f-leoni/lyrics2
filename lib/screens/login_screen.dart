@@ -20,9 +20,9 @@ class LoginScreen extends StatefulWidget {
   final String? username;
 
   const LoginScreen({
-    Key? key,
+    super.key,
     this.username,
-  }) : super(key: key);
+  });
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();

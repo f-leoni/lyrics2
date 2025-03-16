@@ -12,12 +12,12 @@ class SearchSelector extends StatefulWidget {
   final TextEditingController searchControllerSong;
 
   const SearchSelector({
-    Key? key,
+    super.key,
     required this.searchType,
     required this.searchControllerText,
     required this.searchControllerAuthor,
     required this.searchControllerSong,
-  }) : super(key: key);
+  });
 
   @override
   State<SearchSelector> createState() => _SearchSelectorState();
@@ -51,7 +51,8 @@ class _SearchSelectorState extends State<SearchSelector> {
                 newSearchType,
                 widget.searchControllerText.text,
                 widget.searchControllerAuthor.text,
-                widget.searchControllerSong.text);
+                widget.searchControllerSong.text
+            );
           },
           iconBuilder: (value, _ , __) {
             switch (value) {
@@ -59,42 +60,24 @@ class _SearchSelectorState extends State<SearchSelector> {
                 {
                   return Icon(
                     Icons.radio,
-                    color: users.themeData.colorScheme.background,);
+                    color: users.themeData.colorScheme.inversePrimary,);
                 }
               case SearchType.nowPlaying:
                 {
                   return Icon(
                     Icons.play_circle,
-                    color: users.themeData.colorScheme.background,);
+                    color: users.themeData.colorScheme.inversePrimary,);
                 }
               case SearchType.text:
               default:
                 {
                   return Icon(
                     Icons.text_snippet,
-                    color: users.themeData.colorScheme.background,);
+                    color: users.themeData.colorScheme.inversePrimary,);
                 }
             }
           },
-          /*activeColor: users.themeData.indicatorColor,
-          activeToggleColor: users.themeData.primaryColor,
-          activeSwitchBorder: Border.all(
-            color: users.themeData.colorScheme.secondary,
-            width: 4.0,
-          ),
-          inactiveIcon: Icon(
-            Icons.radio,
-            color: users.themeData.colorScheme.secondary,
-          ),
-          inactiveColor: users.themeData.indicatorColor,
-          inactiveToggleColor: users.themeData.primaryColor,
-          inactiveSwitchBorder: Border.all(
-            color: users.themeData.colorScheme.secondary,
-            width: 4.0,
-          ),*/
         ),
-        //const SizedBox(height: 8),
-        //Text(AppLocalizations.of(context)!.msgSearchMode),
       ],
     );
   }

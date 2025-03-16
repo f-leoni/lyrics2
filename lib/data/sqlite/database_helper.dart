@@ -61,7 +61,7 @@ class DatabaseHelper {
         "Database $_databaseName path is: $path. Version: $_databaseVersion");
 
     // Remember to turn off debugging before deploying app to store(s).
-    Sqflite.setDebugModeOn(false);
+    //Sqflite.setDebugModeOn(false);
     Database database = await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
     //return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
     return database;

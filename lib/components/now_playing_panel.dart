@@ -9,7 +9,7 @@ import 'package:lyrics2/models/app_state_manager.dart';
 
 class NowPlayingPanel extends StatefulWidget {
   final Proxy proxy;
-  const NowPlayingPanel({Key? key, required this.proxy}) : super(key: key);
+  const NowPlayingPanel({super.key, required this.proxy});
 
   @override
   State<NowPlayingPanel> createState() => _NowPlayingPanelState();

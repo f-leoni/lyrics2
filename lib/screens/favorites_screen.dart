@@ -17,7 +17,7 @@ class FavoritesScreen extends StatefulWidget {
     );
   }
 
-  const FavoritesScreen({Key? key}) : super(key: key);
+  const FavoritesScreen({super.key});
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
@@ -43,14 +43,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final favoritesRepository =
         Provider.of<FirebaseFavoritesRepository>(context);
     final profile = Provider.of<FirebaseUserRepository>(context, listen: false);
-
     Future<List<Lyric>> favorites =
         favoritesRepository.findAllFavsLyrics(profile.getUser!.email);
+
     return Column(
       children: [
         Expanded(
           flex: 1,
           child: Container(
+            alignment: Alignment.centerLeft,
             color: profile.themeData.primaryColor,
             child: TextField(
               key: _filterKey,
@@ -68,6 +69,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     setState(() => _filterController.text = "");
                   },
                 ),
+                hintStyle: Theme.of(context).textTheme.labelMedium,
+                /*hintStyle: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: 'Roboto',
+                ),*/
                 hintText: AppLocalizations.of(context)!.filterHint,
                 //border: const UnderlineInputBorder(), //OutlineInputBorder(),
                 filled: false,
@@ -87,7 +95,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           ),
         ),
         Expanded(
-          flex: 8,
+          flex: 7,
           child: FutureBuilder(
               future: favorites,
               builder: (context, snapshot) {

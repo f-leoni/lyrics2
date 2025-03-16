@@ -1,4 +1,4 @@
-library lyrics_library;
+library; //lyrics_library;
 
 class LyricException implements Exception {
   int code;

@@ -26,7 +26,7 @@ class SearchScreen extends StatefulWidget {
     );
   }
 
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({super.key});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -84,16 +84,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     snap: true,
                     floating: true,
                     backgroundColor: users.themeData.primaryColor,
-                    expandedHeight: 100.0,
+                    expandedHeight: 120.0,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Column(
                         children: [
                           Expanded(
-                            flex: 3,
+                            flex: 1,
                             child: Column(
                               children: [
                                 Expanded(
-                                    flex: 3, child: buildSearchFields(context)),
+                                    flex: 1, child: buildSearchFields(context)),
                                 /*Expanded(
                                   flex: 2,
                                   child: Padding(
@@ -105,13 +105,17 @@ class _SearchScreenState extends State<SearchScreen> {
                               ],
                             ),
                           ),
-                          Padding(
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 20, 8.0, 0),
                               child: buildSearchSelector(
                                   searchType,
                                   _searchControllerText,
                                   _searchControllerAuthor,
-                                  _searchControllerSong)),
+                                  _searchControllerSong)
+                            )
+                          ),
                         ],
                       ),
                     )),
@@ -337,7 +341,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       border: const OutlineInputBorder(),
                       filled: true,
                       fillColor: Theme.of(context)
-                          .colorScheme.background, //Colors.yellow[50],
+                          .colorScheme.surface, //Colors.yellow[50],
                     ),
                     //onEditingComplete: () => startSearch(context),
                   ),
@@ -440,7 +444,7 @@ class _SearchScreenState extends State<SearchScreen> {
           style: textTheme.labelLarge,
         ),
         onPressed: () async {
-          logger.v("Click on Search button in search screen");
+          logger.t("Click on Search button in search screen");
           startSearch(context);
         },
       );
