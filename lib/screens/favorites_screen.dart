@@ -72,7 +72,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 //border: const UnderlineInputBorder(), //OutlineInputBorder(),
                 filled: false,
                 fillColor:
-                    Theme.of(context).backgroundColor, //Colors.yellow[50],
+                    Theme.of(context).colorScheme.surface, //Colors.yellow[50],
               ),
               onEditingComplete: () => setState(() {
                 filter = _filterController.text;
@@ -131,7 +131,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   color: Provider.of<FirebaseUserRepository>(context,
                           listen: false)
                       .themeData
-                      .backgroundColor,
+                      .colorScheme.surface,
                   size: 25.0)),
           onDismissed: (direction) {
             Provider.of<FirebaseFavoritesRepository>(context, listen: false)
@@ -139,7 +139,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                     '"${lyric.song}" ${AppLocalizations.of(context)!.msgDismissed}',
-                    style: theme.button)));
+                    style: theme.labelLarge)));
           },
           child: InkWell(
             child: LyricTile(
@@ -198,7 +198,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               AppLocalizations.of(context)!.nothingHere,
               style: Provider.of<FirebaseUserRepository>(context, listen: false)
                   .textTheme
-                  .headline1,
+                  .displayLarge,
             ),
             const SizedBox(height: 16.0),
             Text(

@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         hintText: hintText,
-        hintStyle: theme.textTheme.headline4,
+        hintStyle: theme.textTheme.headlineMedium,
       ),
     );
   }
@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             hintText: hintText,
-            hintStyle: theme.textTheme.headline4,
+            hintStyle: theme.textTheme.headlineMedium,
             suffixIcon: IconButton(
               icon: Icon(
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.msgLogin,
-                style: theme.textTheme.button,
+                style: theme.textTheme.labelLarge,
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
@@ -208,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                             '${locale.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}',
-                            style: theme.textTheme.button),
+                            style: theme.textTheme.labelLarge),
                       ));
                     }
                   } on FirebaseAuthException catch (e) {
@@ -216,14 +216,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       SnackBar(
                         content: Text(
                             '${locale.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, e.code)}',
-                            style: theme.textTheme.button),
+                            style: theme.textTheme.labelLarge),
                       ),
                     );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                         '${locale.msgError}: ${e.toString()}',
-                        style: theme.textTheme.button,
+                        style: theme.textTheme.labelLarge,
                       ),
                     ));
                   }
@@ -236,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   locale.msgRegisterExtended,
-                  style: theme.textTheme.bodyText2,
+                  style: theme.textTheme.bodyMedium,
                 ),
                 TextButton(
                   onPressed: () {
@@ -261,13 +261,13 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MaterialButton(
-              color: theme.errorColor,
+              color: theme.colorScheme.error,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
                 AppLocalizations.of(context)!.msgRegister,
-                style: theme.textTheme.button,
+                style: theme.textTheme.labelLarge,
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
@@ -286,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           '${AppLocalizations.of(context)!.msgError}: ${users.codeToLocalizedString(AppLocalizations.of(context)!, users.lastErrorCode)}',
-                          style: theme.textTheme.button,
+                          style: theme.textTheme.labelLarge,
                         ),
                       ));
                     }
@@ -297,14 +297,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           AppLocalizations.of(context)!,
                           e.code,
                         )}',
-                        style: theme.textTheme.button,
+                        style: theme.textTheme.labelLarge,
                       ),
                     ));
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                         '${AppLocalizations.of(context)!.msgError}: ${e.toString()}',
-                        style: theme.textTheme.button,
+                        style: theme.textTheme.labelLarge,
                       ),
                     ));
                   }

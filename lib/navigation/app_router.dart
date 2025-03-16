@@ -76,7 +76,7 @@ class AppRouter extends RouterDelegate
   Widget buildSpinner() {
     //return Container();
     return Container(
-        color: profileManager.themeData.backgroundColor,
+        color: profileManager.themeData.colorScheme.surface,
         child: Center(
           child: SizedBox(
             width: 50,

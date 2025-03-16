@@ -243,7 +243,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   .showSnackBar(SnackBar(
                                 content: Text(
                                   '${AppLocalizations.of(context)!.noResults}: ${result.status.msg}',
-                                  style: textTheme.button,
+                                  style: textTheme.labelLarge,
                                 ),
                               ));
                               return;
@@ -259,7 +259,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           },
                           child: Text(
                             AppLocalizations.of(context)!.msgListen,
-                            style: textTheme.button,
+                            style: textTheme.labelLarge,
                           ),
                         ),
                       ),
@@ -289,7 +289,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Text(
                       '${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.bodyText1),
+                      style: textTheme.bodyLarge),
                 ),
               ],
             ],
@@ -337,7 +337,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       border: const OutlineInputBorder(),
                       filled: true,
                       fillColor: Theme.of(context)
-                          .backgroundColor, //Colors.yellow[50],
+                          .colorScheme.background, //Colors.yellow[50],
                     ),
                     //onEditingComplete: () => startSearch(context),
                   ),
@@ -360,7 +360,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       border: const OutlineInputBorder(),
                       filled: true,
                       fillColor: Theme.of(context)
-                          .backgroundColor, //Colors.yellow[50],
+                          .colorScheme.surface, //Colors.yellow[50],
                     ),
                     //onEditingComplete: () => startSearch(context),
                   ),
@@ -387,7 +387,7 @@ class _SearchScreenState extends State<SearchScreen> {
           flex: 1,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 16.0),
+                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
             child: TextField(
               controller: _searchControllerText,
               onSubmitted: (value) => startSearch(context),
@@ -406,7 +406,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 border: const UnderlineInputBorder(), //OutlineInputBorder(),
                 filled: false,
                 fillColor:
-                    Theme.of(context).backgroundColor, //Colors.yellow[50],
+                    Theme.of(context).colorScheme.surface, //Colors.yellow[50],
               ),
               onEditingComplete: () => startSearch(context),
             ),
@@ -437,7 +437,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         child: Text(
           AppLocalizations.of(context)!.searchText,
-          style: textTheme.button,
+          style: textTheme.labelLarge,
         ),
         onPressed: () async {
           logger.v("Click on Search button in search screen");
@@ -509,7 +509,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.of(context)!.searchTextTooShort,
-          style: theme.textTheme.button,
+          style: theme.textTheme.labelLarge,
         ),
       ));
       return;
@@ -534,7 +534,7 @@ class _SearchScreenState extends State<SearchScreen> {
         content: Text(AppLocalizations.of(context)!.noResults,
             style: Provider.of<FirebaseUserRepository>(context, listen: false)
                 .textTheme
-                .button),
+                .labelLarge),
       ));
     }
   }

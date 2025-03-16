@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,11 +14,12 @@ import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:nowplaying/nowplaying.dart';
+import 'package:nowplaying/nowplaying_track.dart';
 import 'package:provider/provider.dart';
 import 'components/logger.dart';
 import 'navigation/app_router.dart';
 import 'lyricstheme.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 main() {
   GoogleFonts.config.allowRuntimeFetching = false;
@@ -26,7 +28,9 @@ main() {
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp().then((value) {
+  Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform
+  ).then((value) {
     FlutterError.onError = (errorDetails) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
     };
@@ -105,7 +109,7 @@ class _LyricsAppState extends State<LyricsApp> {
           }
           return MaterialApp(
             theme: theme,
-            title: 'Lyrics2 🎶',
+            title: 'Lyrics2 ?',
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

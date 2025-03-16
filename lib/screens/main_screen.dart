@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
           appBar: AppBar(
             backgroundColor: users.themeData.colorScheme.primaryContainer,
             title:
-                Text(pageTitle, style: Theme.of(context).textTheme.headline2),
+                Text(pageTitle, style: Theme.of(context).textTheme.displayMedium),
             actions: [
               profileButton(widget.currentTab),
             ],
@@ -62,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
           body: pages[widget.currentTab],
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor: users.themeData.colorScheme.primaryContainer,
-            unselectedItemColor: users.themeData.colorScheme.background,
+            unselectedItemColor: users.themeData.colorScheme.onSurfaceVariant.withValues(red:0.6, green: 0.6, blue: 0.6),
             currentIndex: widget.currentTab,
             onTap: (index) {
               //only redraw if we are not already in that tab

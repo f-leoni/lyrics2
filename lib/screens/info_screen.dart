@@ -60,7 +60,7 @@ class InfoScreen extends StatelessWidget {
                           Image(height: 80, image: logoImg),
                           //AssetImage("assets/lyrics_assets/logo.png")),
                           Text(AppLocalizations.of(context)!.infoTitle,
-                              style: theme.textTheme.headline1),
+                              style: theme.textTheme.displayLarge),
                         ],
                       ),
                     ),
@@ -79,7 +79,7 @@ class InfoScreen extends StatelessWidget {
                         return Column(
                           children: [
                             Text(AppLocalizations.of(context)!.info,
-                                style: theme.textTheme.headline4),
+                                style: theme.textTheme.headlineMedium),
                             const SizedBox(height: 30),
                             FutureBuilder(
                               future: Provider.of<AppStateManager>(context,
@@ -94,7 +94,7 @@ class InfoScreen extends StatelessWidget {
                                     build = result[1];
                                     return Text(
                                       "Version: $version - Build: $build\n",
-                                      style: theme.textTheme.headline3,
+                                      style: theme.textTheme.displaySmall,
                                     );
                                   } else {
                                     return Container(); //Text("Retrieving version info....");

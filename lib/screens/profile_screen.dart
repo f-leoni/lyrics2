@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
         title: Text(AppLocalizations.of(context)!.ttlProfile,
-            style: users.themeData.textTheme.headline2),
+            style: users.themeData.textTheme.displayMedium),
       ),
       body: Container(
         color: users.themeData.primaryColor,
@@ -103,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(AppLocalizations.of(context)!.msgDarkMode,
-              style: users.themeData.textTheme.bodyText2),
+              style: users.themeData.textTheme.bodyMedium),
           Switch(
             value: users.darkMode, //widget.user.darkMode,
             onChanged: (value) {
@@ -126,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           imageRadius: 60.0,
         ),
         const SizedBox(height: 8.0),
-        Text(widget.user.email!, style: users.themeData.textTheme.headline1),
+        Text(widget.user.email!, style: users.themeData.textTheme.displayLarge),
         Text(
             "Registration date: ${formatter.format(widget.user.metadata.creationTime!)}"), //role
       ],
@@ -172,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocalizations.of(context)!.msgUseService,
-                  style: users.themeData.textTheme.bodyText2),
+                  style: users.themeData.textTheme.bodyMedium),
               DropdownButton<String>(
                   value: dropdownValue,
                   icon: const Icon(Icons.miscellaneous_services),
@@ -181,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       value: value,
                       child: Text(
                         value,
-                        style: users.themeData.textTheme.bodyText2,
+                        style: users.themeData.textTheme.bodyMedium,
                       ),
                     );
                   }).toList(),

@@ -34,7 +34,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         title: Text(AppLocalizations.of(context)!.gettingStarted,
             style: Provider.of<FirebaseUserRepository>(context, listen: false)
                 .textTheme
-                .headline1),
+                .displayLarge),
         leading: GestureDetector(
           child: Icon(
             Icons.chevron_left,
@@ -114,7 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             text,
             style: Provider.of<FirebaseUserRepository>(context, listen: false)
                 .textTheme
-                .headline1,
+                .displayLarge,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),

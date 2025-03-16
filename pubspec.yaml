@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+21
 
 environment:
-  sdk: ">=2.15.0-178.1.beta <3.0.0"
+  sdk: ^3.7.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,41 +31,44 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  google_fonts: ^3.0.1
-  http: ^0.13.4
+  google_fonts: ^4.0.3
+  http: ^1.3.0
   html: ^0.15.1
   provider: ^6.0.5
-  intl: ^0.17.0
-  uuid: ^3.0.7
+  intl: ^0.19.0
+  uuid: ^4.2.2
   smooth_page_indicator: ^1.0.0+2
-  xml2json: ^5.3.6
-  logger: ^1.1.0
-  flutter_acrcloud: ^0.1.6
+  xml2json: ^6.0.0
+  logger: ^2.5.0
+  flutter_acrcloud: ^0.2.2
   equatable: ^2.0.3
   sqflite: ^2.2.2
   path_provider: ^2.0.2
   synchronized: ^3.0.0
   sqlbrite: ^2.1.0
-  package_info_plus: ^3.0.2
-  firebase_core: ^1.6.0
-  cloud_firestore: ^2.5.3
-  firebase_auth: ^3.1.1
-  firebase_crashlytics: ^2.9.0
-  genius_api_unofficial: ^2.0.1
+  package_info_plus: ^8.2.1
+  firebase_core: ^3.12.1
+  cloud_firestore: ^5.6.5
+  firebase_auth: ^5.5.1
+  firebase_crashlytics: ^4.3.4
+  genius_api_unofficial: # ^2.0.2 FL Modificata da Zitzu
+    git:
+      url: https://github.com/Fraleoni/genius_api_unofficial.git
   beautiful_soup_dart: ^0.3.0
   #font_awesome_flutter: ^10.2.1
   #flutter_switch: ^0.3.2
-  fake_cloud_firestore: 1.1.3
-  nowplaying: ^2.0.6
-  animated_toggle_switch: ^0.6.1
+  fake_cloud_firestore: 3.1.0
+  nowplaying: ^3.0.3
+  animated_toggle_switch: ^0.7.0
 
-dependency_overrides:
-  firebase_core_platform_interface: 4.5.1
-
-  
+ 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.8
+  
+dependency_overrides:
+  #intl: ^0.19.0
+  #firebase_core_platform_interface: 4.5.1
 
 dev_dependencies:
   flutter_test:
@@ -74,8 +77,8 @@ dev_dependencies:
     sdk: flutter
   test: ^1.14.4
 
-  flutter_launcher_icons: ^0.11.0
-  flutter_lints: ^2.0.1
+  flutter_launcher_icons: ^0.14.3
+  flutter_lints: ^5.0.0
 
 flutter_icons:
   image_path_android: "assets/icon.png"
@@ -88,12 +91,12 @@ flutter_icons:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
+# The following section is specific to Flutter packages.
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -114,10 +117,10 @@ flutter:
   generate: true 
 
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
+  # https://flutter.dev/to/resolution-aware-images
 
   # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
+  # https://flutter.dev/to/asset-from-package
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
@@ -137,5 +140,4 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
-
+  # see https://flutter.dev/to/font-from-package

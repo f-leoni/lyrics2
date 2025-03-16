@@ -195,7 +195,7 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
               currLyric.song,
               softWrap: true,
               overflow: TextOverflow.fade,
-              style: LyricsTheme.darkTextTheme.headline2,
+              style: LyricsTheme.darkTextTheme.displayMedium,
             ),
           ),
           Expanded(

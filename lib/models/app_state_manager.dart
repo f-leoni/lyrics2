@@ -157,7 +157,7 @@ class AppStateManager extends ChangeNotifier {
         content: Text(msg,
             style: Provider.of<FirebaseUserRepository>(context, listen: false)
                 .textTheme
-                .button),
+                .labelLarge),
         duration: const Duration(milliseconds: 500),
       ));
     }
