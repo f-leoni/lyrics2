@@ -246,5 +246,9 @@
     "msgNoArtwork": "No artwork found!",
     "@msgNoArtwork": {
         "description": "Shown when no artwork is found for nowplaying search"
+    },
+    "msgVersion": "Version: ",
+    "@msgVersion": {
+        "description": "Version info on InfoPage"
     }
 }

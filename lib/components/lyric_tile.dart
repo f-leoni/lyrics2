@@ -109,15 +109,15 @@ class LyricTile extends StatelessWidget {
                 ),
               );
             } else {
-              currIcon = Center(child: SizedBox(width: iconSize, height: iconSize));
-              /*currIcon = Center(
+              //currIcon = Center(child: SizedBox(width: iconSize, height: iconSize));
+              currIcon = Center(
                 child: Icon(
                   Provider.of<AppStateManager>(context, listen: false)
                       .icnNoFavorite,
-                  color: Colors.red,
+                  color: Colors.black12,
                   size: iconSize,
                 ),
-              );*/
+              );
 
             }
           } else {
@@ -152,7 +152,7 @@ class LyricTile extends StatelessWidget {
     return Text(lyric.getArtist(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,
-        style: users.textTheme.displaySmall);
+        style: users.textTheme.headlineMedium);
   }
 
   buildTitle(BuildContext context, LyricData lyric) {
@@ -160,6 +160,6 @@ class LyricTile extends StatelessWidget {
     return Text(lyric.getSong(),
         softWrap: true,
         overflow: TextOverflow.ellipsis,
-        style: users.textTheme.displayLarge);
+        style: users.textTheme.headlineLarge);
   }
 }

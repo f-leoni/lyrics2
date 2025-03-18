@@ -395,6 +395,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: TextField(
               controller: _searchControllerText,
               onSubmitted: (value) => startSearch(context),
+              style: Theme.of(context).textTheme.titleLarge,
               decoration: InputDecoration(
                 prefixIcon: IconButton(
                     icon: const Icon(Icons.search),
@@ -407,6 +408,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   },
                 ),
                 hintText: AppLocalizations.of(context)!.searchHint,
+                hintStyle: Theme.of(context).textTheme.bodyLarge,
                 border: const UnderlineInputBorder(), //OutlineInputBorder(),
                 filled: false,
                 fillColor:

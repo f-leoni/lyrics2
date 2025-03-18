@@ -29,10 +29,12 @@ class InfoScreen extends StatelessWidget {
         ? const AssetImage('assets/lyrics_assets/logo_dark.png')
         : const AssetImage('assets/lyrics_assets/logo.png');
 
-    return SafeArea(
+    return Container(
+      color: theme.primaryColor,
+        child: SafeArea(
       child: Center(
         child: Container(
-          color: theme.primaryColor,
+          //color: theme.primaryColor,
           //MediaQuery.of(context).size.width
           constraints: const BoxConstraints.expand(width: 400, height: 650),
           child: Padding(
@@ -49,18 +51,18 @@ class InfoScreen extends StatelessWidget {
                       height: 80,
                       child: Row(
                         children: [
-                          IconButton(
+                          /*IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
                               Provider.of<AppStateManager>(context,
                                       listen: false)
                                   .goToTab(LyricsTab.search);
                             },
-                          ),
+                          ),*/
                           Image(height: 80, image: logoImg),
                           //AssetImage("assets/lyrics_assets/logo.png")),
                           Text(AppLocalizations.of(context)!.infoTitle,
-                              style: theme.textTheme.displayLarge),
+                              style: theme.textTheme.titleLarge),
                         ],
                       ),
                     ),
@@ -93,8 +95,8 @@ class InfoScreen extends StatelessWidget {
                                     version = result[0];
                                     build = result[1];
                                     return Text(
-                                      "Version: $version - Build: $build\n",
-                                      style: theme.textTheme.displaySmall,
+                                      "${AppLocalizations.of(context)!.msgVersion} $version - Build: $build\n",
+                                      style: theme.textTheme.headlineSmall,
                                     );
                                   } else {
                                     return Container(); //Text("Retrieving version info....");
@@ -120,6 +122,6 @@ class InfoScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 }

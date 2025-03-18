@@ -57,19 +57,22 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               key: _filterKey,
               focusNode: myFocusNode,
               controller: _filterController,
+              style: Theme.of(context).textTheme.headlineLarge,
               decoration: InputDecoration(
                 prefixIcon: IconButton(
                     icon: const Icon(Icons.filter_alt),
+                    color: profile.themeData.primaryColorDark,
                     onPressed: () =>
                         setState(() => filter = _filterController.text)),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
+                  color: profile.themeData.primaryColorDark,
                   onPressed: () {
                     // Clear the search field
                     setState(() => _filterController.text = "");
                   },
                 ),
-                hintStyle: Theme.of(context).textTheme.labelMedium,
+                hintStyle: Theme.of(context).textTheme.headlineMedium,
                 /*hintStyle: TextStyle(
                   fontSize: 15.0,
                   color: Colors.white70,

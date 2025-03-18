@@ -69,6 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildMenu() {
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return ListView(
       children: [
         buildDarkModeRow(),
@@ -82,7 +83,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),*/
         ListTile(
-          title: Center(child: Text(AppLocalizations.of(context)!.msgLogout)),
+          title: Center(child: Text(AppLocalizations.of(context)!.msgLogout,
+            style: users.themeData.textTheme.headlineMedium,)),
           onTap: () {
             // Logout user
             Provider.of<FirebaseUserRepository>(context, listen: false)
@@ -126,9 +128,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           imageRadius: 60.0,
         ),
         const SizedBox(height: 8.0),
-        Text(widget.user.email!, style: users.themeData.textTheme.displayLarge),
-        Text(
-            "Registration date: ${formatter.format(widget.user.metadata.creationTime!)}"), //role
+        Text(widget.user.email!, style: users.themeData.textTheme.titleLarge),
+        Text("${AppLocalizations.of(context)!.msgRegistrationDate} ${formatter.format(widget.user.metadata.creationTime!)}"), //role
       ],
     );
   }
