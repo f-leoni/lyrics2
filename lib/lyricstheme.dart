@@ -18,7 +18,7 @@ class LyricsTheme {
     titleLarge: GoogleFonts.lato(
         fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black87),
     titleMedium: GoogleFonts.lato(
-        fontSize: 18.0, fontWeight: FontWeight.normal, color: Colors.black87),
+        fontSize: 20.0, fontWeight: FontWeight.normal, color: Colors.black87),
     titleSmall: GoogleFonts.lato(
         fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.black87),
     labelLarge: GoogleFonts.lato(
@@ -51,7 +51,7 @@ class LyricsTheme {
     titleLarge: GoogleFonts.lato(
         fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.white70),
     titleMedium: GoogleFonts.lato(
-        fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.white70),
+        fontSize: 20.0, fontWeight: FontWeight.w300, color: Colors.white70),
     titleSmall: GoogleFonts.lato(
         fontSize: 14.0, fontWeight: FontWeight.w300, color: Colors.white70),
     labelLarge: GoogleFonts.lato(

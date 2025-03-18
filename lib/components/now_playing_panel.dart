@@ -8,6 +8,7 @@ import 'package:lyrics2/models/app_state_manager.dart';
 
 class NowPlayingPanel extends StatefulWidget {
   final Proxy proxy;
+
   const NowPlayingPanel({super.key, required this.proxy});
 
   @override
@@ -23,56 +24,83 @@ class _NowPlayingPanelState extends State<NowPlayingPanel> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
-                child: Consumer<NowPlayingTrack>(builder: (context, track, _) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (track.isStopped) Text(AppLocalizations.of(context)!.msgNoPlay),
-                      if (!track.isStopped) ...[
-                        if (track.title != null)
-                          Text(
-                              '${track.title ?? "null"} - ${track.artist ?? "null"}'),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
+              child: Consumer<NowPlayingTrack>(
+                builder: (context, track, _) {
+                  return Container(
+                    color: Colors.red,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      //crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (track.isStopped)
+                          Text(AppLocalizations.of(context)!.msgNoPlay),
+                        if (!track.isStopped) ...[
+                          if (track.title != null)
+                            Text(
+                              '${track.title ?? "null"} - ${track.artist ?? "null"}',
+                            ),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
                                 margin: const EdgeInsets.all(8.0),
                                 width: 150,
                                 height: 30,
                                 alignment: Alignment.center,
                                 //color: Colors.grey,
                                 child: MaterialButton(
-                                  textColor: Provider.of<FirebaseUserRepository>(
-                                      context,
-                                      listen: false)
-                                      .themeData
-                                      .highlightColor,
+                                  textColor:
+                                      Provider.of<FirebaseUserRepository>(
+                                        context,
+                                        listen: false,
+                                      ).themeData.highlightColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
-                                  color: Provider.of<FirebaseUserRepository>(
-                                      context,
-                                      listen: false)
-                                      .themeData
-                                      .indicatorColor,
+                                  color:
+                                      Provider.of<FirebaseUserRepository>(
+                                        context,
+                                        listen: false,
+                                      ).themeData.indicatorColor,
                                   onPressed: () async {
-                                    final manager = Provider.of<AppStateManager>(context, listen: false);
-                                    manager.lastTextSearch = '${track.artist} ${track.title}';
-                                    manager.lastAuthorSearch = track.artist ?? "null";
-                                    manager.lastSongSearch = track.title ?? "null";
-                                    // Consider only first 4 words for title (Genius doesn't seem long titles too much)
+                                    final manager =
+                                        Provider.of<AppStateManager>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    manager.lastTextSearch =
+                                        '${track.artist} ${track.title}';
+                                    manager.lastAuthorSearch =
+                                        track.artist ?? "null";
+                                    manager.lastSongSearch =
+                                        track.title ?? "null";
+                                    // Consider only first 4 words for title
+                                    // (Genius doesn't seem to like long titles too much)
                                     await manager.startSearchSongAuthor(
-                                        track.artist??"null", firstFewWords(track.title??"null",4), widget.proxy);
+                                      track.artist ?? "null",
+                                      firstFewWords(track.title ?? "null", 4),
+                                      widget.proxy,
+                                    );
                                   },
-                                  child: Text(AppLocalizations.of(context)!.lblSearch),
-                                )),
-                            Positioned(bottom: 0, right: 0, child: _iconFrom(track))
-                          ],
-                        ),
-                      ]
-                    ],
+                                  child: Text(
+                                    AppLocalizations.of(context)!.lblSearch,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: _iconFrom(track),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
                   );
-                })),
+                },
+              ),
+            ),
           );
         } else {
           return Padding(
@@ -84,17 +112,17 @@ class _NowPlayingPanelState extends State<NowPlayingPanel> {
     );
   }
 
-
-  String firstFewWords(String bigSentence, int numWords){
-    int startIndex = 0, indexOfSpace=-1;
+  String firstFewWords(String bigSentence, int numWords) {
+    int startIndex = 0, indexOfSpace = -1;
     // Trim at first parenthesis
     int indexOfParenthesis = bigSentence.indexOf('(', 0);
-    if(indexOfParenthesis>0){
+    if (indexOfParenthesis > 0) {
       bigSentence = bigSentence.substring(0, bigSentence.indexOf('(', 0));
     }
-    for(int i = 0; i < numWords; i++){
+    for (int i = 0; i < numWords; i++) {
       indexOfSpace = bigSentence.indexOf(' ', startIndex);
-      if(indexOfSpace == -1){     //-1 is when character is not found
+      if (indexOfSpace == -1) {
+        //-1 is when character is not found
         return bigSentence;
       }
       startIndex = indexOfSpace + 1;
@@ -131,9 +159,10 @@ class _NowPlayingPanelState extends State<NowPlayingPanel> {
       return Container(
         padding: const EdgeInsets.all(6),
         decoration: const BoxDecoration(
-            color: Colors.white,
-            boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black)],
-            shape: BoxShape.circle),
+          color: Colors.white,
+          boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black)],
+          shape: BoxShape.circle,
+        ),
         child: Image(
           image: track.icon ?? const AssetImage('assets/nope.png'),
           width: 25,

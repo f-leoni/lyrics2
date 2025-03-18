@@ -395,7 +395,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: TextField(
               controller: _searchControllerText,
               onSubmitted: (value) => startSearch(context),
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
                 prefixIcon: IconButton(
                     icon: const Icon(Icons.search),
