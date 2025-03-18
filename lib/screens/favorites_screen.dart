@@ -60,13 +60,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               style: Theme.of(context).textTheme.headlineLarge,
               decoration: InputDecoration(
                 prefixIcon: IconButton(
-                    icon: const Icon(Icons.filter_alt),
-                    color: profile.themeData.primaryColorDark,
-                    onPressed: () =>
-                        setState(() => filter = _filterController.text)),
+                  icon: const Icon(Icons.filter_alt),
+                  color: profile.themeData.hintColor,
+                  onPressed: () =>
+                      setState(() => filter = _filterController.text)),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
-                  color: profile.themeData.primaryColorDark,
+                  color: profile.themeData.hintColor,
                   onPressed: () {
                     // Clear the search field
                     setState(() => _filterController.text = "");

@@ -30,14 +30,14 @@ class LyricTile extends StatelessWidget {
           child: Card(
             color: theme.colorScheme.surface,
             shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               side: BorderSide(color: theme.focusColor),
             ),
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: SizedBox(
-                height: 90.0,
+                height: 70.0,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -48,10 +48,12 @@ class LyricTile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: buildTitle(context, lyric),
                           ),
-                          Expanded(flex: 1, child: buildAuthor(context)),
+                          Expanded(
+                              flex: 1,
+                              child: buildAuthor(context)),
                         ],
                       ),
                     ),
@@ -61,15 +63,17 @@ class LyricTile extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Container(
+                            Expanded(
+                              flex:2,child:Container(
                               //color: Colors.blue,
                               child:
                                   buildFavoriteIcon(context, repository, lyric),
-                            ),
+                            )),
                             Expanded(
-                                flex: 1, child: buildProxyIcon(context, lyric)),
+                              flex: 1, child: buildProxyIcon(context, lyric)),
                           ],
-                        )),
+                        )
+                    ),
                   ],
                 ),
               ),
@@ -93,6 +97,7 @@ class LyricTile extends StatelessWidget {
     }
     FirebaseUserRepository profileManager =
         Provider.of<FirebaseUserRepository>(context, listen: false);
+    AppStateManager appStateManager = Provider.of<AppStateManager>(context, listen: false);
     Widget currIcon = Container();
     return FutureBuilder(
         future: repository.isLyricFavoriteById(
@@ -101,10 +106,8 @@ class LyricTile extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData && snapshot.data as bool) {
               currIcon = Center(
-                child: Icon(
-                  Provider.of<AppStateManager>(context, listen: false)
-                      .icnFavorite,
-                  color: Colors.red,
+                child: Icon(appStateManager.icnFavorite,
+                  color: Colors.red.shade700,
                   size: iconSize,
                 ),
               );
@@ -112,8 +115,7 @@ class LyricTile extends StatelessWidget {
               //currIcon = Center(child: SizedBox(width: iconSize, height: iconSize));
               currIcon = Center(
                 child: Icon(
-                  Provider.of<AppStateManager>(context, listen: false)
-                      .icnNoFavorite,
+                  appStateManager.icnNoFavorite,
                   color: Colors.black12,
                   size: iconSize,
                 ),
@@ -147,19 +149,27 @@ class LyricTile extends StatelessWidget {
     );
   }
 
-  Widget buildAuthor(BuildContext context) {
-    var users = Provider.of<FirebaseUserRepository>(context);
-    return Text(lyric.getArtist(),
-        softWrap: true,
-        overflow: TextOverflow.ellipsis,
-        style: users.textTheme.headlineMedium);
-  }
-
   buildTitle(BuildContext context, LyricData lyric) {
     var users = Provider.of<FirebaseUserRepository>(context);
-    return Text(lyric.getSong(),
-        softWrap: true,
-        overflow: TextOverflow.ellipsis,
-        style: users.textTheme.headlineLarge);
+    return Row(children:[
+      Expanded(flex: 1, child: Icon(Icons.music_note_rounded, size: 15, color: users.themeData.indicatorColor)),
+      Expanded(flex: 8, child: Text(lyric.getSong(),
+          softWrap: true,
+          //overflow: TextOverflow.ellipsis,
+          style: users.textTheme.headlineLarge))
+    ]);
   }
+
+  Widget buildAuthor(BuildContext context) {
+    var users = Provider.of<FirebaseUserRepository>(context);
+    return Row(children: [
+        Expanded(flex: 1, child: Icon(Icons.mic, size: 15, color: users.themeData.indicatorColor)),
+        Expanded(flex: 8, child: Text(lyric.getArtist(),
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+            style: users.textTheme.headlineMedium))
+      ]
+    );
+  }
+
 }

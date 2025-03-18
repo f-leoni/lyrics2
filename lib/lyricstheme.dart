@@ -10,7 +10,7 @@ class LyricsTheme {
     displaySmall: GoogleFonts.lato(
         fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.white70),
     headlineLarge: GoogleFonts.lato(
-        fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black87),
+        fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87),
     headlineMedium: GoogleFonts.lato(
         fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.black87),
     headlineSmall: GoogleFonts.lato(
@@ -43,7 +43,7 @@ class LyricsTheme {
     displaySmall: GoogleFonts.lato(
         fontSize: 18.0, fontWeight: FontWeight.w400, color: Colors.black87),
     headlineLarge: GoogleFonts.lato(
-        fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white70),
+        fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white70),
     headlineMedium: GoogleFonts.lato(
         fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.white70),
     headlineSmall: GoogleFonts.lato(
@@ -81,6 +81,7 @@ class LyricsTheme {
       highlightColor: Colors.white70,
       indicatorColor: Colors.blue,
       primaryColorDark: Colors.black87,
+      hintColor: Colors.black45,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightBlue)
           .copyWith(secondary: Colors.lightBlue, brightness: Brightness.light),
     );
@@ -99,6 +100,7 @@ class LyricsTheme {
       highlightColor: Colors.white70,
       indicatorColor: Colors.green.shade500,
       primaryColorDark: Colors.white70,
+      hintColor: Colors.white24,
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
           .copyWith(secondary: Colors.greenAccent, brightness: Brightness.dark).copyWith(surface: Colors.grey.shade800),
     );
