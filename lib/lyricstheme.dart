@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class LyricsTheme {
   static TextTheme lightTextTheme = TextTheme(
     displayLarge: GoogleFonts.lato(
-        fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.white70),
+        fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white70),
     displayMedium: GoogleFonts.lato(
         fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white70),
     displaySmall: GoogleFonts.lato(
@@ -37,7 +37,7 @@ class LyricsTheme {
 
   static TextTheme darkTextTheme = TextTheme(
     displayLarge: GoogleFonts.lato(
-        fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black87),
+        fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.black87),
     displayMedium: GoogleFonts.lato(
         fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.black87),
     displaySmall: GoogleFonts.lato(

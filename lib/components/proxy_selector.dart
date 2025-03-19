@@ -16,11 +16,12 @@ class ProxySelector extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocalizations.of(context)!.msgUseService,
-                  style: users.themeData.textTheme.bodyMedium),
+                  style: users.themeData.textTheme.bodyMedium,
+              textAlign: TextAlign.center,),
               DropdownButton<String>(
                   value: dropdownValue,
                   icon: const Icon(Icons.miscellaneous_services),

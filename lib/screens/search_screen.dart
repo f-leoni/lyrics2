@@ -74,32 +74,35 @@ class _SearchScreenState extends State<SearchScreen> {
     final manager = Provider.of<AppStateManager>(context, listen: false);
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     int searchType = manager.searchType;
-    return Scaffold(
-      backgroundColor: users.themeData.primaryColor,
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  pinned: false,
-                  snap: true,
-                  floating: true,
-                  backgroundColor: users.themeData.primaryColor,
-                  expandedHeight: 120.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Column(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: buildSearchFields(context),
-                              ),
-                              /*Expanded(
+    return Container(
+      color: Colors.red,
+      child: Scaffold(
+        backgroundColor: users.themeData.primaryColor,
+        body: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    pinned: false,
+                    snap: true,
+                    floating: true,
+                    backgroundColor: users.themeData.primaryColor,
+                    //backgroundColor: Colors.red,
+                    expandedHeight: 140.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Column(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: buildSearchFields(context),
+                                ),
+                                /*Expanded(
                                   flex: 2,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -107,45 +110,49 @@ class _SearchScreenState extends State<SearchScreen> {
                                     child: buildSearchButton(context),
                                   ),
                                 ),*/
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  0, 20, 8.0, 0,
-                                ),
-                                child: buildSearchSelector(
-                                  searchType,
-                                  _searchControllerText,
-                                  _searchControllerAuthor,
-                                  _searchControllerSong,
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    0,
+                                    20,
+                                    8.0,
+                                    0,
+                                  ),
+                                  child: buildSearchSelector(
+                                    searchType,
+                                    _searchControllerText,
+                                    _searchControllerAuthor,
+                                    _searchControllerSong,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Expanded(flex: 1, child: ProxySelector()),
-                          ],
-                        ),
-                      ],
+                              Expanded(flex: 1, child: ProxySelector()),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate((
-                    BuildContext context,
-                    int index,
-                  ) {
-                    return buildTile(context, index);
-                  }, childCount: manager.searchResults.length),
-                ),
-              ],
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((
+                      BuildContext context,
+                      int index,
+                    ) {
+                      return buildTile(context, index);
+                    }, childCount: manager.searchResults.length),
+                  ),
+                ],
+              ),
             ),
-          ),
-          spinner,
-        ],
+            spinner,
+          ],
+        ),
       ),
     );
   }
@@ -309,27 +316,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
               ),
             ),
-            /*Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Expanded(
-                  child: SizedBox(
-                    width: 265,
-                    child: Text(
-                        '${AppLocalizations.of(context)!.msgTrack}: Another Brick in the wall Pat II (ft: Patty Pravo) - Pink Floyd',
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.bodyText1),
-                  ),
-                ),
-              ),*/
+
             // Spread operator to extend a Column widget children collection
-            if (music != null ||
+            if (music != null /*||
                 (manager.searchAudioAuthor != "" &&
-                    manager.searchAudioSong != "")) ...[
+                    manager.searchAudioSong != "")*/) ...[
               SizedBox.fromSize(size: const Size(1, 9)),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  '${music != null ? music!.title : manager.searchAudioAuthor} - ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
+                  '${music != null ? music!.title : manager.searchAudioAuthor} -  ${music != null ? music!.artists.first.name : manager.searchAudioSong}',
                   overflow: TextOverflow.ellipsis,
                   style: textTheme.bodyLarge,
                 ),
@@ -505,38 +501,40 @@ class _SearchScreenState extends State<SearchScreen> {
       List<LyricSearchResult> results = manager.searchResults;
       LyricSearchResult lsr = results[index];
       //int hIndex = index + 1;
-      return InkWell(
-        child: LyricTile(lyric: lsr, isFavoritePage: false),
-        onTap: () async {
-          logger.d("Clicked on Search result tile. Song: ${lsr.song}");
-          setState(() {
-            spinner = Center(
-              child: SizedBox(
-                height: 115,
-                width: 115,
-                child: Container(
-                  color: Colors.white12,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: CircularProgressIndicator(
-                      color: theme.indicatorColor,
-                      backgroundColor: theme.primaryColor,
-                      strokeWidth: 8,
+      return Container( color: theme.primaryColor,
+        child: InkWell(
+          child: LyricTile(lyric: lsr, isFavoritePage: false),
+          onTap: () async {
+            logger.d("Clicked on Search result tile. Song: ${lsr.song}");
+            setState(() {
+              spinner = Center(
+                child: SizedBox(
+                  height: 115,
+                  width: 115,
+                  child: Container(
+                    color: Colors.white12,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(
+                        color: theme.indicatorColor,
+                        backgroundColor: theme.primaryColor,
+                        strokeWidth: 8,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          });
-          var lyric =
-              await manager.getLyric(
-                lsr,
-                lsr.provider == Proxies.genius
-                    ? GeniusProxy()
-                    : ChartLyricsProxy(),
-              )!;
-          manager.viewLyric(lyric);
-        },
+              );
+            });
+            var lyric =
+                await manager.getLyric(
+                  lsr,
+                  lsr.provider == Proxies.genius
+                      ? GeniusProxy()
+                      : ChartLyricsProxy(),
+                )!;
+            manager.viewLyric(lyric);
+          },
+        ),
       );
     }
     return Container();
@@ -613,7 +611,7 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  buildSearchSelector(
+  SearchSelector buildSearchSelector(
     int searchType,
     TextEditingController searchControllerText,
     TextEditingController searchControllerAuthor,
