@@ -29,7 +29,8 @@ main() {
   });
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform
+      options: DefaultFirebaseOptions.currentPlatform,
+      name: "Lyrics2",
   ).then((value) {
     FlutterError.onError = (errorDetails) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
