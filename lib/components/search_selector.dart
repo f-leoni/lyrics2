@@ -44,6 +44,9 @@ class _SearchSelectorState extends State<SearchSelector> {
             SearchType.nowPlaying,
           ],
           height: 40.0,
+          innerColor: users.themeData.primaryColorLight,
+          borderColor: users.themeData.canvasColor,
+          indicatorColor: users.themeData.indicatorColor,
           onChanged: (int newSearchType) {
             searchType = newSearchType;
             manager.switchSearch(
@@ -60,20 +63,20 @@ class _SearchSelectorState extends State<SearchSelector> {
                 {
                   return Icon(
                     Icons.radio,
-                    color: users.themeData.colorScheme.inversePrimary,);
+                    color: users.themeData.canvasColor,);
                 }
               case SearchType.nowPlaying:
                 {
                   return Icon(
                     Icons.play_circle,
-                    color: users.themeData.colorScheme.inversePrimary,);
+                    color: users.themeData.canvasColor,);
                 }
               case SearchType.text:
               default:
                 {
                   return Icon(
                     Icons.text_snippet,
-                    color: users.themeData.colorScheme.inversePrimary,);
+                    color: users.themeData.canvasColor,);
                 }
             }
           },

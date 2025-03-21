@@ -7,6 +7,9 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/screens/screens.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../components/circle_image.dart';
 
 class AppRouter extends RouterDelegate
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
@@ -61,14 +64,18 @@ class AppRouter extends RouterDelegate
                   ProfileScreen.page(profileManager.getUser!),
                 if (appStateManager.isViewingLyric)
                   ShowLyricScreen.page(
-                      Future.value(appStateManager.viewedLyric)),
+                    Future.value(appStateManager.viewedLyric),
+                  ),
               ], // pages[]
             );
           } else {
-            return buildSpinner(); //;Text("No data found in settings")
+            //return buildSpinner(); //;Text("No data found in settings")
+            return buildSpinnerAlt(
+              context,
+            ); //;Text("No data found in settings")
           }
         } else {
-          return buildSpinner(); //Text("Getting settings from DB")
+          return buildSpinnerAlt(context); //Text("Getting settings from DB")
         }
       },
     );
@@ -77,24 +84,64 @@ class AppRouter extends RouterDelegate
   Widget buildSpinner() {
     //return Container();
     return Container(
-        color: profileManager.themeData.colorScheme.surface,
-        child: Center(
-          child: SizedBox(
-            width: 50,
-            height: 50,
-            child: CircularProgressIndicator.adaptive(
-              backgroundColor: profileManager.themeData.primaryColor,
+      color: profileManager.themeData.colorScheme.surface,
+      child: Center(
+        child: SizedBox(
+          width: 50,
+          height: 50,
+          child: CircularProgressIndicator.adaptive(
+            backgroundColor: profileManager.themeData.primaryColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Return a fake scaffold to try and avoid "blink" of the screen
+  Widget buildSpinnerAlt(BuildContext pContext) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: profileManager.themeData.colorScheme.primaryContainer,
+        title: Text(AppLocalizations.of(pContext)!.appName),
+        titleTextStyle: profileManager.textTheme.displayLarge,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: GestureDetector(
+              child: CircleImage(
+                imageProvider:
+                    Provider.of<FirebaseUserRepository>(
+                      pContext,
+                      listen: false,
+                    ).userImage,
+              ),
             ),
           ),
-        ));
+        ],
+      ),
+      // Select which tab is to be shown
+      body: Center(
+          child: CircularProgressIndicator.adaptive(
+            backgroundColor: profileManager.themeData.primaryColor,
+          ),
+        ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: '...'),
+          BottomNavigationBarItem(icon: Icon(Icons.find_in_page), label: '...'),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: '...'),
+        ],
+      ),
+    );
   }
 
   // What to do when a page is closed or dismissed ("popped")?
   bool _handlePopPage(
-      //  argument 1 - current route
-      Route<dynamic> route,
-      // argument 2 - value that returns when the route completes
-      result) {
+    //  argument 1 - current route
+    Route<dynamic> route,
+    // argument 2 - value that returns when the route completes
+    result,
+  ) {
     if (!route.didPop(result)) {
       return false;
     }
@@ -123,8 +170,9 @@ class AppRouter extends RouterDelegate
   }
 
   @override
-  Future<void> setNewRoutePath(configuration) async =>
-      {logger.d("setNewRoutePath called!")};
+  Future<void> setNewRoutePath(configuration) async => {
+    logger.d("setNewRoutePath called!"),
+  };
 
   @override
   void dispose() {

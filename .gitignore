@@ -65,3 +65,5 @@ macos/Flutter/ephemeral/.symlinks/plugins/path_provider_macos
 macos/Flutter/ephemeral/.symlinks/plugins/sqflite
 macos/Pods/Local Podspecs/FlutterMacOS.podspec.json
 /.flutter/
+/lib/firebase_options.dart
+/firebase.json

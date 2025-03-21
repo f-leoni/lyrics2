@@ -52,8 +52,8 @@ class _MainScreenState extends State<MainScreen> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: users.themeData.colorScheme.primaryContainer,
-            title:
-                Text(pageTitle, style: Theme.of(context).textTheme.displayMedium),
+            title: Text(pageTitle),
+            titleTextStyle: Theme.of(context).textTheme.displayLarge,
             actions: [
               profileButton(widget.currentTab),
             ],

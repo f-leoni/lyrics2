@@ -189,17 +189,17 @@ class _ShowLyricScreenState extends State<ShowLyricScreen>
               buildFavoriteButton(favorites, currLyric),
             ],
           ),
-          SizedBox(
-            height: 60,
+          Expanded(
+            flex: 1,
             child: Text(
               currLyric.song,
               softWrap: true,
               overflow: TextOverflow.fade,
-              style: LyricsTheme.darkTextTheme.displayMedium,
+              style: LyricsTheme.darkTextTheme.titleLarge,
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 9,
             child: GestureDetector(
               onScaleStart: (details) {
                 _baseFontSize = _fontSize;

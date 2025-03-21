@@ -1,4 +1,4 @@
-package it.zitzusoft.lyrics_2
+package it.zitzusoft.lyrics2
 
 import io.flutter.embedding.android.FlutterActivity
 

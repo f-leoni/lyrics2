@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:lyrics2/components/circle_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lyrics2/models/models.dart';
+import 'package:lyrics2/components/proxy_selector.dart'; // Importa il nuovo componente
 
 class ProfileScreen extends StatefulWidget {
   // ProfileScreen MaterialPage Helper
@@ -29,7 +30,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  static const List<String> services = <String>['Genius', 'ChartLyrics'];
+
   @override
   Widget build(BuildContext context) {
     var users = Provider.of<FirebaseUserRepository>(context, listen: false);
@@ -69,20 +70,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildMenu() {
+    var users = Provider.of<FirebaseUserRepository>(context, listen: false);
     return ListView(
       children: [
         buildDarkModeRow(),
-        buildProxyRow(),
-        /*ListTile(
-          title: const Text('View raywenderlich.com'),
-          onTap: () {
-            // Open raywenderlich.com webview
-            Provider.of<FirebaseUserRepository>(context, listen: false)
-                .tapOnRaywenderlich(true);
-          },
-        ),*/
+        ProxySelector(),
         ListTile(
-          title: Center(child: Text(AppLocalizations.of(context)!.msgLogout)),
+          title: Center(child: Text(AppLocalizations.of(context)!.msgLogout,
+            style: users.themeData.textTheme.headlineMedium,)),
           onTap: () {
             // Logout user
             Provider.of<FirebaseUserRepository>(context, listen: false)
@@ -126,79 +121,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           imageRadius: 60.0,
         ),
         const SizedBox(height: 8.0),
-        Text(widget.user.email!, style: users.themeData.textTheme.displayLarge),
-        Text(
-            "Registration date: ${formatter.format(widget.user.metadata.creationTime!)}"), //role
+        Text(widget.user.email!, style: users.themeData.textTheme.titleLarge),
+        Text("${AppLocalizations.of(context)!.msgRegistrationDate} ${formatter.format(widget.user.metadata.creationTime!)}"), //role
       ],
-    );
-  }
-
-  buildProxyRow() {
-    final users = Provider.of<FirebaseUserRepository>(context, listen: false);
-    String dropdownValue = users.useGenius ? services.first : services.last;
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          /*Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.msgUseGenius,
-                  style: users.themeData.textTheme.bodyText2),
-              Switch(
-                value: users.useGenius, //widget.user.darkMode,
-                onChanged: (value) {
-                  users.useGenius = value;
-                },
-                activeColor: users.themeData.indicatorColor,
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.msgUseCL,
-                  style: users.themeData.textTheme.bodyText2),
-              Switch(
-                value: !users.useGenius, //widget.user.darkMode,
-                onChanged: (value) {
-                  users.useGenius = !value;
-                },
-                activeColor: users.themeData.indicatorColor,
-              )
-            ],
-          ),*/
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.msgUseService,
-                  style: users.themeData.textTheme.bodyMedium),
-              DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: const Icon(Icons.miscellaneous_services),
-                  items: services.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: users.themeData.textTheme.bodyMedium,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? value) {
-                    setState(() {
-                      dropdownValue = value!;
-                      if (dropdownValue == services.first) {
-                        users.useGenius = true;
-                      } else {
-                        users.useGenius = false;
-                      }
-                    });
-                  }),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
