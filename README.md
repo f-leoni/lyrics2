@@ -50,6 +50,11 @@ Lyrics uses some third party libraries such as:
 * (feature) Implement Genius Proxy
 * (fix) Double onboarding?
 
+## REVISION HISTORY
+1.0.0 Build 1 - First version
+...
+1.0.2 Build 2 - Autosearch while typing
+
 # COMMANDS
 ## GENERATE LOCALIZATION FILES
 flutter gen-l10n
