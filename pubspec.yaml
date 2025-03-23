@@ -60,7 +60,7 @@ dependencies:
   fake_cloud_firestore: 3.1.0
   nowplaying: ^3.0.3
   animated_toggle_switch: ^0.7.0
-  dotenv: ^1.0.0
+  dotenv: ^4.2.0
 
  
   # The following adds the Cupertino Icons font to your application.
