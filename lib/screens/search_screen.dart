@@ -132,7 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ),
                                 ),
                               ),
-                              Expanded(flex: 1, child: ProxySelector()),
+                              Expanded(flex: 1, child: const ProxySelector()),
                             ],
                           ),
                         ],

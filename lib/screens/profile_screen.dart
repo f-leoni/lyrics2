@@ -74,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListView(
       children: [
         buildDarkModeRow(),
-        ProxySelector(),
+        const ProxySelector(),
         ListTile(
           title: Center(child: Text(AppLocalizations.of(context)!.msgLogout,
             style: users.themeData.textTheme.headlineMedium,)),

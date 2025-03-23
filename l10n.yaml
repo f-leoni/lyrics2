@@ -1,3 +1,9 @@
+# Synthetic package output (package:flutter_gen) is deprecated: 
+# https://flutter.dev/to/flutter-gen-deprecation. 
+# In a future release, synthetic-package will default to `false` and 
+# will later be removed entirely.
+# synthetic-package: false
+
 arb-dir: lib/l10n
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
