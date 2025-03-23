@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -43,6 +44,8 @@ class _SearchScreenState extends State<SearchScreen> {
   String _searchStringSong = "";
   int minSearchLen = 3;
   Widget spinner = Container();
+  Timer? _debounce;
+  final int _debounceTimeMillis = 500;
 
   @override
   void initState() {
@@ -53,9 +56,11 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchStringText = _searchControllerText.text;
     _searchStringAuthor = _searchControllerAuthor.text;
     _searchStringSong = _searchControllerSong.text;
-    _searchControllerText.addListener(() {
+    /*_searchControllerText.addListener(() {
       _searchStringText = _searchControllerText.text;
-    });
+    });*/
+    // Debounce feature
+    _searchControllerText.addListener(_onSearchChanged);
     _searchControllerAuthor.addListener(() {
       _searchStringAuthor = _searchControllerAuthor.text;
     });
@@ -608,6 +613,7 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchControllerText.dispose();
     _searchControllerAuthor.dispose();
     _searchControllerSong.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -623,5 +629,18 @@ class _SearchScreenState extends State<SearchScreen> {
       searchControllerAuthor: _searchControllerAuthor,
       searchControllerSong: _searchControllerSong,
     );
+  }
+
+  void _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(Duration(milliseconds: _debounceTimeMillis), () {
+      logger.d("Search text: ${_searchControllerText.text}");
+      if(_searchStringText  != _searchControllerText.text &&
+          _searchControllerText.text.length >= minSearchLen ){
+      setState(() {
+        _searchStringText = _searchControllerText.text;
+        startSearch(context);
+      });}
+    });
   }
 }
