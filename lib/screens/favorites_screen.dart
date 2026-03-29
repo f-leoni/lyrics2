@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/l10n/app_localizations.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/components/lyric_tile.dart';
 import 'package:lyrics2/data/firebase_favorites_repository.dart';

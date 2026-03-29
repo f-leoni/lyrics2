@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/l10n/app_localizations.dart';
 import 'package:lyrics2/api/chartlyrics_proxy.dart';
 import 'package:lyrics2/api/genius_proxy.dart';
 import 'package:lyrics2/api/proxies.dart';

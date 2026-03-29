@@ -84,7 +84,7 @@ class GeniusProxy extends Proxy {
     if(bs.find('*', id: 'lyrics-root') != null) {
     outLyric = bs
         .find('*', id: 'lyrics-root')!
-        .children[1]
+        .children[0]
         .innerHtml
         .replaceAll("<br>", "\n");
     } else {

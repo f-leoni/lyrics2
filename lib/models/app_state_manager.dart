@@ -4,7 +4,7 @@ import 'package:lyrics2/api/proxy.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:lyrics2/models/models.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:lyrics2/data/sqlite_settings_repository.dart';
 import 'package:provider/provider.dart';

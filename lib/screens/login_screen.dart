@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/l10n/app_localizations.dart';
 import 'package:lyrics2/data/firebase_user_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/models/models.dart';
@@ -92,7 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
       BuildContext context, String hintText, TextInputType keyboardType) {
     final theme =
         Provider.of<FirebaseUserRepository>(context, listen: false).themeData;
-
     return TextFormField(
       cursorColor: theme.colorScheme.secondary,
       controller: _emailController,

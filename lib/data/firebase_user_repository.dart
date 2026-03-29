@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lyrics2/components/logger.dart';
 import 'package:lyrics2/lyricstheme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/l10n/app_localizations.dart';
 
 class FirebaseUserRepository with ChangeNotifier {
   final auth = FirebaseAuth.instance;

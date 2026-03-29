@@ -7,7 +7,7 @@ import 'package:lyrics2/models/app_state_manager.dart';
 import 'package:lyrics2/models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:lyrics2/screens/screens.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lyrics2/l10n/app_localizations.dart';
 
 import '../components/circle_image.dart';
 
